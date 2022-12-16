@@ -1,0 +1,32 @@
+.main-request{
+  text-align: center;
+  height: 141px;
+
+  >h1{
+      font-family: WinterSunday;
+      color: #000;
+  }
+
+  >button{
+      font-family: "Viga", Arial, Helvetica, sans-serif;
+      background-color: #FFB2CE;
+      color: #fff;
+      height: 56px;
+      width: 273px;
+      font-size: 27px;
+      border: 0;
+  }
+}
+
+.container-home{
+  background: #FFFFFF;
+}
+
+.container-Content{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin: 0 auto;
+  width: 50%;
+  background-color: #FFFFFF;
+}

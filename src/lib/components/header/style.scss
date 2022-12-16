@@ -1,0 +1,135 @@
+*{
+    box-sizing: border-box;
+    text-decoration: none !important;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+@font-face{
+    font-family: WinterSunday;
+    src: url(../../assets/fonts/WinterSunday.otf);
+}
+
+.main-header{
+    justify-content: space-between;
+    background-color: #fff;
+    display: flex;
+    height: 105px;
+    width: 100%;
+    flex-wrap: nowrap;
+
+    >img{
+        z-index: 40;
+    }
+
+    .wrapper-login{
+        border-radius: 40px;
+        background-color: #DB00FF;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: center;
+
+        >img{
+            position: absolute;
+            right: 0px;
+            z-index: 0;
+        }
+
+    }
+
+    .main-action{
+        display: inline-flex;
+        align-items: center;
+        font-size: 2.5rem;
+        font-family: WinterSunday;
+        color: #7C3267;
+        text-decoration: none;
+    }
+
+    .-second{
+        color: #fff;
+        line-height: 24.19px;
+        font-family: 'Viga', Arial, Helvetica, sans-serif;
+        font-size: 2em;
+        padding-top: 0px;
+        padding-right: 99px;
+        padding-left: 15px;
+    }
+
+    .-secondlogado{
+        font-size: 1.5em;
+        font-family: 'Viga', Arial, Helvetica, sans-serif;
+        color: white;
+        padding: 10px 5px 0 20px;
+    }
+
+    .-logado{
+        align-items: center;
+        justify-content: center;
+        border-top-left-radius: 30px;
+        border-bottom-left-radius: 30px;
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+        min-width: 185px;
+
+        >img{
+            position: inherit;
+        }
+    }
+
+    .main-action.-third{
+        color: #fff;
+        line-height: 24,19px;
+        font-family: 'Viga', Arial, Helvetica, sans-serif;
+        padding-top: 0px;
+        padding-right: 99px;
+        padding-left: 15px;
+        font-size: 18px;
+    }
+
+
+    .nav{
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 50px;
+        padding-left: 0;
+        margin-bottom: 0;
+        list-style: none;
+        align-items: center;
+    }
+
+    .nav a{
+        transition: all 0.3s;
+    }
+
+    .nav a:hover{
+        font-size: 55px;
+        color: #7C3267;
+    }
+
+    .logomin{
+        display:block;
+    }
+
+    .logobig{
+        height: 244px;
+        width: 230px;
+        display: block;
+    }
+
+    .arrow{
+        transform: rotate(180deg);
+        align-self: flex-start;
+        margin-top: 20px;
+        margin-left: 20px;
+    }
+
+    #menu-trigger{
+        display: none;
+    }
+    
+
+}
