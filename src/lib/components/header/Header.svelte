@@ -37,14 +37,14 @@ const SairBTN = styled.a`
     <img src={logo} alt="logo clau prado"/>
     <nav class="nav">
         <a class="main-action" href={"/#"}>Inicio</a>
-        <a class="main-action" href={"/Produtos"}>Produtos</a>
-        <a class="main-action" href={"/MandeSuaIdeia"}>Mande sua Ideia</a>
-        <a class="main-action" href={"/Sobre"}>Sobre</a>
+        <a class="main-action" href={"/produtos"}>Produtos</a>
+        <a class="main-action" href={"/mandesuaideia"}>Mande sua Ideia</a>
+        <a class="main-action" href={"/sobre"}>Sobre</a>
     </nav>
     
     <div class="wrapper-login">
-        <a class="main-action -second" href={"/Login"}>Login</a>
-        <a class="main-action -third" href={"/Login"}>ou Cadastre-se</a>
+        <a class="main-action -second" href={"/login"}>Login</a>
+        <a class="main-action -third" href={"/login"}>ou Cadastre-se</a>
         <img src={avatar} alt="imagem para cadastro" height="105" class="img_avatar"/>
     </div>
 </header>
