@@ -39,15 +39,15 @@ setInterval(nextSlide, 3000)
           </div>
         {/each}
           <div class="clouds">
-              <img src={nuvem} alt="nuvem esquerda"/>
-              <img src={nuvem} alt="nuvem direita"/>
+              <img class="max-w-none" src={nuvem} alt="nuvem esquerda"/>
+              <img class="max-w-none" src={nuvem} alt="nuvem direita"/>
           </div>
       </div>
       <img class="wrapper-slide -fundo" src={nuvem} alt=""/>
       {#each SlideData as slide, i}
         <div class={i === current ? 'slide active' : 'slide'}>
           {#if i === current}
-            <img class="wrapper-slide -mascara" id="teste" src={slide.image} alt="produto imagem"/>
+            <img class="wrapper-slide -mascara " id="teste" src={slide.image} alt="produto imagem"/>
           {/if}
         </div>
       {/each}
