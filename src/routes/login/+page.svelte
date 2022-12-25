@@ -7,9 +7,20 @@
   $: current = "container"
   $: message = 'none'
 
-  const handleLogin = async (e) => {
-    
-  }
+  const {form, handleChange, handleSubmit} = createForm({
+    initialValues: {
+      email: "",
+      senha: "",
+    },
+    onSubmit: values => {
+      api.post("/NovoUsuario", values).then((response) =>{
+        console.log(response)
+        if(response.status == 201){
+          goto("/login")
+        }
+      });
+    }
+  })
 </script>
 
 <div class="body">
