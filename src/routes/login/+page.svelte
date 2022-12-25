@@ -18,11 +18,10 @@
     },
     onSubmit: values => {
       api.post("/Autenticar", values).then((response) =>{
-        console.log(response)
         if(response.status == 200){
-          localStorage.setItem('@Auth:user', response.data.user)
-          localStorage.setItem('@Auth:token', response.data.token)
-          // goto("/")
+          localStorage.setItem('@Auth:user', JSON.stringify(response.data.user))
+          localStorage.setItem('@Auth:token', JSON.stringify(response.data.token))
+          goto("/")
         }
       });
     }
