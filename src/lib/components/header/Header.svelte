@@ -1,5 +1,5 @@
 <script>
-import styled from 'styled-components'
+import {user, signed, logout} from '$lib/stores/login'
 import './style.scss'
 import avatar from '$lib/assets/img/avatar-login.png'
 import logomin from '$lib/assets/img/logo-clau.png'
@@ -14,25 +14,9 @@ if(tamanho == "grande"){
     logo = logomin
 }
 
-const ContainerOptionsProfile = styled.div`
-    display: flex;
-    gap: 10px;
-    padding-bottom: 10px;
-`
-
-const SairBTN = styled.a`
-    color: white;
-    font-family: 'Viga';
-
-    &:hover{
-        color: black
-    }
-`
-
-
 </script>
 
-
+{#if !$signed}
 <header class="main-header">
     <img src={logo} alt="logo clau prado"/>
     <nav class="nav">
@@ -48,3 +32,22 @@ const SairBTN = styled.a`
         <img src={avatar} alt="imagem para cadastro" height="105" class="img_avatar"/>
     </div>
 </header>
+{:else}
+    <header class="main-header">
+        <img src={logo} alt="logo clau prado"/>
+        <nav class="nav">
+            <a class="main-action" href={"/#"}>Inicio</a>
+            <a class="main-action" href={"/produtos"}>Produtos</a>
+            <a class="main-action" href={"/mandesuaideia"}>Mande sua Ideia</a>
+            <a class="main-action" href={"/sobre"}>Sobre</a>
+        </nav>
+        
+        <div class="wrapper-login -logado">
+            <a href={"/login"} class="main-action -secondlogado">Ola! <br /> {$user.nome}</a>
+            <div class="container-options">
+                <a class="sair-btn" href={"/perfil"}>Minha conta</a>
+                <a class="sair-btn" href={"/"} on:click={logout}>Sair</a>
+            </div>
+        </div>
+    </header>
+{/if}
