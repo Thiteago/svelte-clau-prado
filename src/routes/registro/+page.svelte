@@ -27,14 +27,12 @@
     onSubmit: values => {
       values.numeroRua = values.numeroRua.toString()
       api.post("/NovoUsuario", values).then((response) =>{
-        console.log(response)
         if(response.status == 201){
           goto("/login")
         }
       });
     }
   })
-  $: console.log($form.cep)
 </script>
 
 <div class="body">
