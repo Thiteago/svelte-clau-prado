@@ -1,6 +1,10 @@
 <script>
   import './style.scss'
   import Previousbutton from '$lib/components/previousbutton/Previousbutton.svelte';
+  import {createForm} from "svelte-forms-lib"
+  import { goto } from '$app/navigation';
+  import { api } from '$lib/services/api';
+
   let email = ''
   let senha = ''
 
@@ -10,13 +14,15 @@
   const {form, handleChange, handleSubmit} = createForm({
     initialValues: {
       email: "",
-      senha: "",
+      senha: ""
     },
     onSubmit: values => {
-      api.post("/NovoUsuario", values).then((response) =>{
+      api.post("/Autenticar", values).then((response) =>{
         console.log(response)
-        if(response.status == 201){
-          goto("/login")
+        if(response.status == 200){
+          localStorage.setItem('@Auth:user', response.data.user)
+          localStorage.setItem('@Auth:token', response.data.token)
+          // goto("/")
         }
       });
     }
@@ -33,11 +39,18 @@
       </div>
       <div class="form-container sign-in-container">
       <Previousbutton endereco='/' />
-          <form on:submit={handleLogin} class="form" action="#">
+          <form on:submit={handleSubmit} class="form" action="#">
               <h1 class="h1">Login</h1>
               <span class="span">acesse sua conta</span>
-              <input class="input" bind:value={email} type="email" placeholder="Email" />
-              <input class="input" bind:value={senha} type="password" placeholder="Senha" />
+              <input 
+              class="input" type="email" placeholder="Email" 
+              on:change={handleChange}
+              bind:value={$form.email}
+              />
+              <input class="input" type="password" placeholder="Senha" 
+              on:change={handleChange}
+              bind:value={$form.senha}
+              />
               <p style="color: red; display: {message}">Credenciais Inválidas</p>
               <a class="a" href="/#">Esqueceu a senha?</a>
               <button class="button">Login</button>
