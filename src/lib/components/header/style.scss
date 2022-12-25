@@ -11,6 +11,21 @@
     src: url(../../assets/fonts/WinterSunday.otf);
 }
 
+.container-options{
+    display: flex;
+    gap: 10px;
+    padding-bottom: 10px;
+}
+
+.sair-btn{
+    color: white;
+    font-family: 'Viga';
+
+    &:hover{
+        color: black
+    }
+}
+
 .main-header{
     justify-content: space-between;
     background-color: #fff;
