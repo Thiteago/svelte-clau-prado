@@ -7,10 +7,15 @@ import Promocoes from '../lib/components/promocoes/Promocoes.svelte'
 import Category from '../lib/components/category/Category.svelte'
 import Testemunhos from '../lib/components/testemunhos/Testemunhos.svelte'
 import Footer from '../lib/components/footer/Footer.svelte'
+import {loadStorageData} from '$lib/stores/login'
 import './style.scss'
+	import { onMount } from 'svelte';
+
+onMount(() => {
+    loadStorageData()
+})
 
 </script>
-
 <div class="container-home">
   <Header tamanho="grande"></Header>
   <Slide></Slide>
