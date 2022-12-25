@@ -33,6 +33,8 @@
 		"axios": "^1.2.1",
 		"daisyui": "^2.45.0",
 		"node-sass": "^8.0.0",
-		"styled-components": "^5.3.6"
+		"styled-components": "^5.3.6",
+		"svelte-forms-lib": "^2.0.1",
+		"svelte-input-mask": "^1.1.0"
 	}
 }
