@@ -16,8 +16,8 @@
 		"@sveltejs/kit": "next",
 		"@types/styled-components": "^5.1.26",
 		"autoprefixer": "^10.4.13",
-		"postcss": "^8.4.20",
 		"daisyui": "^2.6.0",
+		"postcss": "^8.4.20",
 		"prettier": "^2.8.0",
 		"prettier-plugin-svelte": "^2.8.1",
 		"sass": "^1.56.2",
@@ -31,10 +31,10 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@imask/svelte": "^6.4.3",
 		"axios": "^1.2.1",
 		"node-sass": "^8.0.0",
 		"styled-components": "^5.3.6",
-		"svelte-forms-lib": "^2.0.1",
-		"svelte-input-mask": "^1.1.0"
+		"svelte-forms-lib": "^2.0.1"
 	}
 }
