@@ -1,5 +1,4 @@
 <script>
-  import MaskInput from "svelte-input-mask/MaskInput.svelte";
   import "./style.scss"
   import Previousbutton from "$lib/components/previousbutton/Previousbutton.svelte";
   import {createForm} from "svelte-forms-lib"
