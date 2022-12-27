@@ -1,5 +1,6 @@
 <script>
   import './style.scss'
+  import { imask } from '@imask/svelte';
   import {user} from '$lib/stores/login'
   import { api } from '$lib/services/api';
 	import { onMount } from 'svelte';
@@ -12,13 +13,20 @@
   }
   let data
 
+  const optionsCel = {
+    mask: '(00)00000-0000',
+    lazy: false
+  };
+
   async function getUserData(){
     let result = await api.get(`/Usuarios/${$user.id}/dados`)
     return result.data
   }
 
   onMount(async() => {
+    console.log('oi')
     localUser = await getUserData()
+    console.log(localUser)
     let rawData = new Date(localUser.dataNascimento)
     data = rawData.toLocaleDateString('pt-BR')
   })
@@ -32,11 +40,13 @@
       numeroCel: ""
     },
     onSubmit: values => {
-      api.post("/NovoUsuario", values).then((response) =>{
-        if(response.status == 201){
-          
-        }
-      });
+      api.patch(`/Usuarios/${$user.id}/Alterar`, values).then((response) => {
+            if(response.status == 201){
+                alert("Dados alterados com sucesso!")
+            }
+        }).catch((error) => {
+          console.log(error)
+        })
     }
   })
 </script>
@@ -48,23 +58,38 @@
         <form on:submit={handleSubmit} >
             <fieldset class="fieldset">
                 <legend class="legendafield" >Nome Completo *</legend>
-                <input class="input-info" readOnly type="text" placeholder={$user.nome}/>
+                <input class="input-info" readOnly type="text" placeholder={$user.nome}
+                on:change={handleChange}
+                bind:value={$form.nome}
+                />
             </fieldset>
             <fieldset class="fieldset">
                 <legend class="legendafield">Email / Login *</legend>
-                <input class="input-info" type="text" placeholder={$user.email}/>
+                <input class="input-info" type="email" placeholder={$user.email}
+                on:change={handleChange}
+                bind:value={$form.email}
+                />
             </fieldset>
             <fieldset class="fieldset">
                 <legend class="legendafield">CPF *</legend>
-                <input class="input-info" readOnly type="text" placeholder={localUser.cpf} />
+                <input class="input-info" readOnly type="text" placeholder={localUser.cpf} 
+                on:change={handleChange}
+                bind:value={$form.cpf}
+                />
             </fieldset>
             <fieldset class="fieldset">
                 <legend class="legendafield">Data de Nascimento *</legend>
-                <input class="input-info" readOnly type="text" placeholder={data}/>
+                <input class="input-info" readOnly type="text" placeholder={data}
+                on:change={handleChange}
+                bind:value={$form.dataNascimento}
+                />
             </fieldset>
             <fieldset class="fieldset">
                 <legend class="legendafield">Telefone celular *</legend>
-                <input class="input-info" type="text" placeholder={localUser.numeroCel}/>
+                <input class="input-info" type="tel" placeholder={localUser.numeroCel}
+                on:change={handleChange}
+                bind:value={$form.numeroCel}
+                />
             </fieldset>
             <button class="btn btn-primary mt-3" type='submit' >Alterar</button>
         </form>
