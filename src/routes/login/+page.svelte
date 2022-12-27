@@ -9,7 +9,7 @@
   let senha = ''
 
   $: current = "container"
-  $: message = 'none'
+  $: statusAuth = false
 
   const {form, handleChange, handleSubmit} = createForm({
     initialValues: {
@@ -22,6 +22,10 @@
           localStorage.setItem('@Auth:user', JSON.stringify(response.data.user))
           localStorage.setItem('@Auth:token', JSON.stringify(response.data.token))
           goto("/")
+        }
+      }).catch((error) => {
+        if(error.response.status == 401){
+          statusAuth = true
         }
       });
     }
@@ -50,7 +54,9 @@
               on:change={handleChange}
               bind:value={$form.senha}
               />
-              <p style="color: red; display: {message}">Credenciais Inválidas</p>
+              {#if statusAuth == true}
+                <p style="color: red">Falha na Autenticação</p>
+              {/if}
               <a class="a" href="/#">Esqueceu a senha?</a>
               <button class="button">Login</button>
           </form>
