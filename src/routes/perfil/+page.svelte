@@ -1,5 +1,6 @@
 <script>
   import { goto } from "$app/navigation";
+	import Dadoscad from "$lib/components/dadoscadastrais/Dadoscad.svelte";
   import Perfil from "$lib/components/perfil/Perfil.svelte";
   import {user, loadStorageData, signed} from '$lib/stores/login'
 	import { redirect } from "@sveltejs/kit";
@@ -10,7 +11,6 @@
   export function load(){
     loadStorageData()
     if($signed == false){
-      console.log('oi')
       redirect(300,"/")
     }
   }
@@ -39,6 +39,8 @@
   <div class="contentWrapper">
     {#if selected == 'Perfil'}
       <Perfil user={$user}/>
+    {:else if selected == 'Dados Cadastrais'}
+      <Dadoscad />
     {/if}
   </div>
 </div>
