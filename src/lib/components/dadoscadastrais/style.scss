@@ -1,0 +1,30 @@
+.dados-container{
+  padding-top: 20px;
+  padding-left: 20px;
+}
+
+.dados-wrapper{
+  margin-bottom: 15px;
+}
+
+.fieldset{
+  border: 1px solid grey;
+  padding-left: 6px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+}
+
+.legendafield{
+  float: none;
+  font-size: 1.2rem;
+}
+
+.input-info{
+  width: 450px;
+}
+
+.button-submit{
+  width: 140px;
+  height: 50px;
+}
