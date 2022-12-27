@@ -43,7 +43,7 @@ if(tamanho == "grande"){
         </nav>
         
         <div class="wrapper-login -logado">
-            <a href={"/login"} class="main-action -secondlogado">Ola! <br /> {$user.nome}</a>
+            <a href={"/login"} class="main-action -secondlogado">Ola! <br /> {$user.nome.split(' ')[0]}</a>
             <div class="container-options">
                 <a class="sair-btn" href={"/perfil"}>Minha conta</a>
                 <a class="sair-btn" href={"/"} on:click={logout}>Sair</a>
