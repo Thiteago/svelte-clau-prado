@@ -1,11 +1,27 @@
 <script>
   import "./style.scss"
+  import { imask } from '@imask/svelte';
   import Previousbutton from "$lib/components/previousbutton/Previousbutton.svelte";
   import {createForm} from "svelte-forms-lib"
   import {goto} from '$app/navigation'
   import { api } from "$lib/services/api";
 
-
+  const optionsCPF = {
+    mask: '000.000.000-00',
+    lazy: false
+  };
+  const optionsCEP = {
+    mask: '00000-000',
+    lazy: false
+  };
+  const optionsTel = {
+    mask: '(00)0000-0000',
+    lazy: false
+  };
+  const optionsCel = {
+    mask: '(00)00000-0000',
+    lazy: false
+  };
  
 
   const {form, handleChange, handleSubmit} = createForm({
@@ -65,7 +81,7 @@
               bind:value={$form.senha}
               />
               <input 
-              name="cpf" placeholder="CPF" required 
+              name="cpf" placeholder="CPF" required use:imask={optionsCPF}
               on:change={handleChange}
               bind:value={$form.cpf}
               />
@@ -91,17 +107,18 @@
               bind:value={$form.cidade}
               />
               <input 
-              name="cep" placeholder='CEP' type="text" required 
+              name="cep" placeholder='CEP' type="text" required use:imask={optionsCEP}
               on:change={handleChange}
               bind:value={$form.cep}
               />
               <input 
-              name="numeroTel" placeholder='Numero de Telefone' type="text" 
+              name="numeroTel" placeholder='Numero de Telefone' type="text" use:imask={optionsTel}
               on:change={handleChange}
               bind:value={$form.numeroTel}
               />
               <input 
               name="numeroCel" placeholder='Numero de Celular' type="text" required
+              use:imask={optionsCel}
               on:change={handleChange}
               bind:value={$form.numeroCel}
               />
