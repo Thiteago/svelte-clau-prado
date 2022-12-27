@@ -28,12 +28,14 @@
         <li class="item" on:keyup={() => {selected = 'Dados Cadastrais'}} on:click={() => {selected = 'Dados Cadastrais'}}>Dados Cadastrais</li>
         <li class="item" on:keyup={() => {selected = 'Pagamento'}} on:click={() => {selected = 'Pagamento'}}>Formas de Pagamento</li>
         <li class="item" on:keyup={() => {selected = 'Historico de Pedidos'}} on:click={() => {selected = 'Historico de Pedidos'}}>Historico de Pedidos</li>
-        <li class="item" on:keyup={() => {selected = 'Promoções'}} on:click={() => {selected = 'Promoções'}}>Promoções</li>
-        <li class="item" on:keyup={() => {selected = 'Produtos'}} on:click={() => {selected = 'Produtos'}}>Produtos</li>
-        <li class="item" on:keyup={() => {selected = 'Relatórios'}} on:click={() => {selected = 'Relatórios'}}>Relatórios</li>
-        <li class="item" on:keyup={() => {selected = 'Estoque'}} on:click={() => {selected = 'Estoque'}}>Estoque</li>
-        <li class="item" on:keyup={() => {selected = 'Permissoes'}} on:click={() => {selected = 'Permissoes'}}>Permissões</li>
-        <li class="item" on:keyup={() => {selected = 'Usuarios do Sistema'}} on:click={() => {selected = 'Usuarios do Sistema'}}>Usuarios Administrativos</li>
+        {#if $user.cargo == 'Admin'}
+          <li class="item" on:keyup={() => {selected = 'Promoções'}} on:click={() => {selected = 'Promoções'}}>Promoções</li>
+          <li class="item" on:keyup={() => {selected = 'Produtos'}} on:click={() => {selected = 'Produtos'}}>Produtos</li>
+          <li class="item" on:keyup={() => {selected = 'Relatórios'}} on:click={() => {selected = 'Relatórios'}}>Relatórios</li>
+          <li class="item" on:keyup={() => {selected = 'Estoque'}} on:click={() => {selected = 'Estoque'}}>Estoque</li>
+          <li class="item" on:keyup={() => {selected = 'Permissoes'}} on:click={() => {selected = 'Permissoes'}}>Permissões</li>
+          <li class="item" on:keyup={() => {selected = 'Usuarios do Sistema'}} on:click={() => {selected = 'Usuarios do Sistema'}}>Usuarios Administrativos</li>
+        {/if}
     </ul>
   </aside>
   <div class="contentWrapper">
