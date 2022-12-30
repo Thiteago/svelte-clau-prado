@@ -1,6 +1,6 @@
 <script>
   import "./style.scss"
-  import { imask } from '@imask/svelte';
+  import { imask } from '@imask/svelte'
   import Previousbutton from "$lib/components/previousbutton/Previousbutton.svelte";
   import {createForm} from "svelte-forms-lib"
   import {goto} from '$app/navigation'

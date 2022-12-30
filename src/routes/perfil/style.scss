@@ -1,8 +1,8 @@
 .containerContent{
     display: flex;
-    width: 1920px;
+    width: 100%;
     background-color: grey;
-    height: 100vh;
+    height: fit-content;
     margin: 0 auto;
     justify-content: center;
 }
