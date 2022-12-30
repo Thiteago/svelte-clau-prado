@@ -2,6 +2,7 @@
   import { goto } from "$app/navigation";
 	import Dadoscad from "$lib/components/dadoscadastrais/Dadoscad.svelte";
   import Perfil from "$lib/components/perfil/Perfil.svelte";
+	import Produtosadmin from "$lib/components/produtosadmin/Produtosadmin.svelte";
   import {user, loadStorageData, signed} from '$lib/stores/login'
 	import { redirect } from "@sveltejs/kit";
   import "./style.scss"
@@ -43,6 +44,8 @@
       <Perfil user={$user}/>
     {:else if selected == 'Dados Cadastrais'}
       <Dadoscad />
+    {:else if selected == 'Produtos'}
+      <Produtosadmin />
     {/if}
   </div>
 </div>
