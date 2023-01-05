@@ -2,11 +2,30 @@
   import "./style.scss"
   import {createForm} from "svelte-forms-lib"
   import {imask} from '@imask/svelte'
+	import FormUpdate from "./formupdate/FormUpdate.svelte";
 
   let files
+  let selectedProduct
+
   $: result = {
     alert:'',
     text: '',
+  }
+  $: select = false
+  $: produtos = []
+
+
+
+  function handleSelectChange(id){
+    select = true
+    selectedProduct = produtos.find((produto) => produto.id == this.value)
+  }
+
+  async function getProdutos(){
+    const response = await fetch('http://localhost:3333/Produto')
+    const data = await response.json()
+
+    produtos = await data
   }
 
   const optionsValor = {
@@ -36,14 +55,15 @@
     },
     onSubmit: values => {
       
+      let data = new FormData()
+
       if(files.length != null){
         for(let i = 0; i < files.length; i++){
-          values.imagens.push(files[i])
+          data.append('imagens', files[i])
         }
       }
 
-      let data = new FormData()
-
+      
       values.valor = values.valor.replace('R$', '')
 
       data.append('nome', values.nome)
@@ -56,13 +76,13 @@
       data.append('largura', values.largura)
       data.append('comprimento', values.comprimento)
       data.append('material', values.material)
-      data.append('imagens', values.imagens)
+
+      console.log(data)
 
       fetch('http://localhost:3333/Produto/Cadastrar',{
       method: 'POST',
       body: data
       }).then((response) => {
-          console.log(response)
           if(response.status == 201){
               result.alert  = 'alert-success'
               result.text = 'Produto cadastrado com sucesso'
@@ -200,12 +220,24 @@
         </form>
       </div>
     </div>
-    <div tabindex="0" class="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box">
+    <div class="collapse border border-base-300 bg-base-100 rounded-box">
+      <input on:click={() => {getProdutos()}} type="checkbox" /> 
       <div class="collapse-title text-xl font-medium">
         Alterar
       </div>
-      <div class="collapse-content"> 
-        <p>tabindex="0" attribute is necessary to make the div focusable</p>
+      <div class="collapse-content w-full"> 
+        <select class="select select-bordered w-full">
+          <option disabled selected>Selecione um Produto</option>
+          {#if produtos.length !=  0}
+            {#each produtos as produto}
+              <option value={produto.id}>{produto.nome}</option>
+            {/each}
+          {/if}
+        </select>
+
+        {#if select == true}
+          <FormUpdate />
+        {/if}
       </div>
     </div>
     <div tabindex="0" class="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box">
