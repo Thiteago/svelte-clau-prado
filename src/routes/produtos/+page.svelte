@@ -11,7 +11,7 @@ $: produtos = []
 
 function getProdutos() {
   api.get("/Produto").then((response) => {
-    const prod= response.data.produtos
+    const prod= response.data
     produtos = [...prod]
   })
 }
