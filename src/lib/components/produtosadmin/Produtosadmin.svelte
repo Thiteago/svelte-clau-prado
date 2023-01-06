@@ -3,22 +3,44 @@
   import {createForm} from "svelte-forms-lib"
   import {imask} from '@imask/svelte'
 	import FormUpdate from "./formupdate/FormUpdate.svelte";
+	import { onMount } from "svelte";
 
   let files
+  let idSelected
+  let idDeleteSelected
+  let produtos = []
   let selectedProduct
+
 
   $: result = {
     alert:'',
     text: '',
   }
-  $: select = false
-  $: produtos = []
+  
+  onMount(async () => {
+    await getProdutos()
+  })
 
+  function deleteProduct(id){
+    fetch(`http://localhost:3333/Produto/${id}/Deletar`,{
+      method: 'DELETE',
+    }).then((response) => {
+        if(response.status == 200){
+            result.alert  = 'alert-success'
+            result.text = 'Produto deletado com sucesso'
+            files = []
+        }
+    }).catch((error) => {
+        if(error.response.status == 500){
+          result.alert  = 'alert-error'
+          result.text = 'Erro ao deletar o produto'
+          files = []
+        }
+    })
+  }
 
-
-  function handleSelectChange(id){
-    select = true
-    selectedProduct = produtos.find((produto) => produto.id == this.value)
+  function handleSelectChange(){
+    selectedProduct = produtos.find(p => p.id == idSelected)
   }
 
   async function getProdutos(){
@@ -62,7 +84,6 @@
           data.append('imagens', files[i])
         }
       }
-
       
       values.valor = values.valor.replace('R$', '')
 
@@ -77,8 +98,6 @@
       data.append('comprimento', values.comprimento)
       data.append('material', values.material)
 
-      console.log(data)
-
       fetch('http://localhost:3333/Produto/Cadastrar',{
       method: 'POST',
       body: data
@@ -89,7 +108,6 @@
               files = []
           }
       }).catch((error) => {
-        console.log(error)
           if(error.response.status == 500){
             result.alert  = 'alert-error'
             result.text = 'Erro ao cadastrar o produto'
@@ -129,7 +147,7 @@
           bind:value={$form.categoria}
           >
             <option disabled>Selecione uma Categoria</option>
-            <option value="Topo de bolo">Topo de Bolo</option>
+            <option value="Topo de Bolo">Topo de Bolo</option>
             <option value="Painel">Painel</option>
           </select>
 
@@ -221,12 +239,12 @@
       </div>
     </div>
     <div class="collapse border border-base-300 bg-base-100 rounded-box">
-      <input on:click={() => {getProdutos()}} type="checkbox" /> 
+      <input type="checkbox" /> 
       <div class="collapse-title text-xl font-medium">
         Alterar
       </div>
       <div class="collapse-content w-full"> 
-        <select class="select select-bordered w-full">
+        <select bind:value={idSelected} on:change={handleSelectChange} class="select select-bordered w-full">
           <option disabled selected>Selecione um Produto</option>
           {#if produtos.length !=  0}
             {#each produtos as produto}
@@ -235,17 +253,24 @@
           {/if}
         </select>
 
-        {#if select == true}
-          <FormUpdate />
+        {#if selectedProduct != undefined}
+          <FormUpdate bind:produto={selectedProduct}/>
         {/if}
       </div>
     </div>
-    <div tabindex="0" class="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box">
+    <div class="collapse border border-base-300 bg-base-100 rounded-box">
+      <input type="checkbox" /> 
       <div class="collapse-title text-xl font-medium">
         Excluir
       </div>
-      <div class="collapse-content"> 
-        <p>tabindex="0" attribute is necessary to make the div focusable</p>
+      <div class="collapse-content flex-col flex"> 
+        <select bind:value={idDeleteSelected} class="select select-bordered w-full" name="delete" id="delete">
+          {#if produtos.length !=  0}
+            {#each produtos as produto}
+              <option value={produto.id}>{produto.nome}</option>
+            {/each}
+          {/if}
+        </select>
       </div>
     </div>
   </div>
