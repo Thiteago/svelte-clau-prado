@@ -11,6 +11,10 @@
     src: url(../../assets/fonts/WinterSunday.otf);
 }
 
+.cart-container{
+    width:  2.25rem
+}
+
 .container-options{
     display: flex;
     gap: 10px;
@@ -26,12 +30,19 @@
     }
 }
 
+.wrapper-logo{
+    width: 13rem;
+    padding-top: 3rem;
+    padding-left: 1.25rem;
+}
+
 .main-header{
     justify-content: space-between;
     background-color: #fff;
     display: flex;
     height: 105px;
     width: 100%;
+    align-items: center;
     flex-wrap: nowrap;
 
     >img{
@@ -43,6 +54,7 @@
         background-color: #DB00FF;
         position: relative;
         display: flex;
+        height: 100%;
         flex-direction: column;
         align-items: flex-end;
         justify-content: center;
