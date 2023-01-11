@@ -25,7 +25,7 @@
     fetch(`http://localhost:3333/Produto/${id}/Deletar`,{
       method: 'DELETE',
     }).then((response) => {
-        if(response.status == 200){
+        if(response.status == 201){
             result.alert  = 'alert-success'
             result.text = 'Produto deletado com sucesso'
             files = []
@@ -42,6 +42,7 @@
   function handleSelectChange(){
     selectedProduct = produtos.find(p => p.id == idSelected)
   }
+
 
   async function getProdutos(){
     const response = await fetch('http://localhost:3333/Produto')
@@ -264,13 +265,23 @@
         Excluir
       </div>
       <div class="collapse-content flex-col flex"> 
-        <select bind:value={idDeleteSelected} class="select select-bordered w-full" name="delete" id="delete">
+        <select on:click={getProdutos} bind:value={idDeleteSelected} class="select select-bordered w-full" name="delete" id="delete">
           {#if produtos.length !=  0}
             {#each produtos as produto}
               <option value={produto.id}>{produto.nome}</option>
             {/each}
           {/if}
         </select>
+        <button on:click={() => deleteProduct(idDeleteSelected)} class="btn btn-primary w-20 mt-2">Excluir</button>
+
+        {#if result.alert != ''}
+            <div class="alert {result.alert} shadow-lg">
+              <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <span>{result.text}</span>
+              </div>
+            </div>
+          {/if}
       </div>
     </div>
   </div>
