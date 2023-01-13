@@ -1,10 +1,12 @@
 <script>
 import {user, signed, logout} from '$lib/stores/login'
+import { page } from '$app/stores';
+import {cart} from '$lib/stores/cart.js'
 import './style.scss'
 import avatar from '$lib/assets/img/avatar-login.png'
 import logobig from '$lib/assets/img/logo-clau.png'
 import logomin from '$lib/assets/img/logomin.jpg'
-import cart from  '$lib/assets/icons/cart2.svg'
+import carts from  '$lib/assets/icons/cart2.svg'
 
 export let tamanho = "grande"
 let logo
@@ -34,43 +36,34 @@ if(tamanho == "grande"){
 
     <div class="container-right-content">
         <div class="cart-container">
-            <img on:click={() => carrinhoAtivo == true ? carrinhoAtivo = false : carrinhoAtivo = true} src={cart} alt="">
-            <span>0 itens no carrinho</span>
+            {#if $page.url.pathname != "/carrinho"}
+            <img on:click={() => carrinhoAtivo == true ? carrinhoAtivo = false : carrinhoAtivo = true} src={carts} alt="">
+            <span>{$cart.length} itens no carrinho</span>
+            {/if}
         </div>
         {#if carrinhoAtivo == true}
             <div class="cart-preview-container">
                 <h2 class="title">Alguns produtos no seu carrinho</h2>
-                <div class="wrapper-produtos">
-                    <div class="produto">
-                        <div class="produto-info">
-                            <h3>Produto 1</h3>
-                            <div class="adicional-info-wrapper">
-                                <span>Quantidade: 1</span>
-                                <span>R$ 10,00</span>
+                <div class="wrapper-products">
+                    {#if $cart.length > 0}
+                        {#each $cart as produto}
+                            <div class="produto">
+                                <div class="produto-info">
+                                    <h3>{produto.nome}</h3>
+                                    <div class="adicional-info-wrapper">
+                                        <span>Quantidade: 1</span>
+                                        <span>R$ {produto.valor}</span>
+                                    </div>
+                                </div>
                             </div>
-                            
+                        {/each}
+                    {:else}
+                        <div>
+                            <h3>Nenhum produto no carrinho</h3>
                         </div>
-                    </div>
-                    <div class="produto">
-                        <div class="produto-info">
-                            <h3>Produto 1</h3>
-                            <div class="adicional-info-wrapper">
-                                <span>Quantidade: 1</span>
-                                <span>R$ 10,00</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="produto">
-                        <div class="produto-info">
-                            <h3>Produto 1</h3>
-                            <div class="adicional-info-wrapper">
-                                <span>Quantidade: 1</span>
-                                <span>R$ 10,00</span>
-                            </div>
-                        </div>
-                    </div>
+                    {/if}
                     <div class="wrapper-button-cart">
-                        <button>Ir para carrinho</button>
+                        <a href="/carrinho">Ir para carrinho</a>
                     </div>
                 </div>
             </div>
