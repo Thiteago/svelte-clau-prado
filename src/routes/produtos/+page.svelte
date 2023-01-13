@@ -27,7 +27,7 @@ onMount(() => {
 <section class="product-grid">
   <Busca></Busca>
 
-  <div class="wrapper-produtos">
+  <div class="wrapper-produto">
     <aside class="container-filter">
       <h1>Filtrar</h1>
 
