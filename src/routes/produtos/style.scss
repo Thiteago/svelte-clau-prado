@@ -20,9 +20,10 @@ body{
   padding-right: 10px;
   flex-direction: column;
 
-  .wrapper-produtos{
+  .wrapper-produto{
       margin: 20px 15px;
       display: flex;
+      gap: 1rem;
 
       .container-filter{
           height: auto;
