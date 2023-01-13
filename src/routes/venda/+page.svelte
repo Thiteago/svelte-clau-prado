@@ -1,5 +1,6 @@
 <script>
-  import './style.scss'
+  import './venda.scss'
+  import { cart } from '$lib/stores/cart.js'
   import { page } from '$app/stores';
 	import { api } from '$lib/services/api';
   import Header from '$lib/components/header/Header.svelte'
@@ -12,6 +13,13 @@
   $: ativo = 'descricao'
   $: images = []
   $: mainimage = images[0]
+
+  function addToCart(){
+    if(!$cart.find(produtos => produtos.id == produto.id)){
+      $cart = [...$cart, produto]
+    }
+    console.log($cart)
+  }
 
   function toggleActive(e){
     let liList = document.getElementsByTagName("li")
@@ -36,7 +44,6 @@
     api.get(`/Produto/${produtoId}`).then((response) =>{
       const res = response.data
       produto = {...res}
-      console.log(produto)
       produto.dataCriacao = new Date(produto.dataCriacao).toLocaleDateString('pt-BR')
     })
   }
@@ -83,7 +90,7 @@
               <div class='price-info'>
                 R${produto.valor}
               </div>
-                <button class='button'>{produto.tipo == 'Aluguel' ? 'Alugar' : 'Comprar'}</button>
+                <button on:click={addToCart} class='button'>{produto.tipo == 'Aluguel' ? 'Alugar' : 'Comprar'}</button>
             </div>
           </div>
       </div>    
