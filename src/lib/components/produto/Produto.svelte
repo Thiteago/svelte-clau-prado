@@ -18,7 +18,7 @@
   })
 </script>
 
-<div class='wrapper-produto'>
+<div class='wrapper-produtos'>
   <div class='icon-produto'>
       {#if images != undefined}
         <img src={`http://localhost:3333/static/${images}`} alt="" />
