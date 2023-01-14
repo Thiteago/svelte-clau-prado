@@ -58,7 +58,7 @@ if(tamanho == "grande"){
                             </div>
                         {/each}
                     {:else}
-                        <div>
+                        <div class="text-center mt-2">
                             <h3>Nenhum produto no carrinho</h3>
                         </div>
                     {/if}
