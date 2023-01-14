@@ -1,0 +1,28 @@
+.container-steps{
+  display: flex;
+}
+
+.step-icon{
+  width: 36px;
+  height: 36px;
+}
+
+.step{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.step-arrow{
+  width: 33px;
+  height: 8px;
+}
+
+.completed{
+  filter: invert(17%) sepia(95%) saturate(7487%) hue-rotate(307deg) brightness(100%) contrast(106%);;
+}
+
+.text-completed{
+  color: #F000B8;
+  font-weight: bold;
+}
