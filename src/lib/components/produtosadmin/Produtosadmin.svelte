@@ -61,6 +61,16 @@
     }
   }
 
+  const optionsPeso = {
+    mask: 'num kg',
+    blocks: {
+      num: {
+        mask: Number,
+        thousandsSeparator: '.'
+      }
+    }
+  }
+
 
   const {form, handleChange, handleSubmit} = createForm({
     initialValues: {
@@ -75,6 +85,7 @@
       comprimento: "",
       material: "",
       imagens: [],
+      peso: ''
     },
     onSubmit: values => {
       
@@ -98,6 +109,7 @@
       data.append('largura', values.largura)
       data.append('comprimento', values.comprimento)
       data.append('material', values.material)
+      data.append('peso', values.peso)
 
       fetch('http://localhost:3333/Produto/Cadastrar',{
       method: 'POST',
@@ -191,6 +203,13 @@
           <input use:imask={optionsValor} name="valor" type="text" placeholder="R$ 00,00" class="input w-full border border-base-300" 
           on:change={handleChange}
           bind:value={$form.valor}
+          required
+          />
+
+          <label for="valor">Peso</label>
+          <input use:imask={optionsPeso} name="peso" type="text" placeholder="0 kg" class="input w-full border border-base-300" 
+          on:change={handleChange}
+          bind:value={$form.peso}
           required
           />
 
