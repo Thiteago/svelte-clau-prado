@@ -2,6 +2,7 @@
   import './venda.scss'
   import { cart } from '$lib/stores/cart.js'
   import { page } from '$app/stores';
+  import { goto } from '$app/navigation';
 	import { api } from '$lib/services/api';
   import Header from '$lib/components/header/Header.svelte'
   import PreviousButton from '$lib/components/previousbutton/Previousbutton.svelte'
@@ -16,9 +17,9 @@
 
   function addToCart(){
     if(!$cart.find(produtos => produtos.id == produto.id)){
-      $cart = [...$cart, produto]
+      let product = {...produto, imagens: images[0], quantidade: 1}
+      $cart = [...$cart, product]
     }
-    console.log($cart)
   }
 
   function toggleActive(e){
@@ -90,7 +91,7 @@
               <div class='price-info'>
                 R${produto.valor}
               </div>
-                <button on:click={addToCart} class='button'>{produto.tipo == 'Aluguel' ? 'Alugar' : 'Comprar'}</button>
+                <button on:click={() => {addToCart(), goto('/carrinho')}} class='button'>{produto.tipo == 'Aluguel' ? 'Alugar' : 'Comprar'}</button>
             </div>
           </div>
       </div>    
