@@ -16,6 +16,13 @@
   $: cepValidates = true
   let cep = '';
   let freightInfo = {}
+  $: selectedFreight = ''
+  let total = 0
+  let subtotal = 0
+
+  $cart.forEach(element => {
+    subtotal += element.quantidade * element.valor
+  });
 
   async function freightCalculate(){
     if(cep?.length < 9 || cep == ''){
@@ -36,7 +43,12 @@
       })
     }
   }
-
+  
+  $: if(selectedFreight == 'PAC'){
+    total = subtotal + parseFloat(freightInfo?.valorpac)
+  }else if(selectedFreight == 'SEDEX'){
+    total = subtotal + parseFloat(freightInfo?.valorsedex)
+  }
 
 </script>
 
@@ -56,7 +68,7 @@
         <div class="mt-3">
           <form class="flex gap-2 items-center" on:submit={freightCalculate}>
             <input required bind:value={cep} type="text" placeholder="CEP" use:imask={optionsCEP} class="input input-bordered w-full max-w-xs" />
-            <button type="submit" class="btn btn-secondary">Calcular</button>
+            <button type="submit" class="btn bg-[#7C3267]">Calcular</button>
           </form>
           {#if cepValidates != true}
             <span class="text-red-500 font-bold block mt-2">CEP Inválido!</span>
@@ -66,14 +78,20 @@
         <div>
           <div class="mt-4">
             <h1 class="text-xl font-poppins font-bold">Frete</h1>
-            <div class="mt-2">
+            <div class="mt-2 flex flex-col justify-center">
               <div class="flex justify-between">
-                <span class="text-gray-500">PAC - Até {freightInfo?.prazopac} dias úteis</span>
+                <div class="flex gap-2">
+                  <input bind:group={selectedFreight} name="frete" type="radio" value="PAC">
+                  <label for="frete" class="text-gray-500">PAC - Até {freightInfo?.prazopac} dias úteis</label>
+                </div>
                 <span class="text-gray-500">R$ {freightInfo?.valorpac}</span>
               </div>
               
               <div class="flex justify-between">
-                <span class="text-gray-500">SEDEX - Até {freightInfo?.prazosedex} dias úteis</span>
+                <div class="flex gap-2">
+                  <input bind:group={selectedFreight} name="frete" type="radio" value="SEDEX">
+                  <label for="frete" class="text-gray-500">SEDEX - Até {freightInfo?.prazosedex} dias úteis</label>
+                </div>
                 <span class="text-gray-500">R$ {freightInfo?.valorsedex}</span>
               </div>
             </div>
@@ -81,14 +99,12 @@
         </div>
         {/if}
       </div>
-      <div class="flex flex-col w-3/5">
+      <div class="flex flex-col w-3/5 gap-8">
         {#if $cart.length > 0}
           {#each $cart as product}
           <div class="flex items-center justify-evenly w-full">
             <div class="w-1/12">
-              <div class="w-20 h-20">
-                <img class="max-w-full" src='http://localhost:3333/static/{product.imagens}' alt="">
-              </div>
+                <img class="w-20 h-20 object-cover" src='http://localhost:3333/static/{product.imagens}' alt="">
             </div>
             <div class="flex flex-col justify-center w-2/5">
               <span class="text-black font-bold">{product.nome}</span>
@@ -110,9 +126,10 @@
             </div>
             <div class="text-right w-1/5">
               <p>Preço à vista</p>
-              <p class="font-bold text-[#F000B8]">R$ {product.valor},00</p>
+              <p class="font-bold text-[#7C3267]">R$ {product.valor},00</p>
             </div>
           </div>
+          <span class="bg-slate-200 w-full h-2"></span>
           {/each}
         {/if}
         {#if $cart.length == 0}
@@ -127,6 +144,20 @@
       <div>
         <div>
           <h1 class="flex gap-1 items-center font-bold text-2xl"><span><img class="w-5" src={resume} alt="resume logo"></span>Resumo</h1>
+        </div>
+        <div>
+          <div class="flex justify-between mt-4">
+            <span class="text-gray-500 pr-3">Subtotal</span>
+            <span class="text-gray-500">R$ {subtotal},00</span>
+          </div>
+          <div class="flex justify-between mt-4">
+            <span class="text-gray-500">Frete</span>
+            <span class="text-gray-500">R$ {selectedFreight == 'PAC' ? freightInfo?.valorpac : selectedFreight == 'SEDEX' ? freightInfo?.valorsedex : '0,00'}</span>
+          </div>
+          <div class="flex justify-between mt-4">
+            <span class="text-gray-500">Total</span>
+            <span class="text-gray-500">R$ {total },00</span>
+          </div>
         </div>
       </div>
     </div>
