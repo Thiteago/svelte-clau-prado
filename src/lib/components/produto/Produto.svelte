@@ -21,7 +21,7 @@
 <div class='wrapper-produtos'>
   <div class='icon-produto'>
       {#if images != undefined}
-        <img src={`http://localhost:3333/static/${images}`} alt="" />
+        <img class="object-cover w-60 h-60" src={`http://localhost:3333/static/${images}`} alt="" />
       {/if}
   </div>
   <div class='info-produto'>
