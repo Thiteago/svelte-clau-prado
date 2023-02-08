@@ -145,7 +145,7 @@
         <form enctype="multipart/form-data" on:submit={handleSubmit} class="flex flex-col gap-2 w-full">
           <label for="nome">Nome</label>
           <input
-          name="nome" placeholder='Ex: Ciclano Antonio Silva' type="text" required 
+          name="nome" placeholder='Ex: Topo de Bolo' type="text" required 
           class="border border-base-300 rounded pl-1 input w-full"
           on:change={handleChange}
           bind:value={$form.nome}
