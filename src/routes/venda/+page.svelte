@@ -62,6 +62,7 @@
 
 <div>
   <Header tamanho='pequeno'></Header>
+  {#if Object.keys(produto).length > 0}
   <section class="container-produto">
     <div class="container-info">
       <PreviousButton endereco={'/produtos'}></PreviousButton>
@@ -86,12 +87,16 @@
               <p>cod. {produto.id}</p>
             </div>
             <div class='wrapper-buy'>
+              {#if produto.quantidadeEmEstoque == 0}
+                <div class='info-situation'>Produto indisponivel</div>
+              {:else}
               <div class='info-situation'>Disponivel apenas para {produto.tipo}
               </div>
               <div class='price-info'>
                 R${produto.valor}
               </div>
                 <button on:click={() => {addToCart(), goto('/carrinho')}} class='button'>{produto.tipo == 'Aluguel' ? 'Alugar' : 'Comprar'}</button>
+              {/if}
             </div>
           </div>
       </div>    
@@ -144,5 +149,6 @@
         {/if}
     </div> 
   </section>
+  {/if}
   <Footer></Footer>
 </div>
