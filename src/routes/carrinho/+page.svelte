@@ -2,11 +2,13 @@
   import Header from '$lib/components/header/Header.svelte';
 	import Steps from '$lib/components/steps/Steps.svelte';
   import { imask } from '@imask/svelte'
-  import { cart } from '$lib/stores/cart'
+  import { cart, resume } from '$lib/stores/cart'
+  import { signed } from '$lib/stores/login'
   import leftArrow from '$lib/assets/icons/left-arrow.svg'
   import rightArrow from '$lib/assets/icons/right-arrow-qtde.svg'
   import location from '$lib/assets/icons/location-pin.svg'
-  import resume from '$lib/assets/icons/resume-cart.svg'
+  import resumeIcon from '$lib/assets/icons/resume-cart.svg'
+  import { goto } from '$app/navigation';
   import './carrinho.scss'
 
   const optionsCEP = {
@@ -20,9 +22,24 @@
   let total = 0
   let subtotal = 0
 
-  $cart.forEach(element => {
-    subtotal += element.quantidade * element.valor
-  });
+  $: if($cart){
+    subtotal = 0
+    $cart.forEach(element => {
+      subtotal += element.quantidade * element.valor
+    }
+  )
+};
+  function handleRedirect(){
+    $resume = {
+      total: total,
+      cartItens: $cart,
+    }
+    if($signed )
+      goto('/carrinho/step3')
+    else{
+      goto('/login?origin=carrinho')
+    }
+  }
 
   async function freightCalculate(){
     if(cep?.length < 9 || cep == ''){
@@ -48,6 +65,8 @@
     total = subtotal + parseFloat(freightInfo?.valorpac)
   }else if(selectedFreight == 'SEDEX'){
     total = subtotal + parseFloat(freightInfo?.valorsedex)
+  }else{
+    total = subtotal
   }
 
 </script>
@@ -68,7 +87,7 @@
         <div class="mt-3">
           <form class="flex gap-2 items-center" on:submit={freightCalculate}>
             <input required bind:value={cep} type="text" placeholder="CEP" use:imask={optionsCEP} class="input input-bordered w-full max-w-xs" />
-            <button type="submit" class="btn bg-[#7C3267]">Calcular</button>
+            <button disabled={$cart.length < 1 ? true : false} type="submit" class="btn bg-[#7C3267]">Calcular</button>
           </form>
           {#if cepValidates != true}
             <span class="text-red-500 font-bold block mt-2">CEP Inválido!</span>
@@ -126,7 +145,7 @@
             </div>
             <div class="text-right w-1/5">
               <p>Preço à vista</p>
-              <p class="font-bold text-[#7C3267]">R$ {product.valor},00</p>
+              <p class="font-bold text-[#7C3267]">R$ {product.quantidade * product.valor},00</p>
             </div>
           </div>
           <span class="bg-slate-200 w-full h-2"></span>
@@ -143,9 +162,9 @@
       </div>
       <div>
         <div>
-          <h1 class="flex gap-1 items-center font-bold text-2xl"><span><img class="w-5" src={resume} alt="resume logo"></span>Resumo</h1>
+          <h1 class="flex gap-1 items-center font-bold text-2xl"><span><img class="w-5" src={resumeIcon} alt="resume logo"></span>Resumo</h1>
         </div>
-        <div>
+        <div class="w-48">
           <div class="flex justify-between mt-4">
             <span class="text-gray-500 pr-3">Subtotal</span>
             <span class="text-gray-500">R$ {subtotal},00</span>
@@ -154,9 +173,12 @@
             <span class="text-gray-500">Frete</span>
             <span class="text-gray-500">R$ {selectedFreight == 'PAC' ? freightInfo?.valorpac : selectedFreight == 'SEDEX' ? freightInfo?.valorsedex : '0,00'}</span>
           </div>
-          <div class="flex justify-between mt-4">
-            <span class="text-gray-500">Total</span>
-            <span class="text-gray-500">R$ {total },00</span>
+          <div class="flex flex-col justify-center items-center bg-green-200 font-bold py-10 px-5 text-xl mt-4">
+            <span class="text-black text-2xl">Total</span>
+            <span class="text-black">R$ {total },00</span>
+          </div>
+          <div>
+            <button on:click={handleRedirect} disabled={selectedFreight == '' ? true : false} class="btn bg-[#7C3267] w-full mt-4">Finalizar compra</button>
           </div>
         </div>
       </div>
