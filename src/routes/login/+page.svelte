@@ -1,5 +1,5 @@
 <script>
-  import './style.scss'
+  import './login.scss'
   import Previousbutton from '$lib/components/previousbutton/Previousbutton.svelte';
   import {createForm} from "svelte-forms-lib"
   import { goto } from '$app/navigation';
