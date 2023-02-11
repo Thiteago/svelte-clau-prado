@@ -36,7 +36,7 @@ if(tamanho == "grande"){
 
     <div class="container-right-content">
         <div class="cart-container">
-            {#if $page.url.pathname != "/carrinho"}
+            {#if !$page.url.pathname.includes("/carrinho")}
                 <img on:click={() => carrinhoAtivo == true ? carrinhoAtivo = false : carrinhoAtivo = true} src={carts} alt="">
                 <span>{$cart.length} itens no carrinho</span>
             {/if}
