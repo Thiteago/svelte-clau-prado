@@ -5,7 +5,11 @@ module.exports = {
     fontFamily: {
       sans: ['poppins', 'sans-serif'],
     },
-    extend: {},
+    extend: {
+      inset : {
+        '12%' : '12%',
+      }
+    },
   },
   plugins: [require("daisyui")],
   daisyui: {
