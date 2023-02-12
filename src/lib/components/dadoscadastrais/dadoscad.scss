@@ -7,10 +7,19 @@
   margin-bottom: 15px;
 }
 
+.desabilitado{
+  background-color: #eee;
+  border: none;
+  padding: 12px 15px;
+  margin: 8px 0;
+  width: 100%;
+}
+
 .fieldset{
   border: 1px solid grey;
   padding-left: 6px;
   display: flex;
+  width: 90%;
   flex-direction: column;
   margin-top: 10px;
 }
