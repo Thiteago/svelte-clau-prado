@@ -78,6 +78,7 @@
       categoria: "",
       descricao: "",
       dataCriacao: "",
+      quantidade: "",
       tipo: "",
       valor: "",
       altura: "",
@@ -102,6 +103,7 @@
       data.append('nome', values.nome)
       data.append('categoria', values.categoria)
       data.append('descricao', values.descricao)
+      data.append('quantidade', values.quantidade)
       data.append('dataCriacao', values.dataCriacao)
       data.append('tipo', values.tipo)
       data.append('valor', values.valor)
@@ -182,6 +184,18 @@
           name="data-fabricacao"
           on:change={handleChange}
           bind:value={$form.dataCriacao}
+          required
+          />
+
+          <label for="data-fabricacao">Quantidade em Estoque</label>
+          <input 
+          type="number" 
+          min="1"
+          max="1000"
+          class="border border-base-300 rounded input w-full"
+          name="quantidade"
+          on:change={handleChange}
+          bind:value={$form.quantidade}
           required
           />
 
