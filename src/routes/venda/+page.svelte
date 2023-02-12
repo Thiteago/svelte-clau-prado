@@ -1,9 +1,9 @@
 <script>
   import './venda.scss'
   import { cart } from '$lib/stores/cart.js'
+  import { onMount } from 'svelte';
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
-	import { api } from '$lib/services/api';
   import Header from '$lib/components/header/Header.svelte'
   import PreviousButton from '$lib/components/previousbutton/Previousbutton.svelte'
   import Footer from '$lib/components/footer/Footer.svelte'
@@ -41,22 +41,28 @@
     }
   }
 
-  function getInfo(){
-    api.get(`/Produto/${produtoId}`).then((response) =>{
-      const res = response.data
-      produto = {...res}
-      produto.dataCriacao = new Date(produto.dataCriacao).toLocaleDateString('pt-BR')
-    })
+  async function getInfo(){
+
+    const response = await fetch(`http://localhost:3333/Produto/${produtoId}`)
+    const data = await response.json()
+    produto = {...data}
+    produto.dataCriacao = new Date(produto.dataCriacao).toLocaleDateString('pt-BR')
+    
   }
 
-  function getImages(){
-    api.get(`/Produto/ImagePath/${produtoId}`).then((response) => {
-      const res = response.data.caminhos
-      images = [...res]
-    })
+  async function getImages(){
+
+    const response = await fetch(`http://localhost:3333/Produto/ImagePath/${produtoId}`)
+    const data = await response.json()
+    images = [...data.caminhos]
+
   }
-  getInfo()
-  getImages()
+
+  onMount(() => {
+    getInfo()
+    getImages()
+  })
+
 
 </script>
 

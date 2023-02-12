@@ -1,62 +1,48 @@
 <script>
-  import './style.scss'
+  import './dadoscad.scss'
   import { imask } from '@imask/svelte';
   import {user} from '$lib/stores/login'
-  import { api } from '$lib/services/api';
 	import { onMount } from 'svelte';
-	import { createForm } from 'svelte-forms-lib';
 
 	let data
-
- 
   $: status = ''
   $: localUser = {}
-  $: teste = {
-      nome: 'ssssssss',
-      email: '',
-      dataNascimento: '',
-      cpf: '',
-      numeroCel: '',
-  }
-
-  
 
   const optionsCel = {
     mask: '(00)00000-0000',
-    lazy: false
+    lazy: true
   };
 
   async function getUserData(){
-    let result = await api.get(`/Usuarios/${$user.id}/dados`)
-    return result.data
+    let result = await fetch(`http://localhost:3333/Usuarios/${$user.id}/dados`)
+    let data = await result.json()
+    return data
   }
 
   onMount(async() => {
     localUser = await getUserData()
     let rawData = new Date(localUser.dataNascimento)
     data = rawData.toLocaleDateString('pt-BR')
-
-    $form.nome = $user.nome
-    $form.email = $user.email
-    $form.cpf = localUser.cpf
-    $form.dataNascimento = data
-    $form.numeroCel = localUser.numeroCel
   })
 
-  const {form, handleChange, handleSubmit} = createForm({
-    initialValues: teste,
-    onSubmit: values => {
-      api.patch(`/Usuarios/${$user.id}/Alterar`, values).then((response) => {
-            if(response.status == 201){
-              status = 'sucesso'
-            }
-        }).catch((error) => {
-          if(error.response?.status == 401){
-            status = 'falhou'
-          }
-        })
-    }
-  })
+  async function handleSubmit(e) {
+
+  }
+
+    // onSubmit: values => {
+    //   fetch(`http://localhost:3333/Usuarios/${$user.id}/Alterar`, {
+    //     method: 'PATCH',
+    //     body: JSON.stringify(values),
+    //   }).then((response) => {
+    //         if(response.status == 201){
+    //           status = 'sucesso'
+    //         }
+    //     }).catch((error) => {
+    //       if(error.response?.status == 401){
+    //         status = 'falhou'
+    //       }
+    //     })
+
 
 </script>
 {#if status == 'sucesso'}
@@ -81,42 +67,32 @@
     <h1 class="text-3xl">Seus Dados</h1>
     <div class="dados-wrapper">
         <form on:submit={handleSubmit} >
-            <fieldset class="fieldset">
-                <legend class="legendafield" >Nome Completo *</legend>
-                <input class="input-info" readOnly type="text" 
-                on:change={handleChange}
-                bind:value={$form.nome}
-                />
-            </fieldset>
-            <fieldset class="fieldset">
-                <legend class="legendafield">Email / Login *</legend>
-                <input class="input-info" type="email" 
-                on:change={handleChange}
-                bind:value={$form.email}
-                />
-            </fieldset>
-            <fieldset class="fieldset">
-                <legend class="legendafield">CPF *</legend>
-                <input class="input-info" readOnly type="text" 
-                on:change={handleChange}
-                bind:value={$form.cpf}
-                />
-            </fieldset>
-            <fieldset class="fieldset">
-                <legend class="legendafield">Data de Nascimento *</legend>
-                <input class="input-info" readOnly type="text" 
-                on:change={handleChange}
-                bind:value={$form.dataNascimento}
-                />
-            </fieldset>
-            <fieldset class="fieldset">
-                <legend class="legendafield">Telefone celular *</legend>
-                <input class="input-info" type="tel" 
-                use:imask={optionsCel}
-                on:change={handleChange}
-                bind:value={$form.numeroCel}
-                />
-            </fieldset>
+  
+              <label for="nome" class="label">
+                <span class="label-text">Nome Completo</span>
+              </label>
+              <input name="nome" type="text" bind:value={localUser.nome} disabled  class="input input-bordered w-full max-w-xs" />
+
+              <label for="email" class="label">
+                <span class="label-text">Email / Login</span>
+              </label>
+              <input name="email" type="text" bind:value={localUser.email} class="input input-bordered w-full max-w-xs" />
+
+              <label for="cpf" class="label">
+                <span class="label-text">CPF *</span>
+              </label>
+              <input name="cpf" type="text" bind:value={localUser.cpf} disabled  class="input input-bordered w-full max-w-xs" />
+
+              <label for="dataNascimento" class="label">
+                <span class="label-text">Data de Nascimento *</span>
+              </label>
+              <input name="dataNascimento" type="text" bind:value={localUser.dataNascimento}  disabled  class="input input-bordered w-full max-w-xs" />
+
+              <label for="dataNascimento" class="label">
+                <span class="label-text">Telefone celular</span>
+              </label>
+              <input name="dataNascimento" type="text" bind:value={localUser.numeroCel} use:imask={optionsCel} class="input input-bordered w-full max-w-xs" />
+
             <button class="btn btn-primary mt-3" type='submit' >Alterar</button>
         </form>
     </div>

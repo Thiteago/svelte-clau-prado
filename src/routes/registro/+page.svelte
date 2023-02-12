@@ -1,10 +1,23 @@
 <script>
-  import "./style.scss"
+  import "./registro.scss"
   import { imask } from '@imask/svelte'
   import Previousbutton from "$lib/components/previousbutton/Previousbutton.svelte";
-  import {createForm} from "svelte-forms-lib"
   import {goto} from '$app/navigation'
-  import { api } from "$lib/services/api";
+
+  let nome = ''
+  let email = ''
+  let dataNascimento = ''
+  let senha = ''
+  let cpf = ''
+  let rua = ''
+  let numeroRua = ''
+  let bairro = ''
+  let cidade = ''
+  let cep = ''
+  let numeroTel = ''
+  let numeroCel = ''
+
+  
 
   const optionsCPF = {
     mask: '000.000.000-00',
@@ -23,31 +36,33 @@
     lazy: false
   };
  
+  async function handleSubmit(e) {
+    e.preventDefault()
 
-  const {form, handleChange, handleSubmit} = createForm({
-    initialValues: {
-      nome: "",
-      email: "",
-      dataNascimento: "",
-      senha: "",
-      cpf: "",
-      rua: "",
-      numeroRua: "",
-      bairro: "",
-      cidade: "",
-      cep: "",
-      numeroTel: "",
-      numeroCel: ""
-    },
-    onSubmit: values => {
-      values.numeroRua = values.numeroRua.toString()
-      api.post("/NovoUsuario", values).then((response) =>{
-        if(response.status == 201){
-          goto("/login")
-        }
-      });
+    const response = await fetch("http://localhost:3333/NovoUsuario",{
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        nome: nome,
+        email: email,
+        dataNascimento: dataNascimento,
+        senha: senha,
+        cpf: cpf,
+        rua: rua,
+        numeroRua: numeroRua.toString(),
+        bairro: bairro,
+        cidade: cidade,
+        cep: cep,
+        numeroTel: numeroTel,
+        numeroCel: numeroCel
+      })
+    })
+    if(response.status == 201){
+      goto("/login")
     }
-  })
+  }
 </script>
 
 <div class="body">
@@ -62,68 +77,56 @@
           <form on:submit={handleSubmit} class='form-subscribe' action="#">
               <input
               name="nome" placeholder='NOME' type="text" required 
-              on:change={handleChange}
-              bind:value={$form.nome}
+              bind:value={nome}
               />
               <input 
               name="email" placeholder='EMAIL' type="text" required 
-              on:change={handleChange}
-              bind:value={$form.email}
+              bind:value={email}
               />
               <input
               name="dataNascimento" type="date" required 
-              on:change={handleChange}
-              bind:value={$form.dataNascimento}
+              bind:value={dataNascimento}
               />
               <input 
               name="senha" placeholder="SENHA" type="password" required 
-              on:change={handleChange}
-              bind:value={$form.senha}
+              bind:value={senha}
               />
               <input 
               name="cpf" placeholder="CPF" required use:imask={optionsCPF}
-              on:change={handleChange}
-              bind:value={$form.cpf}
+              bind:value={cpf}
               />
               <input placeholder="CONFIRME A SENHA" type="password" required />
               <input 
               name="rua" placeholder='Rua' type="Text" required 
-              on:change={handleChange}
-              bind:value={$form.rua}
+              bind:value={rua}
               />
               <input 
               name="numeroRua:" placeholder='Numero' type="number" required 
-              on:change={handleChange}
-              bind:value={$form.numeroRua}
+              bind:value={numeroRua}
               />
               <input 
               name="bairro" placeholder='Bairro' type="text" required 
-              on:change={handleChange}
-              bind:value={$form.bairro}
+              bind:value={bairro}
               />
               <input 
               name="cidade" placeholder='Cidade' type="text" required 
-              on:change={handleChange}
-              bind:value={$form.cidade}
+              bind:value={cidade}
               />
               <input 
               name="cep" placeholder='CEP' type="text" required use:imask={optionsCEP}
-              on:change={handleChange}
-              bind:value={$form.cep}
+              bind:value={cep}
               />
               <input 
               name="numeroTel" placeholder='Numero de Telefone' type="text" use:imask={optionsTel}
-              on:change={handleChange}
-              bind:value={$form.numeroTel}
+              bind:value={numeroTel}
               />
               <input 
               name="numeroCel" placeholder='Numero de Celular' type="text" required
               use:imask={optionsCel}
-              on:change={handleChange}
-              bind:value={$form.numeroCel}
+              bind:value={numeroCel}
               />
               
-              <button class='submit' type="submit">Registar</button>
+              <button class='submit' type="submit">Registrar</button>
           </form>
       </div>
   </div>

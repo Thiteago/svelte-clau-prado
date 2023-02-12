@@ -3,21 +3,19 @@ import Header from '$lib/components/header/Header.svelte'
 import Busca from '$lib/components/busca/Busca.svelte'
 import Footer from '$lib/components/footer/Footer.svelte'
 import Produto from '$lib/components/produto/Produto.svelte'
-import {api} from '$lib/services/api'
 import './style.scss'
 import {onMount} from 'svelte'
 
 $: produtos = []
 
-function getProdutos() {
-  api.get("/Produto").then((response) => {
-    const prod= response.data
-    produtos = [...prod]
-  })
+async function getProdutos() {
+  const response = await fetch('http://localhost:3333/Produto')
+  const data = await response.json()
+  produtos = data
 }
 
-onMount(() => {
-  getProdutos()
+onMount(async () => {
+  await getProdutos()
 })
 
 </script>

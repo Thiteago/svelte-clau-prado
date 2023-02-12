@@ -1,9 +1,8 @@
 <script>
   import './login.scss'
   import Previousbutton from '$lib/components/previousbutton/Previousbutton.svelte';
-  import {createForm} from "svelte-forms-lib"
+
   import { goto } from '$app/navigation';
-  import { api } from '$lib/services/api';
 
   let email = ''
   let senha = ''
@@ -11,25 +10,29 @@
   $: current = "container"
   $: statusAuth = false
 
-  const {form, handleChange, handleSubmit} = createForm({
-    initialValues: {
-      email: "",
-      senha: ""
-    },
-    onSubmit: values => {
-      api.post("/Autenticar", values).then((response) =>{
-        if(response.status == 200){
-          localStorage.setItem('@Auth:user', JSON.stringify(response.data.user))
-          localStorage.setItem('@Auth:token', JSON.stringify(response.data.token))
-          goto("/")
-        }
-      }).catch((error) => {
-        if(error.response.status == 401){
-          statusAuth = true
-        }
-      });
+  async function handleSubmit(e) {
+    e.preventDefault()
+
+    const response = await fetch("http://localhost:3333/Autenticar",{
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        email: email,
+        senha: senha
+      })
+    })
+    if(response.status == 200){
+      let data = await response.json()
+      localStorage.setItem('@Auth:user', JSON.stringify(data.user))
+      localStorage.setItem('@Auth:token', JSON.stringify(data.token))
+      goto("/")
+    }else{
+      statusAuth = true
     }
-  })
+  }
+  
 </script>
 
 <div class="body">
@@ -47,12 +50,10 @@
               <span class="span">acesse sua conta</span>
               <input 
               class="input" type="email" placeholder="Email" 
-              on:change={handleChange}
-              bind:value={$form.email}
+              bind:value={email}
               />
               <input class="input" type="password" placeholder="Senha" 
-              on:change={handleChange}
-              bind:value={$form.senha}
+              bind:value={senha}
               />
               {#if statusAuth == true}
                 <p style="color: red">Falha na Autenticação</p>

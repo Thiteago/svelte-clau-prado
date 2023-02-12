@@ -1,5 +1,4 @@
 <script>
-	import { api } from '$lib/services/api';
 	import { onMount } from 'svelte';
   import cifrao from '$lib/assets/icons/cifrao.svg'
   import './style.scss'
@@ -7,10 +6,12 @@
 
   $: images = ''
 
-  function getImages(){
-    api.get(`/Produto/ImagePath/${id}`).then((response) => {
-      images = response.data.caminhos[0]
-    })
+  async function getImages(){
+
+    const response = await fetch(`http://localhost:3333/Produto/ImagePath/${id}`)
+    const data = await response.json()
+    images = data.caminhos[0]
+
   }
 
   onMount(() => {
