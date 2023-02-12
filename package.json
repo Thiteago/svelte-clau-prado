@@ -32,9 +32,7 @@
 	"type": "module",
 	"dependencies": {
 		"@imask/svelte": "^6.4.3",
-		"axios": "^1.2.1",
 		"node-sass": "^8.0.0",
-		"styled-components": "^5.3.6",
-		"svelte-forms-lib": "^2.0.1"
+		"styled-components": "^5.3.6"
 	}
 }

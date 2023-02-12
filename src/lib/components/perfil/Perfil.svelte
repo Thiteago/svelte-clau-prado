@@ -37,7 +37,7 @@
                   <span>Cartão de crédito</span>
               </div>
           </div>
-          <a href="/#">Histórico de Pedidos</a>
+          <a href="#">Histórico de Pedidos</a>
       </div>
       
   </div>
