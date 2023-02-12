@@ -5,7 +5,7 @@
 	import Produtosadmin from "$lib/components/produtosadmin/Produtosadmin.svelte";
   import {user, loadStorageData, signed} from '$lib/stores/login'
 	import { redirect } from "@sveltejs/kit";
-  import "./style.scss"
+  import "./perfil.scss"
 
   $: selected = 'Perfil'
 
