@@ -29,6 +29,14 @@
     lazy: true
   };
 
+  function handlePayment(metodo){
+    if(metodo == 'boleto'){
+      console.log('boleto')
+    }else if(metodo == 'cartao'){
+      console.log('cartao')
+    }
+  }
+
 
 
 </script>
@@ -67,7 +75,7 @@
               <h1 class="text-2xl font-bold">R$ {$resume.total},00</h1>
             </div>
             <div>
-              <button class="btn bg-[#7C3267] w-full mt-4">Prosseguir</button>
+              <button on:click={() => handlePayment('boleto')} class="btn bg-[#7C3267] w-full mt-4">Prosseguir</button>
             </div>
           </div>
         {:else}
@@ -95,7 +103,7 @@
                   {/each}
                 </select>
               </div>
-              <button class="btn bg-[#7C3267] w-full mt-4">Prosseguir</button>
+              <button on:click={() => handlePayment('cartao')} class="btn bg-[#7C3267] w-full mt-4">Prosseguir</button>
             </form>
           </div>
         {/if}
