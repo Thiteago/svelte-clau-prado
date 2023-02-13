@@ -26,23 +26,20 @@
   })
 
   async function handleSubmit(e) {
-
+    e.preventDefault()
+    let result = await fetch(`http://localhost:3333/Usuarios/${$user.id}/Alterar`, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'PATCH',
+      body: JSON.stringify(localUser),
+    })
+    if(result.status == 201){
+      status = 'sucesso'
+    }else if(result.status == 401){
+      status = 'falhou'
+    }
   }
-
-    // onSubmit: values => {
-    //   fetch(`http://localhost:3333/Usuarios/${$user.id}/Alterar`, {
-    //     method: 'PATCH',
-    //     body: JSON.stringify(values),
-    //   }).then((response) => {
-    //         if(response.status == 201){
-    //           status = 'sucesso'
-    //         }
-    //     }).catch((error) => {
-    //       if(error.response?.status == 401){
-    //         status = 'falhou'
-    //       }
-    //     })
-
 
 </script>
 {#if status == 'sucesso'}
@@ -66,32 +63,32 @@
   <div class="dados-container">
     <h1 class="text-3xl">Seus Dados</h1>
     <div class="dados-wrapper">
-        <form on:submit={handleSubmit} >
+        <form class="flex flex-col w-11/12" on:submit={handleSubmit} >
   
               <label for="nome" class="label">
                 <span class="label-text">Nome Completo</span>
               </label>
-              <input name="nome" type="text" bind:value={localUser.nome} disabled  class="input input-bordered w-full max-w-xs" />
+              <input name="nome" type="text" bind:value={localUser.nome} disabled  class="input input-bordered w-full" />
 
               <label for="email" class="label">
                 <span class="label-text">Email / Login</span>
               </label>
-              <input name="email" type="text" bind:value={localUser.email} class="input input-bordered w-full max-w-xs" />
+              <input name="email" type="text" bind:value={localUser.email} class="input input-bordered w-full" />
 
               <label for="cpf" class="label">
                 <span class="label-text">CPF *</span>
               </label>
-              <input name="cpf" type="text" bind:value={localUser.cpf} disabled  class="input input-bordered w-full max-w-xs" />
+              <input name="cpf" type="text" bind:value={localUser.cpf} disabled  class="input input-bordered w-full" />
 
               <label for="dataNascimento" class="label">
                 <span class="label-text">Data de Nascimento *</span>
               </label>
-              <input name="dataNascimento" type="text" bind:value={localUser.dataNascimento}  disabled  class="input input-bordered w-full max-w-xs" />
+              <input name="dataNascimento" type="text" bind:value={localUser.dataNascimento}  disabled  class="input input-bordered w-full" />
 
               <label for="dataNascimento" class="label">
                 <span class="label-text">Telefone celular</span>
               </label>
-              <input name="dataNascimento" type="text" bind:value={localUser.numeroCel} use:imask={optionsCel} class="input input-bordered w-full max-w-xs" />
+              <input name="dataNascimento" type="text" bind:value={localUser.numeroCel} use:imask={optionsCel} class="input input-bordered w-full" />
 
             <button class="btn btn-primary mt-3" type='submit' >Alterar</button>
         </form>

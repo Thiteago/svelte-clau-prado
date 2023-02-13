@@ -1,6 +1,5 @@
 <script>
   import "./style.scss"
-  import {createForm} from "svelte-forms-lib"
   import {imask} from '@imask/svelte'
 	import FormUpdate from "./formupdate/FormUpdate.svelte";
 	import { onMount } from "svelte";
@@ -10,6 +9,19 @@
   let idDeleteSelected
   let produtos = []
   let selectedProduct
+
+  let nome = ""
+  let categoria = ""
+  let descricao = ""
+  let dataCriacao = ""
+  let quantidade = ""
+  let tipo = ""
+  let valor = ""
+  let altura = ""
+  let largura = ""
+  let comprimento = ""
+  let material = ""
+  let peso = ''
 
 
   $: result = {
@@ -72,48 +84,32 @@
   }
 
 
-  const {form, handleChange, handleSubmit} = createForm({
-    initialValues: {
-      nome: "",
-      categoria: "",
-      descricao: "",
-      dataCriacao: "",
-      quantidade: "",
-      tipo: "",
-      valor: "",
-      altura: "",
-      largura: "",
-      comprimento: "",
-      material: "",
-      imagens: [],
-      peso: ''
-    },
-    onSubmit: values => {
-      
-      let data = new FormData()
+  async function handleSubmit(event){
+    event.preventDefault()
 
-      if(files.length != null){
-        for(let i = 0; i < files.length; i++){
-          data.append('imagens', files[i])
-        }
+    let data = new FormData()
+    if(files.length != null){
+      for(let i = 0; i < files.length; i++){
+        data.append('imagens', files[i])
       }
-      
-      values.valor = values.valor.replace('R$', '')
+    }
 
-      data.append('nome', values.nome)
-      data.append('categoria', values.categoria)
-      data.append('descricao', values.descricao)
-      data.append('quantidade', values.quantidade)
-      data.append('dataCriacao', values.dataCriacao)
-      data.append('tipo', values.tipo)
-      data.append('valor', values.valor)
-      data.append('altura', values.altura)
-      data.append('largura', values.largura)
-      data.append('comprimento', values.comprimento)
-      data.append('material', values.material)
-      data.append('peso', values.peso)
+    valor = valor.replace('R$', '')
 
-      fetch('http://localhost:3333/Produto/Cadastrar',{
+    data.append('nome', nome)
+    data.append('categoria', categoria)
+    data.append('descricao', descricao)
+    data.append('quantidade', quantidade)
+    data.append('dataCriacao', dataCriacao)
+    data.append('tipo', tipo)
+    data.append('valor', valor)
+    data.append('altura', altura)
+    data.append('largura', largura)
+    data.append('comprimento', comprimento)
+    data.append('material', material)
+    data.append('peso', peso)
+
+    fetch('http://localhost:3333/Produto/Cadastrar',{
       method: 'POST',
       body: data
       }).then((response) => {
@@ -129,8 +125,7 @@
             files = []
           }
       })
-    }
-  })
+  }
 
 </script>
 
@@ -149,8 +144,7 @@
           <input
           name="nome" placeholder='Ex: Topo de Bolo' type="text" required 
           class="border border-base-300 rounded pl-1 input w-full"
-          on:change={handleChange}
-          bind:value={$form.nome}
+          bind:value={nome}
           />
 
           <label for="categoria">Categoria</label>
@@ -158,8 +152,7 @@
           id="categoria"
           class="border border-base-300 rounded input w-full"
           required
-          on:change={handleChange}
-          bind:value={$form.categoria}
+          bind:value={categoria}
           >
             <option disabled>Selecione uma Categoria</option>
             <option value="Topo de Bolo">Topo de Bolo</option>
@@ -172,8 +165,7 @@
           name="descricao" 
           id="descricao" 
           placeholder="Insira a descrição do produto"
-          on:change={handleChange}
-          bind:value={$form.descricao}
+          bind:value={descricao}
           required
           />
 
@@ -182,8 +174,7 @@
           type="date" 
           class="border border-base-300 rounded input w-full"
           name="data-fabricacao"
-          on:change={handleChange}
-          bind:value={$form.dataCriacao}
+          bind:value={dataCriacao}
           required
           />
 
@@ -194,8 +185,7 @@
           max="1000"
           class="border border-base-300 rounded input w-full"
           name="quantidade"
-          on:change={handleChange}
-          bind:value={$form.quantidade}
+          bind:value={quantidade}
           required
           />
 
@@ -204,8 +194,7 @@
           name="tipo" 
           class="border border-base-300 rounded input w-full"
           id="tipo"
-          on:change={handleChange}
-          bind:value={$form.tipo}
+          bind:value={tipo}
           required
           >
             <option disabled selected>Selecione um tipo</option>
@@ -215,43 +204,37 @@
 
           <label for="valor">Valor</label>
           <input use:imask={optionsValor} name="valor" type="text" placeholder="R$ 00,00" class="input w-full border border-base-300" 
-          on:change={handleChange}
-          bind:value={$form.valor}
+          bind:value={valor}
           required
           />
 
           <label for="valor">Peso</label>
           <input use:imask={optionsPeso} name="peso" type="text" placeholder="0 kg" class="input w-full border border-base-300" 
-          on:change={handleChange}
-          bind:value={$form.peso}
+          bind:value={peso}
           required
           />
 
           <label for="altura">Altura (Em centimetros)</label>
           <input type="text" name="altura" placeholder="12" class="input input-bordered w-full"
-          on:change={handleChange}
-          bind:value={$form.altura}
+          bind:value={altura}
           required
           />
 
           <label for="largura">Largura (Em centimetros)</label>
           <input type="text" name="largura" placeholder="12" class="input input-bordered w-full"
-          on:change={handleChange}
-          bind:value={$form.largura}
+          bind:value={largura}
           required
           />
 
           <label for="comprimento">Comprimento (Em centimetros)</label>
           <input type="text" name="comprimento" placeholder="12" class="input input-bordered w-full"
-          on:change={handleChange}
-          bind:value={$form.comprimento}
+          bind:value={comprimento}
           required
           />
 
           <label for="material">Material </label>
           <input type="text" name="material" placeholder="Ex: Feltro, plastico, etc..." class="input input-bordered w-full"
-          on:change={handleChange}
-          bind:value={$form.material}
+          bind:value={material}
           required
           />
 
@@ -288,7 +271,7 @@
         </select>
 
         {#if selectedProduct != undefined}
-          <FormUpdate bind:produto={selectedProduct}/>
+          <FormUpdate produto={selectedProduct}/>
         {/if}
       </div>
     </div>

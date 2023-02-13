@@ -1,12 +1,14 @@
 <script>
-  import {createForm} from "svelte-forms-lib"
   import {imask} from '@imask/svelte'
-  export let produto
+  export let produto = {}	
 
-  let files
   $: result = {
     alert:'',
     text: '',
+  }
+  let files 
+  if(Object.keys(produto).length > 0){
+    files = produto.imagens
   }
 
   const optionsValor = {
@@ -19,43 +21,30 @@
     }
   }
 
+  async function handleSubmit(event){
+    event.preventDefault()
 
-  const {form, handleChange, handleSubmit} = createForm({
-    initialValues: {
-      nome: produto.nome,
-      categoria: produto.categoria,
-      descricao: produto.descricao,
-      dataCriacao: produto.dataCriacao,
-      tipo: produto.tipo,
-      valor: produto.valor,
-      altura: produto.altura,
-      largura: produto.largura,
-      comprimento: produto.comprimento,
-      material: produto.material,
-      imagens: produto.imagens,
-    },
-    onSubmit: values => {
-      let data = new FormData()
-      
-
-      if(files?.length != null && files?.length != undefined){
-        for(let i = 0; i < files.length; i++){
-          data.append('imagens', files[i])
-        }
+    let data = new FormData()
+    if(files?.length != null && files?.length != undefined){
+      for(let i = 0; i < files.length; i++){
+        data.append('imagens', files[i])
       }
+    }
 
-      data.append('nome', values.nome)
-      data.append('categoria', values.categoria)
-      data.append('descricao', values.descricao)
-      data.append('dataCriacao', values.dataCriacao)
-      data.append('tipo', values.tipo)
-      data.append('valor', values.valor)
-      data.append('altura', values.altura)
-      data.append('largura', values.largura)
-      data.append('comprimento', values.comprimento)
-      data.append('material', values.material)
 
-      fetch(`http://localhost:3333/Produto/${produto.id}/Alterar`,{
+    data.append('nome', produto.nome)
+    data.append('categoria', produto.categoria)
+    data.append('descricao', produto.descricao)
+    data.append('dataCriacao', produto.dataCriacao)
+    data.append('quantidade', produto.quantidadeEmEstoque)
+    data.append('tipo', produto.tipo)
+    data.append('valor', produto.valor)
+    data.append('altura', produto.altura)
+    data.append('largura', produto.largura)
+    data.append('comprimento', produto.comprimento)
+    data.append('material', produto.material)
+
+    fetch(`http://localhost:3333/Produto/${produto.id}/Alterar`,{
       method: 'PATCH',
       body: data
       }).then((response) => {
@@ -71,11 +60,7 @@
             files = []
           }
       })
-    }
-  })
 
-  $:{
-    $form = produto
   }
 
 </script>
@@ -85,8 +70,7 @@
   <input
   name="nome" placeholder='Ex: Ciclano Antonio Silva' type="text" required 
   class="border border-base-300 rounded pl-1 input w-full"
-  on:change={handleChange}
-  bind:value={$form.nome}
+  bind:value={produto.nome}
   />
 
   <label for="categoria">Categoria</label>
@@ -94,8 +78,7 @@
   id="categoria"
   class="border border-base-300 rounded input w-full"
   required
-  on:change={handleChange}
-  bind:value={$form.categoria}
+  bind:value={produto.categoria}
   >
     <option disabled>Selecione uma Categoria</option>
     <option value="Topo de Bolo">Topo de Bolo</option>
@@ -108,8 +91,7 @@
   name="descricao" 
   id="descricao" 
   placeholder="Insira a descrição do produto"
-  on:change={handleChange}
-  bind:value={$form.descricao}
+  bind:value={produto.descricao}
   required
   />
 
@@ -118,8 +100,18 @@
   type="date" 
   class="border border-base-300 rounded input w-full"
   name="data-fabricacao"
-  on:change={handleChange}
-  bind:value={$form.dataCriacao}
+  bind:value={produto.dataCriacao}
+  required
+  />
+
+  <label for="data-fabricacao">Quantidade em Estoque</label>
+  <input 
+  type="number" 
+  min="1"
+  max="1000"
+  class="border border-base-300 rounded input w-full"
+  name="quantidade"
+  bind:value={produto.quantidadeEmEstoque}
   required
   />
 
@@ -128,8 +120,7 @@
   name="tipo" 
   class="border border-base-300 rounded input w-full"
   id="tipo"
-  on:change={handleChange}
-  bind:value={$form.tipo}
+  bind:value={produto.tipo}
   required
   >
     <option disabled selected>Selecione um tipo</option>
@@ -139,36 +130,31 @@
 
   <label for="valor">Valor</label>
   <input use:imask={optionsValor} name="valor" type="text" placeholder="R$ 00,00" class="input w-full border border-base-300" 
-  on:change={handleChange}
-  bind:value={$form.valor}
+  bind:value={produto.valor}
   required
   />
 
   <label for="altura">Altura (Em centimetros)</label>
   <input type="text" name="altura" placeholder="12" class="input input-bordered w-full"
-  on:change={handleChange}
-  bind:value={$form.altura}
+  bind:value={produto.altura}
   required
   />
 
   <label for="largura">Largura (Em centimetros)</label>
   <input type="text" name="largura" placeholder="12" class="input input-bordered w-full"
-  on:change={handleChange}
-  bind:value={$form.largura}
+  bind:value={produto.largura}
   required
   />
 
   <label for="comprimento">Comprimento (Em centimetros)</label>
   <input type="text" name="comprimento" placeholder="12" class="input input-bordered w-full"
-  on:change={handleChange}
-  bind:value={$form.comprimento}
+  bind:value={produto.comprimento}
   required
   />
 
   <label for="material">Material </label>
   <input type="text" name="material" placeholder="Ex: Feltro, plastico, etc..." class="input input-bordered w-full"
-  on:change={handleChange}
-  bind:value={$form.material}
+  bind:value={produto.material}
   required
   />
 
