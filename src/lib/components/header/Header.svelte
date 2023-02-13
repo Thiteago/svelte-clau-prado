@@ -2,7 +2,7 @@
 import {user, signed, logout} from '$lib/stores/login'
 import { page } from '$app/stores';
 import {cart} from '$lib/stores/cart.js'
-import './style.scss'
+import './header.scss'
 import avatar from '$lib/assets/img/avatar-login.png'
 import logobig from '$lib/assets/img/logo-clau.png'
 import logomin from '$lib/assets/img/logomin.jpg'
@@ -28,7 +28,6 @@ if(tamanho == "grande"){
         <nav class="nav">
             <a class="main-action" href={"/#"}>Inicio</a>
             <a class="main-action" href={"/produtos"}>Produtos</a>
-            <a class="main-action" href={"/mandesuaideia"}>Mande sua Ideia</a>
             <a class="main-action" href={"/sobre"}>Sobre</a>
         </nav>
     </div>
@@ -82,7 +81,6 @@ if(tamanho == "grande"){
         <nav class="nav">
             <a class="main-action" href={"/#"}>Inicio</a>
             <a class="main-action" href={"/produtos"}>Produtos</a>
-            <a class="main-action" href={"/mandesuaideia"}>Mande sua Ideia</a>
             <a class="main-action" href={"/sobre"}>Sobre</a>
         </nav>
     </div>
