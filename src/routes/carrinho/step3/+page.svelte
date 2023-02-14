@@ -6,9 +6,10 @@
   import boletoIcon from '$lib/assets/icons/boleto.svg'
   import cardIcon from '$lib/assets/icons/card.svg'
   import { resume } from '$lib/stores/cart.js'
+	import { goto } from '$app/navigation';
 
   $: selectedMethodPayment = 'boleto'
-
+  let sendedPaymentRequest = false
 
   const maskCPF = {
     mask: '000.000.000-00',
@@ -26,20 +27,21 @@
   };
 
   async function handlePayment(metodo){
+    sendedPaymentRequest = true
     if(metodo == 'boleto'){
       $resume = {...$resume, metodoPagamento: 'boleto'}
     }else if(metodo == 'cartao'){
       $resume = {...$resume, metodoPagamento: 'cartao'}
     }
 
-    let response = await fetch('http://localhost:3333/venda/gerar', {
+    await fetch('http://localhost:3333/venda/gerar', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify($resume)
     })
-    let data = await response.json()
+    goto('/carrinho/step4')
   }
 
 
@@ -80,7 +82,7 @@
               <h1 class="text-2xl font-bold">R$ {$resume.total},00</h1>
             </div>
             <div>
-              <button on:click={() => handlePayment('boleto')} class="btn bg-[#7C3267] w-full mt-4">Prosseguir</button>
+              <button disabled={sendedPaymentRequest} on:click={() => handlePayment('boleto')} class="btn bg-[#7C3267] w-full mt-4">Prosseguir</button>
             </div>
           </div>
         {:else}
