@@ -3,7 +3,7 @@
 	import Steps from '$lib/components/steps/Steps.svelte';
   import { imask } from '@imask/svelte'
   import { cart, resume } from '$lib/stores/cart'
-  import { signed } from '$lib/stores/login'
+  import { user, signed } from '$lib/stores/login'
   import leftArrow from '$lib/assets/icons/left-arrow.svg'
   import rightArrow from '$lib/assets/icons/right-arrow-qtde.svg'
   import location from '$lib/assets/icons/location-pin.svg'
@@ -22,17 +22,23 @@
   let total = 0
   let subtotal = 0
 
+  $: alugados = $cart.filter(element => element.tipo == 'Aluguel')
+  $: comprados = $cart.filter(element => element.tipo == 'Venda')
+
   $: if($cart){
     subtotal = 0
-    $cart.forEach(element => {
+    alugados.forEach(element => {
       subtotal += element.quantidade * element.valor
-    }
-  )
+    })
+    comprados.forEach(element => {
+      subtotal += element.quantidade * element.valor
+    })
 };
   function handleRedirect(){
     $resume = {
       total: total,
       cartItens: $cart,
+      idUser: $user.id
     }
     if($signed )
       goto('/carrinho/step3')
@@ -120,36 +126,72 @@
       </div>
       <div class="flex flex-col w-3/5 gap-8">
         {#if $cart.length > 0}
-          {#each $cart as product}
-          <div class="flex items-center justify-evenly w-full">
-            <div class="w-1/12">
-                <img class="w-20 h-20 object-cover" src='http://localhost:3333/static/{product.imagens}' alt="">
-            </div>
-            <div class="flex flex-col justify-center w-2/5">
-              <span class="text-black font-bold">{product.nome}</span>
-              <span class="text-gray-500 block">Voce esta <span class="font-bold text-black">{product.tipo == 'Aluguel' ? 'ALUGANDO' : 'COMPRANDO'}</span> esse produto</span>
-            </div>
-            <div class="flex flex-col items-center justify-center w-1/12">
-              <div class="flex flex-col items-center">
-                <label for="quantidade">Quant.</label>
-                <div class="flex items-center justify-center">
-                  <button on:click={() => {product.quantidade > 1 ? product.quantidade-- : ''}} class="w-4">
-                    <img src={leftArrow} alt="">
-                  </button>
-                  <input name="quantidade" class="input-number w-11 text-center" min="1" type="number" value={product.quantidade} readonly>
-                  <button on:click={() => product.quantidade++} class="w-4">
-                    <img src={rightArrow} alt="">
-                  </button>
+          {#if comprados.length > 0}
+          <h1 class="bg-[#7C3267] rounded w-1/2 text-white pl-3 py-2">Voce esta <b>Comprando</b></h1>
+          {#each comprados as product}
+            <div class="flex items-center justify-evenly w-full">
+              <div class="w-1/12">
+                  <img class="w-20 h-20 object-cover" src='http://localhost:3333/static/{product.imagens}' alt="">
+              </div>
+              <div class="flex flex-col justify-center w-2/5">
+                <span class="text-black font-bold">{product.nome}</span>
+                <span class="text-gray-500 block">Voce esta <span class="font-bold text-black">{product.tipo == 'Aluguel' ? 'ALUGANDO' : 'COMPRANDO'}</span> esse produto</span>
+              </div>
+              <div class="flex flex-col items-center justify-center w-1/12">
+                <div class="flex flex-col items-center">
+                  <label for="quantidade">Quant.</label>
+                  <div class="flex items-center justify-center">
+                    <button on:click={() => {product.quantidade > 1 ? product.quantidade-- : ''}} class="w-4">
+                      <img src={leftArrow} alt="">
+                    </button>
+                    <input name="quantidade" class="input-number w-11 text-center" min="1" type="number" value={product.quantidade} readonly>
+                    <button on:click={() => product.quantidade++} class="w-4">
+                      <img src={rightArrow} alt="">
+                    </button>
+                  </div>
                 </div>
               </div>
+              <div class="text-right w-1/5">
+                <p>Preço à vista</p>
+                <p class="font-bold text-[#7C3267]">R$ {product.quantidade * product.valor},00</p>
+              </div>
             </div>
-            <div class="text-right w-1/5">
-              <p>Preço à vista</p>
-              <p class="font-bold text-[#7C3267]">R$ {product.quantidade * product.valor},00</p>
-            </div>
-          </div>
-          <span class="bg-slate-200 w-full h-2"></span>
+            <span class="bg-slate-200 w-full h-2"></span>
           {/each}
+          {/if}
+          {#if alugados.length > 0}
+            <h1 class="bg-[#7C3267] rounded w-1/2 text-white pl-3 py-2">Voce esta <b>Alugando</b></h1>
+            {#each alugados as product}
+            <div class="flex items-center justify-evenly w-full">
+              <div class="w-1/12">
+                  <img class="w-20 h-20 object-cover" src='http://localhost:3333/static/{product.imagens}' alt="">
+              </div>
+              <div class="flex flex-col justify-center w-2/5">
+                <span class="text-black font-bold">{product.nome}</span>
+                <span class="text-gray-500 block">Voce esta <span class="font-bold text-black">{product.tipo == 'Aluguel' ? 'ALUGANDO' : 'COMPRANDO'}</span> esse produto</span>
+              </div>
+              <div class="flex flex-col items-center justify-center w-1/12">
+                <div class="flex flex-col items-center">
+                  <label for="quantidade">Quant.</label>
+                  <div class="flex items-center justify-center">
+                    <button on:click={() => {product.quantidade > 1 ? product.quantidade-- : ''}} class="w-4">
+                      <img src={leftArrow} alt="">
+                    </button>
+                    <input name="quantidade" class="input-number w-11 text-center" min="1" type="number" value={product.quantidade} readonly>
+                    <button on:click={() => product.quantidade++} class="w-4">
+                      <img src={rightArrow} alt="">
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="text-right w-1/5">
+                <p>Preço à vista</p>
+                <p class="font-bold text-[#7C3267]">R$ {product.quantidade * product.valor},00</p>
+              </div>
+            </div>
+            <span class="bg-slate-200 w-full h-2"></span>
+            {/each}
+          {/if}
         {/if}
         {#if $cart.length == 0}
           <div class="flex flex-col items-center absolute top-1/2 right-1/2">
