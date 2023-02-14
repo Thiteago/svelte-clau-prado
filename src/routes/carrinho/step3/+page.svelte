@@ -10,10 +10,6 @@
   $: selectedMethodPayment = 'boleto'
 
 
-  $: if($resume){
-    console.log($resume.total)
-  }
-
   const maskCPF = {
     mask: '000.000.000-00',
     lazy: true
@@ -29,12 +25,21 @@
     lazy: true
   };
 
-  function handlePayment(metodo){
+  async function handlePayment(metodo){
     if(metodo == 'boleto'){
-      console.log('boleto')
+      $resume = {...$resume, metodoPagamento: 'boleto'}
     }else if(metodo == 'cartao'){
-      console.log('cartao')
+      $resume = {...$resume, metodoPagamento: 'cartao'}
     }
+
+    let response = await fetch('http://localhost:3333/venda/gerar', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify($resume)
+    })
+    let data = await response.json()
   }
 
 
