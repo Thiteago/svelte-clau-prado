@@ -161,7 +161,7 @@
 
           <label for="descricao">Descrição</label>
           <textarea 
-          class="border border-base-300 rounded pl-1 max-h-32 input w-full" 
+          class="border border-base-300 rounded px-2 py-2 max-h-32 input w-full" 
           name="descricao" 
           id="descricao" 
           placeholder="Insira a descrição do produto"
@@ -202,11 +202,20 @@
             <option value="Venda">Venda</option>
           </select>
 
-          <label for="valor">Valor</label>
-          <input use:imask={optionsValor} name="valor" type="text" placeholder="R$ 00,00" class="input w-full border border-base-300" 
-          bind:value={valor}
-          required
-          />
+          {#if tipo == 'Aluguel'}
+            <label for="data-disponibilidaade">Data de disponibilidade</label>
+            <input type="date">
+
+            <label for="valor">Valor (Por dia)</label>
+            <input use:imask={optionsValor} name="valor" type="text" placeholder="R$ 00,00" class="input w-full border border-base-300" 
+            bind:value={valor}
+            required
+            />
+          {/if}
+
+
+
+
 
           <label for="valor">Peso</label>
           <input use:imask={optionsPeso} name="peso" type="text" placeholder="0 kg" class="input w-full border border-base-300" 
