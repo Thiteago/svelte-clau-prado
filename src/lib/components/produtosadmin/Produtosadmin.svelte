@@ -15,6 +15,8 @@
   let descricao = ""
   let dataCriacao = ""
   let quantidade = ""
+  let dataDisponibilidade = ""
+  let valorAluguel = ""
   let tipo = ""
   let valor = ""
   let altura = ""
@@ -95,6 +97,7 @@
     }
 
     valor = valor.replace('R$', '')
+    valorAluguel = valorAluguel.replace('R$', '')
 
     data.append('nome', nome)
     data.append('categoria', categoria)
@@ -102,12 +105,18 @@
     data.append('quantidade', quantidade)
     data.append('dataCriacao', dataCriacao)
     data.append('tipo', tipo)
-    data.append('valor', valor)
     data.append('altura', altura)
     data.append('largura', largura)
     data.append('comprimento', comprimento)
     data.append('material', material)
     data.append('peso', peso)
+
+    if(tipo == 'Aluguel'){
+      data.append('dataDisponibilidade', dataDisponibilidade)
+      data.append('valor', valorAluguel)
+    }else{
+      data.append('valor', valor)
+    }
 
     fetch('http://localhost:3333/Produto/Cadastrar',{
       method: 'POST',
@@ -204,18 +213,14 @@
 
           {#if tipo == 'Aluguel'}
             <label for="data-disponibilidaade">Data de disponibilidade</label>
-            <input type="date">
+            <input bind:value={dataDisponibilidade} type="date" class="input input-bordered">
 
             <label for="valor">Valor (Por dia)</label>
             <input use:imask={optionsValor} name="valor" type="text" placeholder="R$ 00,00" class="input w-full border border-base-300" 
-            bind:value={valor}
+            bind:value={valorAluguel}
             required
             />
           {/if}
-
-
-
-
 
           <label for="valor">Peso</label>
           <input use:imask={optionsPeso} name="peso" type="text" placeholder="0 kg" class="input w-full border border-base-300" 

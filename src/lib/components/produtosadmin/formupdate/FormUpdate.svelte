@@ -11,6 +11,11 @@
     files = produto.imagens
   }
 
+  console.log(produto)
+
+  let formatedDatadeCriacao = new Date(produto.dataCriacao).toISOString().split('T')[0]
+  let formatedDatadeDisponibilidade = new Date(produto.data_disponibilidade).toISOString().split('T')[0]
+
   const optionsValor = {
     mask: 'R$num',
     blocks: {
@@ -100,7 +105,7 @@
   type="date" 
   class="border border-base-300 rounded input w-full"
   name="data-fabricacao"
-  bind:value={produto.dataCriacao}
+  bind:value={formatedDatadeCriacao}
   required
   />
 
@@ -123,16 +128,27 @@
   bind:value={produto.tipo}
   required
   >
-    <option disabled selected>Selecione um tipo</option>
-    <option value="Aluguel">Aluguel</option>
-    <option value="Venda">Venda</option>
+    <option disabled>Selecione um tipo</option>
+    <option value="Aluguel" selected={produto.tipo == 'Aluguel' ? true : false}>Aluguel</option>
+    <option value="Venda" selected={produto.tipo == 'Venda' ? true : false}>Venda</option>
   </select>
 
-  <label for="valor">Valor</label>
+  <label for="valor">Valor {produto.tipo == 'Aluguel' ? '(Por dia)' : ''}</label>
   <input use:imask={optionsValor} name="valor" type="text" placeholder="R$ 00,00" class="input w-full border border-base-300" 
   bind:value={produto.valor}
   required
   />
+
+  {#if produto.tipo == 'Aluguel'}
+    <label for="data-disponibilidade">Data de disponibilidade</label>
+    <input 
+    type="date" 
+    class="border border-base-300 rounded input w-full"
+    name="data-disponibilidade"
+    bind:value={formatedDatadeDisponibilidade}
+    required
+    />
+  {/if}
 
   <label for="altura">Altura (Em centimetros)</label>
   <input type="text" name="altura" placeholder="12" class="input input-bordered w-full"
