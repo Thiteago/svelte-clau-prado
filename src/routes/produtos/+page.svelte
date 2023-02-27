@@ -3,7 +3,7 @@ import Header from '$lib/components/header/Header.svelte'
 import Busca from '$lib/components/busca/Busca.svelte'
 import Footer from '$lib/components/footer/Footer.svelte'
 import Produto from '$lib/components/produto/Produto.svelte'
-import './style.scss'
+import './produtos.scss'
 import {onMount} from 'svelte'
 
 $: produtos = []

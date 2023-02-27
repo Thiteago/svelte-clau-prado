@@ -9,11 +9,12 @@
   let idDeleteSelected
   let produtos = []
   let selectedProduct
+  let today = new Date().toISOString().split('T')[0]
 
   let nome = ""
   let categoria = ""
   let descricao = ""
-  let dataCriacao = ""
+  let dataFabricacao = ""
   let quantidade = ""
   let dataDisponibilidade = ""
   let valorAluguel = ""
@@ -103,7 +104,7 @@
     data.append('categoria', categoria)
     data.append('descricao', descricao)
     data.append('quantidade', quantidade)
-    data.append('dataCriacao', dataCriacao)
+    data.append('dataFabricacao', dataFabricacao)
     data.append('tipo', tipo)
     data.append('altura', altura)
     data.append('largura', largura)
@@ -182,8 +183,9 @@
           <input 
           type="date" 
           class="border border-base-300 rounded input w-full"
+          max={today}
           name="data-fabricacao"
-          bind:value={dataCriacao}
+          bind:value={dataFabricacao}
           required
           />
 
@@ -220,7 +222,15 @@
             bind:value={valorAluguel}
             required
             />
+          {:else}
+            <label for="valor">Valor</label>
+            <input use:imask={optionsValor} name="valor" type="text" placeholder="R$ 00,00" class="input w-full border border-base-300" 
+            bind:value={valor}
+            required
+            />
           {/if}
+
+
 
           <label for="valor">Peso</label>
           <input use:imask={optionsPeso} name="peso" type="text" placeholder="0 kg" class="input w-full border border-base-300" 
