@@ -40,7 +40,7 @@ onMount(async () => {
     </aside>
     <div class="container-produtos">
       {#each produtos as item}
-        <Produto id={item.id} title={item.nome} description={item.descricao} type={item.tipo} buttonType={item.tipo}></Produto>
+        <Produto id={item.id} title={item.nome} description={item.descricao} type={item.Aluguel != null ? 'Aluguel' : 'Venda'} buttonType={item.Aluguel != null ? 'Aluguel' : 'Venda'}></Produto>
       {/each}
     </div>
   </div>

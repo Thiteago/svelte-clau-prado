@@ -96,12 +96,12 @@
               {#if produto.quantidadeEmEstoque == 0}
                 <div class='info-situation'>Produto indisponivel</div>
               {:else}
-              <div class='info-situation'>Disponivel apenas para {produto.tipo}
+              <div class='info-situation'>Disponivel apenas para {produto.Aluguel != null ? 'aluguel' : 'venda'}
               </div>
               <div class='price-info'>
                 R${produto.valor}
               </div>
-                <button on:click={() => {addToCart(), goto('/carrinho')}} class='button'>{produto.tipo == 'Aluguel' ? 'Alugar' : 'Comprar'}</button>
+                <button on:click={() => {addToCart(), goto('/carrinho')}} class='button'>{produto.Aluguel != null ? 'Alugar' : 'Comprar'}</button>
               {/if}
             </div>
           </div>

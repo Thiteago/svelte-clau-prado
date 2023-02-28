@@ -11,8 +11,6 @@
     files = produto.imagens
   }
 
-  console.log(produto)
-
   let formatedDatadeCriacao = new Date(produto.dataCriacao).toISOString().split('T')[0]
   let formatedDatadeDisponibilidade = new Date(produto.data_disponibilidade).toISOString().split('T')[0]
 

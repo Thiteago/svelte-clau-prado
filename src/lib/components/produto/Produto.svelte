@@ -40,9 +40,9 @@
               </div>
           </div>
           <div class='buy-button'>
-              <a href="/venda?produto_id={id}">
+            <a href="/venda?produto_id={id}">
               <button class="botao">{buttonType == 'Venda' ? 'Comprar' : 'Alugar'}</button>
-              </a>
+            </a>
           </div>
       </div>
   </div>

@@ -215,7 +215,7 @@
 
           {#if tipo == 'Aluguel'}
             <label for="data-disponibilidaade">Data de disponibilidade</label>
-            <input bind:value={dataDisponibilidade} type="date" class="input input-bordered">
+            <input bind:value={dataDisponibilidade} min={today} type="date" class="input input-bordered">
 
             <label for="valor">Valor (Por dia)</label>
             <input use:imask={optionsValor} name="valor" type="text" placeholder="R$ 00,00" class="input w-full border border-base-300" 

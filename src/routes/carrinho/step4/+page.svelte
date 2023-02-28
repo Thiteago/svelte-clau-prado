@@ -1,6 +1,9 @@
 <script>
   import Header from "$lib/components/header/Header.svelte";
   import Steps from "$lib/components/steps/Steps.svelte";
+  import {cart} from "$lib/stores/cart";
+
+  $cart = []
 </script>
 
 <Header />
