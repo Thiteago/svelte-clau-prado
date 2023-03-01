@@ -1,13 +1,16 @@
 <script>
-  import foto from '$lib/assets/img/foto-clau.png'
+  import './perfilscreen.scss'
+  import { fetchSales } from '$lib/js/helpers.js'
+	import { onMount } from 'svelte';
 
   export let user
+  let sales = []
 
-  async function getSales(){
-    const response = await fetch(`http://localhost:3000/pagamento/listar/${user.id}`)
-    const data = await response.json()
-    return data
-  }
+
+
+  onMount(async () => {
+    sales = await fetchSales(user.id) 
+  })
   
   
 </script>
@@ -19,36 +22,24 @@
         <h2>Bem-vindo, {user.nome}!</h2>
         <span>{user.email}</span>
     </div>
-    <div class="containerImageProfile">
-        <img class="imageProfile" src={foto} alt="" />
-    </div>
   </div>
   
   <div class="containerUltimoPedido">
-    <h3 class="sectionTitle">Ultimo Pedido</h3>
+    <h3 class="sectionTitle">Ultimos Pedidos</h3>
     <div class="containerPedido">
-        <div class="wrapperPedido">
-          <div>
-              <h4 class="title">NÚMERO DO PEDIDO</h4>
-              <span>#1</span>
-          </div>
-          <div>
-              <h4 class="title">STATUS</h4>
-              <span>Concluído</span>
-          </div>
-          <div>
-              <h4 class="title">DATA</h4>
-              <span>01/01/2022</span>
-          </div>
-          <div>
-              <h4 class="title">PAGAMENTO</h4>
-              <span>Cartão de crédito</span>
-          </div>
-        </div>
-        <a href="#">Histórico de Pedidos</a>
-        <div>
-
-        </div>
+      <div class="grid-container">
+        <div class="header col-4">Número do Pedido</div>
+        <div class="header col-4">Status</div>
+        <div class="header col-4">Data</div>
+        <div class="header col-4">Pagamento</div>
+        {#each sales as sale}
+          <div class="item col-4">{sale.id}</div>
+          <div class="item col-4">{sale.status}</div>
+          <div class="item col-4">{sale.data_pedido}</div>
+          <div class="item col-4">{sale.Pagamento.forma_pagamento}</div>
+        {/each}
+      </div>
+      <a href="#">Histórico de Pedidos</a>
     </div>
   </div>
 </div>
