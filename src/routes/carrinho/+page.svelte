@@ -1,15 +1,19 @@
 <script>
   import Header from '$lib/components/header/Header.svelte';
 	import Steps from '$lib/components/steps/Steps.svelte';
+  import { fetchAddress } from '$lib/js/helpers';
+  // @ts-ignore
   import { imask } from '@imask/svelte'
-  import { cart, resume } from '$lib/stores/cart'
-  import { user, signed } from '$lib/stores/login'
+  import { cart, resume } from '$lib/js/stores/cart.js'
+  import { user, signed } from '$lib/js/stores/login.js'
   import leftArrow from '$lib/assets/icons/left-arrow.svg'
   import rightArrow from '$lib/assets/icons/right-arrow-qtde.svg'
   import location from '$lib/assets/icons/location-pin.svg'
+  import truck from '$lib/assets/icons/truck-icon.svg'
   import resumeIcon from '$lib/assets/icons/resume-cart.svg'
   import { goto } from '$app/navigation';
   import './carrinho.scss'
+	import { onMount } from 'svelte';
 
   const optionsCEP = {
     mask: '00000-000',
@@ -21,6 +25,7 @@
   $: selectedFreight = ''
   let total = 0
   let subtotal = 0
+  let enderecos = []
 
   $: alugados = $cart.filter(element => element.Aluguel != null)
   $: comprados = $cart.filter(element => element.Venda != null)
@@ -79,6 +84,11 @@ $: if($cart){
     total = subtotal
   }
 
+  onMount(async () => {
+    enderecos = await fetchAddress($user.id)
+    console.log(enderecos)
+  })
+
 </script>
 
 <Header />
@@ -91,7 +101,7 @@ $: if($cart){
     <div class="flex w-full gap-10">
       <div>
         <div class="flex items-center gap-2 ">
-          <img class="w-6 h-6" src={location} alt="">
+          <img class="w-6 h-6" src={truck} alt="">
           <h1 class="text-xl font-poppins font-bold">Calcular prazo e frete</h1>
         </div>
         <div class="mt-3">
@@ -127,6 +137,24 @@ $: if($cart){
           </div>
         </div>
         {/if}
+        <div class="w-full flex items-center gap-5 pb-2">
+          <div class="w-1/2 h-px bg-black"></div>
+          <span>Ou</span>
+          <div class="w-1/2 h-px bg-black"></div>
+        </div>
+        <div>
+          <div class="flex gap-2">
+            <img class="w-6 h-6" src={location} alt="">
+            <h1 class="text-xl font-poppins font-bold">Selecione seu endereço</h1>
+          </div>
+          <div>
+            {#each enderecos as endereco}
+              <div>
+                {endereco.rua}, {endereco.numeroRua}, {endereco.bairro}, {endereco.cidade}, {endereco.estado}, {endereco.cep}
+              </div>
+            {/each}
+          </div>
+        </div>
       </div>
       <div class="flex flex-col w-3/5 gap-8">
         {#if $cart.length > 0}
