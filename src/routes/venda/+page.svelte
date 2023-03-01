@@ -1,6 +1,6 @@
 <script>
   import './venda.scss'
-  import { cart } from '$lib/stores/cart.js'
+  import { cart } from '$lib/js/stores/cart.js'
   import { onMount } from 'svelte';
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';

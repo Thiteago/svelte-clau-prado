@@ -1,7 +1,7 @@
 <script>
-import {user, signed, logout} from '$lib/stores/login'
+import {user, signed, logout} from '$lib/js/stores/login.js'
 import { page } from '$app/stores';
-import {cart} from '$lib/stores/cart.js'
+import {cart} from '$lib/js/stores/cart.js'
 import './header.scss'
 import avatar from '$lib/assets/img/avatar-login.png'
 import logobig from '$lib/assets/img/logo-clau.png'

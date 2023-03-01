@@ -1,7 +1,7 @@
 <script>
   import './dadoscad.scss'
   import { imask } from '@imask/svelte';
-  import {user} from '$lib/stores/login'
+  import {user} from '$lib/js/stores/login.js'
 	import { onMount } from 'svelte';
 
 	let data

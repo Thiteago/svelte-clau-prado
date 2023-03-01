@@ -1,9 +1,10 @@
 <script>
   import { goto } from "$app/navigation";
 	import Dadoscad from "$lib/components/dadoscadastrais/Dadoscad.svelte";
+  import Historico from "$lib/components/historicopedidos/Historico.svelte";
   import Perfil from "$lib/components/perfil/Perfil.svelte";
 	import Produtosadmin from "$lib/components/produtosadmin/Produtosadmin.svelte";
-  import {user, loadStorageData, signed} from '$lib/stores/login'
+  import {user, loadStorageData, signed} from '$lib/js/stores/login.js'
 	import { redirect } from "@sveltejs/kit";
   import "./perfil.scss"
 
@@ -46,6 +47,8 @@
       <Dadoscad />
     {:else if selected == 'Produtos'}
       <Produtosadmin />
+    {:else if selected == 'Historico de Pedidos'}
+      <Historico user={$user}/>
     {/if}
   </div>
 </div>
