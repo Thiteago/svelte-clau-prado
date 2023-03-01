@@ -5,7 +5,7 @@
   import moneyIcon from '$lib/assets/icons/money.svg'
   import boletoIcon from '$lib/assets/icons/boleto.svg'
   import cardIcon from '$lib/assets/icons/card.svg'
-  import { resume } from '$lib/stores/cart.js'
+  import { resume } from '$lib/js/stores/cart.js'
 	import { goto } from '$app/navigation';
 
   $: selectedMethodPayment = 'boleto'
@@ -34,17 +34,19 @@
       $resume = {...$resume, metodoPagamento: 'cartao'}
     }
 
-    await fetch('http://localhost:3333/pedido/gerar', {
+    const response = await fetch('http://localhost:3333/pedido/gerar', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify($resume)
     })
-    goto('/carrinho/step4')
+    if(response.status == 200){
+      goto('/carrinho/step4')
+    }else{
+      alert('Erro ao gerar pedido')
+    }
   }
-
-
 
 </script>
 
@@ -82,8 +84,7 @@
               <h1 class="text-2xl font-bold">R$ {$resume.total},00</h1>
             </div>
             <div>
-              <!-- disabled={sendedPaymentRequest} -->
-              <button   on:click={() => handlePayment('boleto')} class="btn bg-[#7C3267] w-full mt-4">Prosseguir</button>
+              <button disabled={sendedPaymentRequest}  on:click={() => handlePayment('boleto')} class="btn bg-[#7C3267] w-full mt-4">Prosseguir</button>
             </div>
           </div>
         {:else}
