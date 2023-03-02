@@ -13,6 +13,7 @@
   let numeroRua = ''
   let bairro = ''
   let cidade = ''
+  let estado = ''
   let cep = ''
   let numeroTel = ''
   let numeroCel = ''
@@ -54,6 +55,7 @@
         numeroRua: numeroRua.toString(),
         bairro: bairro,
         cidade: cidade,
+        estado: estado,
         cep: cep,
         numeroTel: numeroTel,
         numeroCel: numeroCel
@@ -111,6 +113,10 @@
               <input 
               name="cidade" placeholder='Cidade' type="text" required 
               bind:value={cidade}
+              />
+              <input 
+              name="estado" placeholder='Estado' type="text" required 
+              bind:value={estado}
               />
               <input 
               name="cep" placeholder='CEP' type="text" required use:imask={optionsCEP}
