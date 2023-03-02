@@ -40,9 +40,6 @@
     })
 };
 
-$: if($cart){
-  console.log($cart)
-}
   function handleRedirect(){
     $resume = {
       total: total,
@@ -149,8 +146,13 @@ $: if($cart){
           </div>
           <div>
             {#each enderecos as endereco}
-              <div>
-                {endereco.rua}, {endereco.numeroRua}, {endereco.bairro}, {endereco.cidade}, {endereco.estado}, {endereco.cep}
+              <div class="flex w-full items-center justify-center">
+                <div class="w-11/12">
+                  {endereco.rua}, {endereco.numeroRua}, {endereco.bairro}, {endereco.cidade} - {endereco.estado}, {endereco.cep}
+                </div>
+                <div class="w-1/12">
+                  <input type="radio">
+                </div>
               </div>
             {/each}
           </div>
