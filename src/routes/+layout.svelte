@@ -1,5 +1,12 @@
 <script>
   import "../app.css";
+  import { loadStorageData} from '$lib/js/stores/login.js'
+	import { onMount } from "svelte";
+
+  onMount(async () => {
+    loadStorageData()
+  })
+  
 </script>
 
 <svelte:head>
