@@ -1,7 +1,8 @@
 <script>
   import {fetchSales} from '$lib/js/helpers.js'
 	import { onMount } from 'svelte';
-	import Modal from '../modal/Modal.svelte';
+	import ModalPedido from '../modalPedido/ModalPedido.svelte';
+	import Modal from '../modalPedido/ModalPedido.svelte';
 
   export let user
   let isOpen = false
@@ -58,4 +59,4 @@
   </div>
 </section>
 
-<Modal pedido={selectedPedido} {isOpen}/>
+<ModalPedido pedido={selectedPedido} {isOpen}/>
