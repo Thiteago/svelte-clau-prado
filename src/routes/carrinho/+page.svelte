@@ -14,19 +14,27 @@
   import { goto } from '$app/navigation';
   import './carrinho.scss'
 	import { onMount } from 'svelte';
+	import Loading from '$lib/components/loading/Loading.svelte';
 
   const optionsCEP = {
     mask: '00000-000',
     lazy: true
   };
-  $: cepValidates = true
-  let cep = '';
+
+  let loading = false
   let freightInfo = {}
-  $: selectedFreight = ''
   let total = 0
   let subtotal = 0
+  let selectedEndereco
   let enderecos = []
 
+  $: if (selectedEndereco){
+    freightInfo = {}
+    cep = selectedEndereco.cep
+  }
+  $: cepValidates = true
+  $: selectedFreight = ''
+  $: cep = '';
   $: alugados = $cart.filter(element => element.Aluguel != null)
   $: comprados = $cart.filter(element => element.Venda != null)
 
@@ -44,7 +52,8 @@
     $resume = {
       total: total,
       cartItens: $cart,
-      idUser: $user.id
+      idUser: $user.id,
+      endereco: selectedEndereco,
     }
     if($signed )
       goto('/carrinho/step3')
@@ -54,6 +63,7 @@
   }
 
   async function freightCalculate(){
+    loading = true
     if(cep?.length < 9 || cep == ''){
       cepValidates = false
       return
@@ -71,8 +81,9 @@
         }
       })
     }
+    loading = false
   }
-  
+
   $: if(selectedFreight == 'PAC'){
     total = subtotal + parseFloat(freightInfo?.valorpac)
   }else if(selectedFreight == 'SEDEX'){
@@ -83,7 +94,7 @@
 
   onMount(async () => {
     enderecos = await fetchAddress($user.id)
-    console.log(enderecos)
+    selectedEndereco = enderecos.find(element => element.principal == true)
   })
 
 </script>
@@ -110,31 +121,36 @@
             <span class="text-red-500 font-bold block mt-2">CEP Inválido!</span>
           {/if}
         </div>
+        {#if loading}
+          <div class="w-9/12 flex justify-center mt-4">
+            <Loading />
+          </div>
+        {/if}
         {#if Object.keys(freightInfo).length > 0 && freightInfo?.valorpac != '0,00' && freightInfo?.valorsedex != '0,00'}
-        <div>
-          <div class="mt-4">
-            <h1 class="text-xl font-poppins font-bold">Frete</h1>
-            <div class="mt-2 flex flex-col justify-center">
-              <div class="flex justify-between">
-                <div class="flex gap-2">
-                  <input bind:group={selectedFreight} name="frete" type="radio" value="PAC">
-                  <label for="frete" class="text-gray-500">PAC - Até {freightInfo?.prazopac} dias úteis</label>
+          <div>
+            <div class="mt-4">
+              <h1 class="text-xl font-poppins font-bold">Frete</h1>
+              <div class="mt-2 w-9/12 flex flex-col justify-center">
+                <div class="flex justify-between">
+                  <div class="flex gap-2">
+                    <input bind:group={selectedFreight} name="frete" type="radio" value="PAC">
+                    <label for="frete" class="text-gray-500">PAC - Até {freightInfo?.prazopac} dias úteis</label>
+                  </div>
+                  <span class="text-gray-500">R$ {freightInfo?.valorpac}</span>
                 </div>
-                <span class="text-gray-500">R$ {freightInfo?.valorpac}</span>
-              </div>
-              
-              <div class="flex justify-between">
-                <div class="flex gap-2">
-                  <input bind:group={selectedFreight} name="frete" type="radio" value="SEDEX">
-                  <label for="frete" class="text-gray-500">SEDEX - Até {freightInfo?.prazosedex} dias úteis</label>
+                
+                <div class="flex justify-between">
+                  <div class="flex gap-2">
+                    <input bind:group={selectedFreight} name="frete" type="radio" value="SEDEX">
+                    <label for="frete" class="text-gray-500">SEDEX - Até {freightInfo?.prazosedex} dias úteis</label>
+                  </div>
+                  <span class="text-gray-500">R$ {freightInfo?.valorsedex}</span>
                 </div>
-                <span class="text-gray-500">R$ {freightInfo?.valorsedex}</span>
               </div>
             </div>
           </div>
-        </div>
         {/if}
-        <div class="w-full flex items-center gap-5 pb-2">
+        <div class="w-3/4 flex items-center gap-5 py-5">
           <div class="w-1/2 h-px bg-black"></div>
           <span>Ou</span>
           <div class="w-1/2 h-px bg-black"></div>
@@ -146,14 +162,30 @@
           </div>
           <div>
             {#each enderecos as endereco}
-              <div class="flex w-full items-center justify-center">
-                <div class="w-11/12">
-                  {endereco.rua}, {endereco.numeroRua}, {endereco.bairro}, {endereco.cidade} - {endereco.estado}, {endereco.cep}
+              {#if endereco.principal}
+                <div class="flex flex-col bg-[#7C3267] py-2 rounded px-2 w-3/4 my-2">
+                  <div class="flex">
+                    <div class="w-11/12 text-white">
+                      {endereco.rua}, {endereco.numeroRua}, {endereco.bairro}, {endereco.cidade} - {endereco.estado}, {endereco.cep}
+                    </div>
+                    <div class="w-1/12">
+                      <input name="endereco" bind:group={selectedEndereco} type="radio" value={endereco}>
+                    </div>
+                  </div>
+                  <div class="flex justiy-left pt-3">
+                    <span class="text-white font-bold text-left">PRINCIPAL</span>
+                  </div>
                 </div>
-                <div class="w-1/12">
-                  <input type="radio">
+              {:else}
+                <div class="flex py-2 px-2 w-3/4 items-center my-2 justify-center">
+                  <div class="w-11/12">
+                    {endereco.rua}, {endereco.numeroRua}, {endereco.bairro}, {endereco.cidade} - {endereco.estado}, {endereco.cep}
+                  </div>
+                  <div class="w-1/12">
+                    <input name="endereco" bind:group={selectedEndereco} type="radio" value={endereco}>
+                  </div>
                 </div>
-              </div>
+              {/if}
             {/each}
           </div>
         </div>
