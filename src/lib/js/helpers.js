@@ -3,11 +3,15 @@ export async function fetchSales(userId){
   const response = await fetch(`http://localhost:3333/pedido/listar/${userId}`)
   const data = await response.json()
 
-  data.forEach((sale) => {
-    sale.data_pedido = formatDate(sale.data_pedido)
-  })
+  if(data.length > 0){
+    data.forEach((sale) => {
+      sale.data_pedido = formatDate(sale.data_pedido)
+    })
+
+    return data
+  }
   
-  return data
+  return []
 }
 
 export function formatDate(date){
