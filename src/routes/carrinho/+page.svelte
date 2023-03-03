@@ -51,6 +51,7 @@
   function handleRedirect(){
     $resume = {
       total: total,
+      frete: selectedFreight == 'PAC' ? freightInfo?.valorpac : freightInfo?.valorsedex,
       cartItens: $cart,
       idUser: $user.id,
       endereco: selectedEndereco,
