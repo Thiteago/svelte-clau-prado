@@ -2,6 +2,7 @@
   import { goto } from "$app/navigation";
 	import Dadoscad from "$lib/components/dadoscadastrais/Dadoscad.svelte";
   import Historico from "$lib/components/historicopedidos/Historico.svelte";
+  import Endereco from "$lib/components/enderecos/Endereco.svelte";
   import Perfil from "$lib/components/perfil/Perfil.svelte";
 	import Produtosadmin from "$lib/components/produtosadmin/Produtosadmin.svelte";
   import {user, loadStorageData, signed} from '$lib/js/stores/login.js'
@@ -28,6 +29,7 @@
     <ul class="menu">
         <li class="item" on:keyup={() => {selected = 'Perfil'}} on:click={() => {selected = 'Perfil'}}>Perfil</li>
         <li class="item" on:keyup={() => {selected = 'Dados Cadastrais'}} on:click={() => {selected = 'Dados Cadastrais'}}>Dados Cadastrais</li>
+        <li class="item" on:keyup={() => {selected = 'Enderecos'}} on:click={() => {selected = 'Enderecos'}}>Endereços</li>
         <li class="item" on:keyup={() => {selected = 'Pagamento'}} on:click={() => {selected = 'Pagamento'}}>Formas de Pagamento</li>
         <li class="item" on:keyup={() => {selected = 'Historico de Pedidos'}} on:click={() => {selected = 'Historico de Pedidos'}}>Historico de Pedidos</li>
         {#if $user.cargo == 'Admin'}
@@ -49,6 +51,8 @@
       <Produtosadmin />
     {:else if selected == 'Historico de Pedidos'}
       <Historico user={$user}/>
+    {:else if selected == 'Enderecos'}
+      <Endereco />
     {/if}
   </div>
 </div>
