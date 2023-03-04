@@ -1,7 +1,7 @@
 <script>
-  import "./style.scss"
+  import "./produtos.scss"
   import {imask} from '@imask/svelte'
-	import FormUpdate from "./formupdate/FormUpdate.svelte";
+	import FormUpdate from "$lib/components/formupdate/FormUpdate.svelte";
 	import { onMount } from "svelte";
 
   let files

@@ -1,16 +1,15 @@
 <script>
   import {fetchSales} from '$lib/js/helpers.js'
+  import { user } from '$lib/js/stores/login.js'
 	import { onMount } from 'svelte';
-	import ModalPedido from '../modalPedido/ModalPedido.svelte';
-	import Modal from '../modalPedido/ModalPedido.svelte';
+	import ModalPedido from '$lib/components/modalPedido/ModalPedido.svelte';
 
-  export let user
   let isOpen = false
   $: selectedPedido = {}
   let pedidos = []
 
   async function loadSales(){
-    pedidos = await fetchSales(user.id)
+    pedidos = await fetchSales($user.id)
   }
 
   onMount(async () => {

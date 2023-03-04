@@ -3,7 +3,7 @@
   import {fetchAddress} from '$lib/js/helpers.js'
 	import { onMount } from 'svelte';
   import { imask } from '@imask/svelte'
-	import ModalEndereco from '../modalEndereco/ModalEndereco.svelte';
+	import ModalEndereco from '$lib/components/modalEndereco/ModalEndereco.svelte';
 
   let selectedEndereco = {id: 1}
   let principal

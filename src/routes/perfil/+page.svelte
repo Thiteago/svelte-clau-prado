@@ -1,58 +1,44 @@
 <script>
-  import { goto } from "$app/navigation";
-	import Dadoscad from "$lib/components/dadoscadastrais/Dadoscad.svelte";
-  import Historico from "$lib/components/historicopedidos/Historico.svelte";
-  import Endereco from "$lib/components/enderecos/Endereco.svelte";
-  import Perfil from "$lib/components/perfil/Perfil.svelte";
-	import Produtosadmin from "$lib/components/produtosadmin/Produtosadmin.svelte";
-  import {user, loadStorageData, signed} from '$lib/js/stores/login.js'
-	import { redirect } from "@sveltejs/kit";
-  import "./perfil.scss"
+  import './perfil.scss'
+  import { user } from '$lib/js/stores/login.js'
+  import { fetchSales } from '$lib/js/helpers.js'
+	import { onMount } from 'svelte';
 
-  $: selected = 'Perfil'
+  let sales = []
 
-  export function load(){
-    loadStorageData()
-    if($signed == false){
-      redirect(300,"/")
-    }
-  }
 
-  load()
-
+  onMount(async () => {
+    sales = await fetchSales($user.id) 
+  })
+  
+  
 </script>
 
 
-<div class="containerContent">
-  <aside class="menuBar">
-    <span class="returnButton" on:keyup={() => {goto("/")}} on:click={() => {goto("/")}}>Voltar</span>
-    <ul class="menu">
-        <li class="item" on:keyup={() => {selected = 'Perfil'}} on:click={() => {selected = 'Perfil'}}>Perfil</li>
-        <li class="item" on:keyup={() => {selected = 'Dados Cadastrais'}} on:click={() => {selected = 'Dados Cadastrais'}}>Dados Cadastrais</li>
-        <li class="item" on:keyup={() => {selected = 'Enderecos'}} on:click={() => {selected = 'Enderecos'}}>Endereços</li>
-        <li class="item" on:keyup={() => {selected = 'Pagamento'}} on:click={() => {selected = 'Pagamento'}}>Formas de Pagamento</li>
-        <li class="item" on:keyup={() => {selected = 'Historico de Pedidos'}} on:click={() => {selected = 'Historico de Pedidos'}}>Historico de Pedidos</li>
-        {#if $user.cargo == 'Admin'}
-          <li class="item" on:keyup={() => {selected = 'Promoções'}} on:click={() => {selected = 'Promoções'}}>Promoções</li>
-          <li class="item" on:keyup={() => {selected = 'Produtos'}} on:click={() => {selected = 'Produtos'}}>Produtos</li>
-          <li class="item" on:keyup={() => {selected = 'Relatórios'}} on:click={() => {selected = 'Relatórios'}}>Relatórios</li>
-          <li class="item" on:keyup={() => {selected = 'Estoque'}} on:click={() => {selected = 'Estoque'}}>Estoque</li>
-          <li class="item" on:keyup={() => {selected = 'Permissoes'}} on:click={() => {selected = 'Permissoes'}}>Permissões</li>
-          <li class="item" on:keyup={() => {selected = 'Usuarios do Sistema'}} on:click={() => {selected = 'Usuarios do Sistema'}}>Usuarios Administrativos</li>
-        {/if}
-    </ul>
-  </aside>
-  <div class="contentWrapper">
-    {#if selected == 'Perfil'}
-      <Perfil user={$user}/>
-    {:else if selected == 'Dados Cadastrais'}
-      <Dadoscad />
-    {:else if selected == 'Produtos'}
-      <Produtosadmin />
-    {:else if selected == 'Historico de Pedidos'}
-      <Historico user={$user}/>
-    {:else if selected == 'Enderecos'}
-      <Endereco />
-    {/if}
+<div class="profileContainer">
+  <div class="userWrapper">
+    <div>
+        <h2>Bem-vindo, {$user.nome}!</h2>
+        <span>{$user.email}</span>
+    </div>
+  </div>
+  
+  <div class="containerUltimoPedido">
+    <h3 class="sectionTitle">Ultimos Pedidos</h3>
+    <div class="containerPedido">
+      <div class="grid-container">
+        <div class="header col-4">Número do Pedido</div>
+        <div class="header col-4">Status</div>
+        <div class="header col-4">Data</div>
+        <div class="header col-4">Pagamento</div>
+        {#each sales as sale}
+          <div class="item col-4">{sale.id}</div>
+          <div class="item col-4">{sale.status}</div>
+          <div class="item col-4">{sale.data_pedido}</div>
+          <div class="item col-4">{sale.Pagamento.forma_pagamento}</div>
+        {/each}
+      </div>
+      <a href="/perfil/pedidos">Histórico de Pedidos</a>
+    </div>
   </div>
 </div>

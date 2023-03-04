@@ -59,7 +59,7 @@
   </div>
 {/if}
 
-{#if localUser.cpf != '' && localUser.cpf != undefined}
+{#if localUser.cpf}
   <div class="dados-container">
     <h1 class="text-3xl">Seus Dados</h1>
     <div class="dados-wrapper">
