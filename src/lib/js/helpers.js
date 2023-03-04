@@ -1,16 +1,18 @@
 
+export const cpfRegexp = /^[0-9]{11}$/;
+
 export async function fetchSales(userId){
   const response = await fetch(`http://localhost:3333/pedido/listar/${userId}`)
-  const data = await response.json()
+  if(response.status === 200){
+    const data = await response.json()
+    if(data.length > 0){
+      data.forEach((sale) => {
+        sale.data_pedido = formatDate(sale.data_pedido)
+      })
 
-  if(data.length > 0){
-    data.forEach((sale) => {
-      sale.data_pedido = formatDate(sale.data_pedido)
-    })
-
-    return data
+      return data
+    }
   }
-  
   return []
 }
 
@@ -28,4 +30,11 @@ export async function fetchAddress(userId){
   const data = await response.json()
 
   return data
+}
+
+export function validateCPF(cpf){
+  if(cpfRegexp.test(cpf)){
+    return true
+  }
+  return false
 }
