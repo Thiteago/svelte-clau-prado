@@ -3,12 +3,13 @@
   import { imask } from '@imask/svelte'
   import Previousbutton from "$lib/components/previousbutton/Previousbutton.svelte";
   import {goto} from '$app/navigation'
+  import { validateCPF } from "$lib/js/helpers.js";
 
   let nome = ''
   let email = ''
   let dataNascimento = ''
   let senha = ''
-  let cpf = ''
+  $: cpf = undefined
   let rua = ''
   let numeroRua = ''
   let bairro = ''
@@ -17,8 +18,14 @@
   let cep = ''
   let numeroTel = ''
   let numeroCel = ''
+  $: validateForm = false
+  $: validateCpf = false
 
-  
+  $: if(cpf){
+    validateCPF(cpf) ? validateCpf = true : validateCpf = false
+
+    console.log(validateCpf)
+  }
 
   const optionsCPF = {
     mask: '000.000.000-00',
@@ -69,71 +76,86 @@
 
 <div class="body">
   <div class="container">
-      <div class='header'>
-          <Previousbutton endereco='/login'/>
-          <div class="title">
-              <h1>Registre-se</h1>
-          </div>
+    <div class='header'>
+      <Previousbutton endereco='/login'/>
+      <div class="my-3">
+        <h1 class="font-bold text-xl">Registre-se</h1>
       </div>
-      <div class='wrapper-form'>
-          <form on:submit={handleSubmit} class='form-subscribe' action="#">
-              <input
-              name="nome" placeholder='NOME' type="text" required 
-              bind:value={nome}
-              />
-              <input 
-              name="email" placeholder='EMAIL' type="text" required 
-              bind:value={email}
-              />
-              <input
-              name="dataNascimento" type="date" required 
-              bind:value={dataNascimento}
-              />
-              <input 
-              name="senha" placeholder="SENHA" type="password" required 
-              bind:value={senha}
-              />
-              <input 
-              name="cpf" placeholder="CPF" required use:imask={optionsCPF}
-              bind:value={cpf}
-              />
-              <input placeholder="CONFIRME A SENHA" type="password" required />
-              <input 
-              name="rua" placeholder='Rua' type="Text" required 
-              bind:value={rua}
-              />
-              <input 
-              name="numeroRua:" placeholder='Numero' type="number" required 
-              bind:value={numeroRua}
-              />
-              <input 
-              name="bairro" placeholder='Bairro' type="text" required 
-              bind:value={bairro}
-              />
-              <input 
-              name="cidade" placeholder='Cidade' type="text" required 
-              bind:value={cidade}
-              />
-              <input 
-              name="estado" placeholder='Estado' type="text" required 
-              bind:value={estado}
-              />
-              <input 
-              name="cep" placeholder='CEP' type="text" required use:imask={optionsCEP}
-              bind:value={cep}
-              />
-              <input 
-              name="numeroTel" placeholder='Numero de Telefone' type="text" use:imask={optionsTel}
-              bind:value={numeroTel}
-              />
-              <input 
-              name="numeroCel" placeholder='Numero de Celular' type="text" required
-              use:imask={optionsCel}
-              bind:value={numeroCel}
-              />
-              
-              <button class='submit' type="submit">Registrar</button>
-          </form>
-      </div>
+    </div>
+    <div class="flex m-auto w-7/12 justify-center">
+      <form on:submit={handleSubmit} class='flex w-full py-8 flex-col gap-3' action="#">
+            <input
+            class="input input-bordered w-full "
+            name="nome" placeholder='NOME' type="text" required 
+            bind:value={nome}
+            />
+            <input 
+            class="input input-bordered w-full "
+            name="email" placeholder='EMAIL' type="text" required 
+            bind:value={email}
+            />
+            <input 
+            class="input input-bordered w-full "
+            name="cpf" placeholder="CPF" required use:imask={optionsCPF}
+            bind:value={cpf}
+            />
+            {#if validateCpf == false}
+              <p class="error">CPF inválido</p>
+            {/if}
+
+            <input 
+            class="input input-bordered w-full "
+            name="rua" placeholder='Rua' type="Text" required 
+            bind:value={rua}
+            />
+            <input 
+            class="input input-bordered w-full "
+            name="numeroRua:" placeholder='Numero' type="number" required 
+            bind:value={numeroRua}
+            />
+            <input 
+            class="input input-bordered w-full "
+            name="bairro" placeholder='Bairro' type="text" required 
+            bind:value={bairro}
+            />
+            <input 
+            class="input input-bordered w-full "
+            name="numeroCel" placeholder='Numero de Celular' type="text" required
+            use:imask={optionsCel}
+            bind:value={numeroCel}
+            />
+            <input
+            class="input input-bordered w-full "
+            name="dataNascimento" type="date" required 
+            bind:value={dataNascimento}
+            />
+            <input 
+            class="input input-bordered w-full "
+            name="senha" placeholder="SENHA" type="password" required 
+            bind:value={senha}
+            />
+            <input
+              class="input input-bordered w-full "
+              placeholder="CONFIRME A SENHA" type="password" required 
+            />
+
+            <input 
+            class="input input-bordered w-full "
+            name="cidade" placeholder='Cidade' type="text" required 
+            bind:value={cidade}
+            />
+            <input 
+            class="input input-bordered w-full "
+            name="estado" placeholder='Estado' type="text" required 
+            bind:value={estado}
+            />
+            <input 
+            class="input input-bordered w-full "
+            name="cep" placeholder='CEP' type="text" required use:imask={optionsCEP}
+            bind:value={cep}
+            />
+            <button disabled class='submit' type="submit">Registrar</button>
+      </form>
+    </div>
   </div>
 </div>
