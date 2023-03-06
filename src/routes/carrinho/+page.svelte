@@ -21,6 +21,7 @@
     lazy: true
   };
 
+  let today = new Date().toISOString().substr(0, 10)
   let loading = false
   let freightInfo = {}
   let total = 0
@@ -28,15 +29,37 @@
   let selectedEndereco
   let enderecos = []
 
-  $: if (selectedEndereco){
-    freightInfo = {}
-    cep = selectedEndereco.cep
-  }
+  $: limitDate = ''
+  $: validateForm = true
   $: cepValidates = true
   $: selectedFreight = ''
   $: cep = '';
   $: alugados = $cart.filter(element => element.Aluguel != null)
   $: comprados = $cart.filter(element => element.Venda != null)
+  $: data_inicio_aluguel = ''
+  $: data_final_aluguel = ''
+  $: diasAlugados = data_inicio_aluguel != '' && data_final_aluguel != '' ? (new Date(data_final_aluguel).getTime() - new Date(data_inicio_aluguel).getTime()) / (1000 * 3600 * 24) : 0
+  
+  $: if(alugados.length > 0 && data_inicio_aluguel != ''){
+    const initialDate = new Date(data_inicio_aluguel);
+    limitDate = new Date(initialDate.getTime() + (15 * 24 * 60 * 60 * 1000)).toISOString().substr(0, 10);
+  }
+
+  $: if (selectedEndereco){
+    freightInfo = {}
+    cep = selectedEndereco.cep
+  }
+
+  $: if(selectedFreight != ''){
+    validateForm = true
+    if(alugados.length > 0){
+      if(data_inicio_aluguel == '' || data_final_aluguel == ''){
+        validateForm = false
+      }
+    }
+  }else{
+    validateForm = false
+  }
 
   $: if($cart){
     subtotal = 0
@@ -51,7 +74,8 @@
   function handleRedirect(){
     $resume = {
       total: total,
-      frete: selectedFreight == 'PAC' ? freightInfo?.valorpac : freightInfo?.valorsedex,
+      tipo_frete: selectedFreight,
+      valor_frete: selectedFreight == 'PAC' ? freightInfo?.valorpac : freightInfo?.valorsedex,
       cartItens: $cart,
       idUser: $user.id,
       endereco: selectedEndereco,
@@ -191,12 +215,12 @@
           </div>
         </div>
       </div>
-      <div class="flex flex-col w-3/5 gap-8">
+      <div class="flex gap-3 flex-col w-3/5">
         {#if $cart.length > 0}
           {#if comprados.length > 0}
             <h1 class="bg-[#7C3267] rounded w-1/2 text-white pl-3 py-2">Voce esta <b>Comprando</b></h1>
             {#each comprados as product}
-              <div class="flex items-center justify-evenly w-full">
+              <div class="flex gap-8 items-center justify-evenly w-full">
                 <div class="w-1/12">
                     <img class="w-20 h-20 object-cover" src='http://localhost:3333/static/{product.imagens}' alt="">
                 </div>
@@ -227,7 +251,7 @@
             {/each}
           {/if}
           {#if alugados.length > 0}
-            <h1 class="bg-[#7C3267] rounded w-1/2 text-white pl-3 py-2">Voce esta <b>Alugando</b></h1>
+            <h1 class="bg-[#7C3267] mb-5 rounded w-1/2 text-white pl-3 py-2">Voce esta <b>Alugando</b></h1>
             {#each alugados as product}
             <div class="flex items-center justify-evenly w-full">
               <div class="w-1/12">
@@ -258,6 +282,25 @@
             </div>
             <span class="bg-slate-200 w-full h-2"></span>
             {/each}
+            <div class="text-center">
+              <h2 class="rounded text-xl w-full text-black font-bold pl-3">Para quais dias voce precisa</h2>
+              <span class="text-sm">(válido para os itens alugados)</span>
+            </div>
+            <div class="w-11/12 flex flex-col m-auto">
+              <div class="w-full flex flex-col">
+                <span>Do dia</span>
+                <input bind:value={data_inicio_aluguel} class="input input-bordered input-date" min={today} type="date">
+              </div>
+              <div class="w-full flex flex-col">
+                <span>Até o dia</span>
+                <input bind:value={data_final_aluguel} class="input input-bordered input-date" min={data_inicio_aluguel} max={limitDate} type="date">
+              </div>
+              {#if data_inicio_aluguel && data_final_aluguel}
+                <div class="mt-2">
+                  <span>Voce esta alugando por {diasAlugados+1} dias</span>
+                </div>
+              {/if}
+            </div>
           {/if}
         {/if}
         {#if $cart.length == 0}
@@ -287,7 +330,7 @@
             <span class="text-black">R$ {total },00</span>
           </div>
           <div>
-            <button on:click={handleRedirect} disabled={selectedFreight == '' ? true : false} class="btn bg-[#7C3267] w-full mt-4">Finalizar compra</button>
+            <button on:click={handleRedirect} disabled={!validateForm} class="btn bg-[#7C3267] w-full mt-4">Finalizar compra</button>
           </div>
         </div>
       </div>
