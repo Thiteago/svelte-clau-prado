@@ -7,7 +7,7 @@
   let email = ''
   let senha = ''
 
-  $: current = "container"
+  $: current = "container-login"
   $: statusAuth = false
 
   async function handleSubmit(e) {
@@ -68,13 +68,13 @@
                   <h1 class="h1">Ola!</h1>
                   <p class="p">Para realizar o cadastro , clique em Cadastrar!</p>
                   <span style="color: white; padding-bottom: 1rem">Ja possui cadastro?</span>
-                  <button on:click={() => current = 'container'} class="ghost button" id="signIn">Login</button>
+                  <button on:click={() => current = 'container-login'} class="ghost button" id="signIn">Login</button>
               </div>
               <div class="overlay-panel overlay-right">
                   <h1 class="h1-registro">Bem-Vindo de Volta!</h1>
                   <p class="p">para acessar sua conta , por favor , informe as seguintes informações.</p>
                   <span style="color: white; padding-bottom: 1rem">ou</span>
-                  <button on:click={() => current = "container right-panel-active"} class="ghost button" id="signUp">Cadastrar-se</button>
+                  <button on:click={() => current = "container-login right-panel-active"} class="ghost button" id="signUp">Cadastrar-se</button>
               </div>
           </div>
       </div>
