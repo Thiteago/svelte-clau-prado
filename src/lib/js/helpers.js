@@ -1,5 +1,5 @@
 
-export const cpfRegexp = /^[0-9]{11}$/;
+export const cpfRegexp = /([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})/;
 
 export async function fetchSales(userId){
   const response = await fetch(`http://localhost:3333/pedido/listar/${userId}`)
