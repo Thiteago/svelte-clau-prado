@@ -49,8 +49,7 @@
               <td class="border px-4 py-2">{pedido.Pagamento.forma_pagamento}</td>
               <!-- svelte-ignore a11y-click-events-have-key-events -->
               <td><label for="my-modal-{pedido.id}" on:click={() => selectPedido(pedido.id)} class="btn btn-primary rounded">Detalhes</label></td>
-            </tr>
-            
+            </tr> 
           {/each}
         {/if}
       </tbody>
@@ -58,4 +57,6 @@
   </div>
 </section>
 
-<ModalPedido pedido={selectedPedido} {isOpen}/>
+{#if selectedPedido != null}
+  <ModalPedido pedido={selectedPedido} {isOpen}/>
+{/if}
