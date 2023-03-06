@@ -3,12 +3,9 @@
   export let pedido
   export let isOpen
 
-  $: if(pedido){
-    console.log(pedido)
-  }
 </script>
 
-{#if pedido != null}
+{#if Object.keys(pedido).length > 0}
   <input type="checkbox" checked={isOpen} id="my-modal-{pedido.id}" class="modal-toggle" />
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <label on:click={() => {isOpen = false}} for="my-modal-{pedido.id}" class="modal">
@@ -41,7 +38,7 @@
 
         <div>
           <h2 class="font-bold">Método de Entrega:</h2>
-          
+          Correios - 
         </div>
       </div>
     </label>
