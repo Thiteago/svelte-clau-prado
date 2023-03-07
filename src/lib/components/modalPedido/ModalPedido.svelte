@@ -3,6 +3,15 @@
   export let pedido
   export let isOpen
 
+  async function handlePdf(){
+    await fetch(`http://localhost:3333/pagamento/boleto/${pedido.Pagamento.id}`)
+    .then(response => response.blob())
+    .then(blob => {
+    const file = new File([blob], 'file.pdf', { type: 'application/pdf' })
+    window.open(URL.createObjectURL(file))
+  })
+  }
+
 </script>
 
 {#if Object.keys(pedido).length > 0}
@@ -27,7 +36,7 @@
           {#if pedido.Pagamento.forma_pagamento == 'boleto'}
           <h2 class="font-bold">Forma de pagamento: <i>Boleto</i> </h2>
             <div class="flex items-center mt-2 gap-5">
-              <button class="btn btn-success">Baixar Boleto</button>
+              <button on:click={handlePdf} class="btn btn-success">Baixar Boleto</button>
               <p>Clique no Botao para baixar seu boleto</p>
             </div>
             
@@ -38,7 +47,8 @@
 
         <div>
           <h2 class="font-bold">Método de Entrega:</h2>
-          Correios - 
+          <p>Correios - {pedido.tipo_frete}</p>
+          <p>Valor do frete: R${pedido.valor_frete}</p>
         </div>
       </div>
     </label>
