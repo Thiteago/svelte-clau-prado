@@ -1,37 +1,20 @@
 <script>
   import Steps from '$lib/components/steps/Steps.svelte';
   import Header from '$lib/components/header/Header.svelte';
-  import { imask } from '@imask/svelte'
   import moneyIcon from '$lib/assets/icons/money.svg'
   import boletoIcon from '$lib/assets/icons/boleto.svg'
   import cardIcon from '$lib/assets/icons/card.svg'
   import { resume } from '$lib/js/stores/cart.js'
 	import { goto } from '$app/navigation';
+	import CreditCard from '$lib/components/creditCard/CreditCard.svelte';
 
   $: selectedMethodPayment = 'boleto'
   let sendedPaymentRequest = false
-
-  const maskCPF = {
-    mask: '000.000.000-00',
-    lazy: true
-  };
-
-  const maskCard = {
-    mask: '0000 0000 0000 0000',
-    lazy: true
-  };
-
-  const maskValid = {
-    mask: '00/00',
-    lazy: true
-  };
 
   async function handlePayment(metodo){
     sendedPaymentRequest = true
     if(metodo == 'boleto'){
       $resume = {...$resume, metodoPagamento: 'boleto'}
-    }else if(metodo == 'cartao'){
-      $resume = {...$resume, metodoPagamento: 'cartao'}
     }
 
     const response = await fetch('http://localhost:3333/pedido/gerar', {
@@ -88,32 +71,10 @@
             </div>
           </div>
         {:else}
-          <div>
+          <div class="mb-5">
             <h1 class="text-xl font-bold mb-2 ">Cartao de Crédito</h1>
             <p>Aceitamos as bandeiras de cartão VISA, MasterCard, ELO, HiperCard, American Express e Diners</p>
-          </div>
-          <div class="flex justify-between items-center">
-            <form class="flex flex-col w-full gap-y-3" action="">
-              <input class="input input-bordered w-full" type="text" placeholder="Nome impresso no cartão">
-              <input use:imask={maskCard} class="input input-bordered w-full" type="text" placeholder="Numero do cartão">
-              <div class="flex gap-x-3">
-                <input use:imask={maskValid} class="input input-bordered w-1/3" type="text" placeholder="Validade">
-                <input class="input input-bordered w-1/3" type="text" maxlength="3" on:input={(e) => e.target.value = e.target.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1')}
-                  placeholder="Código de Verificação (CVV)">  
-                <input class="input input-bordered w-1/3" type="date" placeholder="Data de Nascimento">
-              </div>
-              <input use:imask={maskCPF} class="input input-bordered w-full" type="text" placeholder="CPF do titular">
-              <div class="mt-2.5 relative">
-                <div class="z-10 bottom-9 ml-3 bg-white absolute">Forma de pagamento</div>
-                <select class="select select-bordered w-full">
-                  <option value="avista" selected>À vista - R$ {$resume.total},00</option>
-                  {#each Array(12) as _, i}
-                    <option value="parcelado">Parcelado em {i + 2}x de R$ {($resume.total / (i + 2)).toFixed(2)} </option>
-                  {/each}
-                </select>
-              </div>
-              <button on:click={() => handlePayment('cartao')} class="btn bg-[#7C3267] w-full mt-4">Prosseguir</button>
-            </form>
+            <CreditCard submitPayment={handlePayment}/>
           </div>
         {/if}
       </div>
