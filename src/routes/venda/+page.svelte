@@ -82,7 +82,9 @@
               <div class="flex w-28 gap-3">
               {#if images.length > 0}
                 {#each images as img}
-                  <img on:click={() => {mainimage = img}} src="http://localhost:3333/static/{img}" alt="">
+                  <div class="container-img">
+                    <img class="img" on:click={() => {mainimage = img}} src="http://localhost:3333/static/{img}" alt="">
+                  </div>
                 {/each}
               {/if}
               </div>
@@ -158,3 +160,17 @@
   {/if}
   <Footer></Footer>
 </div>
+
+
+<style>
+  .img{
+    width: 100%;
+    object-fit: contain;
+    height: 90px;
+  }
+
+  .container-img{
+    width: 110px;
+    height: 110px;
+  }
+</style>
