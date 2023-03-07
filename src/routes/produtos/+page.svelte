@@ -39,13 +39,21 @@ onMount(async () => {
       </div>
     </aside>
     <div class="container-produtos">
-      {#if produtos.length == 0}
-        <div class="flex justify-center items-center h-screen">
-          <h1 class="message-callback">Nenhum produto encontrado</h1>
-        </div>
-      {/if}
       {#each produtos as item}
-        <Produto id={item.id} title={item.nome} description={item.descricao} type={item.Aluguel != null ? 'Aluguel' : 'Venda'} buttonType={item.Aluguel != null ? 'Aluguel' : 'Venda'}></Produto>
+        {#if item.Aluguel != null && item.Aluguel.status_aluguel != 'Indisponível'}
+          <Produto id={item.id} title={item.nome} description={item.descricao} type={item.Aluguel != null ? 'Aluguel' : 'Venda'} buttonType={item.Aluguel != null ? 'Aluguel' : 'Venda'}></Produto>
+        {:else}
+          <div class="flex justify-center items-center h-screen">
+            <h1 class="message-callback">Nenhum produto encontrado</h1>
+          </div>
+        {/if}
+        {#if item.Venda != null && item.Venda.status_venda != 'Indisponível'}
+          <Produto id={item.id} title={item.nome} description={item.descricao} type={item.Aluguel != null ? 'Aluguel' : 'Venda'} buttonType={item.Aluguel != null ? 'Aluguel' : 'Venda'}></Produto>
+        {:else}
+          <div class="flex justify-center items-center h-screen">
+            <h1 class="message-callback">Nenhum produto encontrado</h1>
+          </div>
+        {/if}
       {/each}
     </div>
   </div>
