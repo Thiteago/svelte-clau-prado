@@ -65,7 +65,7 @@
       <div class="overlay-container">
           <div class="overlay">
               <div class="overlay-panel overlay-left">
-                  <h1 class="h1">Ola!</h1>
+                  <h1 class="h1-registro">Ola!</h1>
                   <p class="p">Para realizar o cadastro , clique em Cadastrar!</p>
                   <span style="color: white; padding-bottom: 1rem">Ja possui cadastro?</span>
                   <button on:click={() => current = 'container'} class="ghost button" id="signIn">Login</button>

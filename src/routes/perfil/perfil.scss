@@ -102,7 +102,8 @@ padding: 25px 30px;
 .contentWrapper {
   width: 760px;
   background-color: #ffffff;
-  height: 100rem;
+  height: 100%;
+  min-height: 100vw;
 }
 
 .menu{
