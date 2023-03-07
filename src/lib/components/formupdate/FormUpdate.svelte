@@ -11,7 +11,7 @@
     files = produto.imagens
   }
 
-  let formatedDatadeCriacao = new Date(produto.dataCriacao).toISOString().split('T')[0]
+  let formatedDatadeCriacao = new Date(produto.dataFabricacao).toISOString().split('T')[0]
   let formatedDatadeDisponibilidade = new Date(produto.data_disponibilidade).toISOString().split('T')[0]
 
   const optionsValor = {
