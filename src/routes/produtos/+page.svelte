@@ -40,21 +40,19 @@ onMount(async () => {
     </aside>
     <div class="container-produtos">
       {#each produtos as item}
-        {#if item.Aluguel != null && item.Aluguel.status_aluguel != 'Indisponível'}
-          <Produto id={item.id} title={item.nome} description={item.descricao} type={item.Aluguel != null ? 'Aluguel' : 'Venda'} buttonType={item.Aluguel != null ? 'Aluguel' : 'Venda'}></Produto>
-        {:else}
-          <div class="flex justify-center items-center h-screen">
-            <h1 class="message-callback">Nenhum produto encontrado</h1>
-          </div>
-        {/if}
-        {#if item.Venda != null && item.Venda.status_venda != 'Indisponível'}
-          <Produto id={item.id} title={item.nome} description={item.descricao} type={item.Aluguel != null ? 'Aluguel' : 'Venda'} buttonType={item.Aluguel != null ? 'Aluguel' : 'Venda'}></Produto>
-        {:else}
-          <div class="flex justify-center items-center h-screen">
-            <h1 class="message-callback">Nenhum produto encontrado</h1>
+        {#if (item.Aluguel != null && item.Aluguel.status_aluguel != 'Indisponível') || (item.Venda != null && item.Venda.status_venda != 'Indisponível')}
+          <Produto id={item.id} title={item.nome} description={item.descricao} type={item.Aluguel != null ? 'Aluguel' : 'Venda'} buttonType={item.Aluguel != null ? 'Aluguel' : 'Venda'} valor={item.valor}></Produto>
+          {:else}
+          <div class="sem-produtos">
+            <h1>Nenhum produto encontrado</h1>
           </div>
         {/if}
       {/each}
+      {#if produtos.length == 0}
+        <div class="sem-produtos">
+          <h1>Nenhum produto encontrado</h1>
+        </div>
+      {/if}
     </div>
   </div>
 
