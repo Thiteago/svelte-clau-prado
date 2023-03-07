@@ -39,9 +39,11 @@
               <button on:click={handlePdf} class="btn btn-success">Baixar Boleto</button>
               <p>Clique no Botao para baixar seu boleto</p>
             </div>
-            
-          {:else if pedido.forma_pagamento == 'cartao'}
-            <p>Cartão</p>
+          {:else if pedido.Pagamento.forma_pagamento == 'cartao'}
+            <h2 class="font-bold">Forma de pagamento: <i>Cartao</i> </h2>
+            <div class="flex items-center mt-2 gap-5">
+              <p>Cartão com final {pedido.Pagamento.cartao.numero.substr(-4)}</p>
+            </div>
           {/if}
         </div>
 
@@ -49,6 +51,11 @@
           <h2 class="font-bold">Método de Entrega:</h2>
           <p>Correios - {pedido.tipo_frete}</p>
           <p>Valor do frete: R${pedido.valor_frete}</p>
+        </div>
+
+        <div>
+          <h2 class="font-bold">Status do Pagamento</h2>
+          <p>{pedido.Pagamento.status}</p>
         </div>
       </div>
     </label>
