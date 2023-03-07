@@ -65,13 +65,25 @@
     subtotal = 0
     alugados.forEach(element => {
       subtotal += element.quantidade * element.valor
+      if(diasAlugados > 0){
+        subtotal = subtotal * (diasAlugados+1)
+      }
     })
     comprados.forEach(element => {
       subtotal += element.quantidade * element.valor
     })
 };
 
-  function handleRedirect(){
+  function createResume(){
+
+    if(alugados.length > 0){
+      alugados.forEach(element => {
+        element.Aluguel.data_aluguel = data_inicio_aluguel
+        element.Aluguel.data_expiracao =  data_final_aluguel
+        element.Aluguel.dias_alugados = diasAlugados
+      })
+    }
+
     $resume = {
       total: total,
       tipo_frete: selectedFreight,
@@ -80,6 +92,10 @@
       idUser: $user.id,
       endereco: selectedEndereco,
     }
+  }
+
+  function handleRedirect(){
+    createResume()
     if($signed )
       goto('/carrinho/step3')
     else{
@@ -130,15 +146,15 @@
     <Steps currentStep={1} />
   </div>
 
-  <div class="flex w-9/12 mt-8">
+  <div class="flex w-11/12 mt-8">
     <div class="flex w-full gap-10">
-      <div>
+      <div class="w-4/12">
         <div class="flex items-center gap-2 ">
           <img class="w-6 h-6" src={truck} alt="">
           <h1 class="text-xl font-poppins font-bold">Calcular prazo e frete</h1>
         </div>
         <div class="mt-3">
-          <form class="flex gap-2 items-center" on:submit={freightCalculate}>
+          <form class="flex w-11/12 gap-2 items-center" on:submit={freightCalculate}>
             <input required bind:value={cep} type="text" placeholder="CEP" use:imask={optionsCEP} class="input input-bordered w-full max-w-xs" />
             <button disabled={$cart.length < 1 ? true : false} type="submit" class="btn bg-[#7C3267]">Calcular</button>
           </form>
@@ -175,7 +191,7 @@
             </div>
           </div>
         {/if}
-        <div class="w-3/4 flex items-center gap-5 py-5">
+        <div class="w-full flex items-center gap-5 py-5">
           <div class="w-1/2 h-px bg-black"></div>
           <span>Ou</span>
           <div class="w-1/2 h-px bg-black"></div>
@@ -188,7 +204,7 @@
           <div>
             {#each enderecos as endereco}
               {#if endereco.principal}
-                <div class="flex flex-col bg-[#7C3267] py-2 rounded px-2 w-3/4 my-2">
+                <div class="flex flex-col bg-[#7C3267] py-2 rounded px-2 w-full my-2">
                   <div class="flex">
                     <div class="w-11/12 text-white">
                       {endereco.rua}, {endereco.numeroRua}, {endereco.bairro}, {endereco.cidade} - {endereco.estado}, {endereco.cep}
@@ -277,7 +293,13 @@
               </div>
               <div class="text-right w-1/5">
                 <p>Preço à vista</p>
-                <p class="font-bold text-[#7C3267]">R$ {product.quantidade * product.valor},00</p>
+                <div class="flex justify-end gap-2">
+                  {#if diasAlugados > 0}
+                    <span>{diasAlugados+1}x</span>
+                  {/if}
+                  <p class="font-bold text-[#7C3267]">R$ {product.quantidade * product.valor},00</p>
+                </div>
+                
               </div>
             </div>
             <span class="bg-slate-200 w-full h-2"></span>
@@ -294,10 +316,11 @@
               <div class="w-full flex flex-col">
                 <span>Até o dia</span>
                 <input bind:value={data_final_aluguel} class="input input-bordered input-date" min={data_inicio_aluguel} max={limitDate} type="date">
+                <span class="mt-1">(Limite de Aluguel de no máximo 16 dias)</span>
               </div>
               {#if data_inicio_aluguel && data_final_aluguel}
                 <div class="mt-2">
-                  <span>Voce esta alugando por {diasAlugados+1} dias</span>
+                  <span class="font-bold text-lg">Voce esta alugando por {diasAlugados+1} dia(s)</span>
                 </div>
               {/if}
             </div>
