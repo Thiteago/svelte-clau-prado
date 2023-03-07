@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
   import cifrao from '$lib/assets/icons/cifrao.svg'
   import './style.scss'
-  export let id, title, description, type, buttonType
+  export let id, title, description, type, buttonType, valor
 
   $: images = ''
 
@@ -30,6 +30,7 @@
           <h1 class="text-3xl font-bold">{title}</h1>
           <p>{description}</p>
       </div>
+      
       <div class="wrapper-additional-info">
           <div class='container-situation'>
               <div class='icon-situation'>
@@ -40,6 +41,12 @@
               </div>
           </div>
           <div class='buy-button'>
+            <div class="flex justify-end items-end">
+              <p class="text-2xl font-bold">R$ {valor},00</p>
+              {#if buttonType == 'Aluguel'}
+                <p class="text-md font-bold">/por dia</p>
+              {/if}
+            </div>
             <a href="/venda?produto_id={id}">
               <button class="botao">{buttonType == 'Venda' ? 'Comprar' : 'Alugar'}</button>
             </a>
