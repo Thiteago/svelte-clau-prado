@@ -79,7 +79,7 @@
                   <img class="h-80" src="http://localhost:3333/static/{mainimage}" alt="">
                 {/if}
               </div>
-              <div class="flex w-28 gap-3">
+              <div class="flex w-full gap-3">
               {#if images.length > 0}
                 {#each images as img}
                   <div class="container-img">
@@ -165,7 +165,7 @@
 <style>
   .img{
     width: 100%;
-    object-fit: contain;
+    object-fit: cover;
     height: 90px;
   }
 
