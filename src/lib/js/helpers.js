@@ -16,6 +16,28 @@ export async function fetchSales(userId){
   return []
 }
 
+export async function fetchProducts(){
+  const response = await fetch('http://localhost:3333/Produto')
+  if(response.status === 200){
+    const data = await response.json()
+    if(data.length > 0){
+      return data
+    }
+  }
+  return []
+}
+
+export async function fetchPromotions(){
+  const response = await fetch('http://localhost:3333/promocao/listar')
+  if(response.status === 200){
+    const data = await response.json()
+    if(data.length > 0){
+      return data
+    }
+  }
+  return []
+}
+
 export function formatDate(date){
   let data = new Date(date)
   let dia = data.getDate()
