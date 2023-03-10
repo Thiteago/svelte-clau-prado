@@ -5,13 +5,12 @@
   export let id, title, description, type, buttonType, valor
 
   $: images = ''
+  valor = valor.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})
 
   async function getImages(){
-
     const response = await fetch(`http://localhost:3333/Produto/ImagePath/${id}`)
     const data = await response.json()
     images = data.caminhos[0]
-
   }
 
   onMount(() => {
@@ -21,7 +20,7 @@
 
 <div class='wrapper-produtos'>
   <div class='icon-produto'>
-      {#if images != undefined}
+      {#if images != undefined && images != ''}
         <img class="object-cover w-60 h-60" src={`http://localhost:3333/static/${images}`} alt="" />
       {/if}
   </div>
@@ -42,7 +41,7 @@
           </div>
           <div class='buy-button'>
             <div class="flex justify-end items-end">
-              <p class="text-2xl font-bold">R$ {valor},00</p>
+              <p class="text-2xl font-bold">{Number.isInteger(valor) ? `${valor},00` : valor}</p>
               {#if buttonType == 'Aluguel'}
                 <p class="text-md font-bold">/por dia</p>
               {/if}
