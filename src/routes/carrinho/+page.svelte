@@ -297,7 +297,7 @@
                   {#if diasAlugados > 0}
                     <span>{diasAlugados+1}x</span>
                   {/if}
-                  <p class="font-bold text-[#7C3267]">R$ {product.quantidade * product.valor},00</p>
+                  <p class="font-bold text-[#7C3267]">R$ { product.quantidade * product.valor}</p>
                 </div>
                 
               </div>
@@ -342,7 +342,7 @@
         <div class="w-48">
           <div class="flex justify-between mt-4">
             <span class="text-gray-500 pr-3">Subtotal</span>
-            <span class="text-gray-500">R$ {subtotal},00</span>
+            <span class="text-gray-500">R$ {subtotal}</span>
           </div>
           <div class="flex justify-between mt-4">
             <span class="text-gray-500">Frete</span>
@@ -350,7 +350,7 @@
           </div>
           <div class="flex flex-col justify-center items-center bg-green-200 font-bold py-10 px-5 text-xl mt-4">
             <span class="text-black text-2xl">Total</span>
-            <span class="text-black">R$ {total },00</span>
+            <span class="text-black">R$ {total }</span>
           </div>
           <div>
             <button on:click={handleRedirect} disabled={!validateForm} class="btn bg-[#7C3267] w-full mt-4">Finalizar compra</button>
