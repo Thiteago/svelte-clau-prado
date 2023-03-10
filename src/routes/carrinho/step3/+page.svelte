@@ -64,7 +64,7 @@
           <div class="flex justify-between items-center">
             <div class="flex flex-col justify-center">
               <p>TOTAL DA SUA COMPRA:</p>
-              <h1 class="text-2xl font-bold">R$ {$resume.total},00</h1>
+              <h1 class="text-2xl font-bold">R$ {$resume.total}</h1>
             </div>
             <div>
               <button disabled={sendedPaymentRequest}  on:click={() => handlePayment('boleto')} class="btn bg-[#7C3267] w-full mt-4">Prosseguir</button>

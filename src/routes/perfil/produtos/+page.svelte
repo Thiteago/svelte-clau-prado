@@ -62,7 +62,7 @@
   async function getProdutos(){
     const response = await fetch('http://localhost:3333/Produto')
     const data = await response.json()
-
+    
     produtos = await data
   }
 
