@@ -7,6 +7,7 @@
   import Header from '$lib/components/header/Header.svelte'
   import PreviousButton from '$lib/components/previousbutton/Previousbutton.svelte'
   import Footer from '$lib/components/footer/Footer.svelte'
+	import { fetchProductsById } from '$lib/js/helpers';
 
   const produtoId = $page.url.searchParams.get('produto_id');
 
@@ -41,14 +42,7 @@
     }
   }
 
-  async function getInfo(){
 
-    const response = await fetch(`http://localhost:3333/Produto/${produtoId}`)
-    const data = await response.json()
-    produto = {...data}
-    produto.dataCriacao = new Date(produto.dataCriacao).toLocaleDateString('pt-BR')
-    
-  }
 
   async function getImages(){
 
@@ -58,8 +52,8 @@
 
   }
 
-  onMount(() => {
-    getInfo()
+  onMount(async () => {
+    produto = await fetchProductsById(produtoId)
     getImages()
   })
 
@@ -128,7 +122,7 @@
                 <!-- row 1 -->
                 <tr>
                   <td>Data de fabricação:</td>
-                  <td>{produto.dataCriacao}</td>
+                  <td>{produto.dataFabricacao}</td>
                 </tr>
                 <!-- row 2 -->
                 <tr>
