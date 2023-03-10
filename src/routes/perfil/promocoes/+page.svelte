@@ -38,8 +38,12 @@
   let promocaoSelecionada = {}
   let produtos = []
 
-  onMount(async () => {
+  async function loadPromotions(){
     promocao = await fetchPromotions();
+  }
+
+  onMount(async () => {
+    loadPromotions()
     produtos = await fetchProducts();
     if(produtos.length > 0) {
       produtos.forEach((item) => {
@@ -78,17 +82,17 @@
     <div class="collapse-title text-xl font-medium">
       Ver Promoções
     </div>
-    <div class="collapse-content flex items-center gap-5"> 
+    <div class="collapse-content flex flex-wrap items-center gap-5"> 
       {#if promocao.length > 0}
         {#each promocao as item}
-          <div class="flex">
+          <div class="flex justify-center items-center">
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <!-- svelte-ignore a11y-label-has-associated-control -->
-            <label for="my-modal-{item.id}" on:click={() => {promocaoSelecionada = item}} class="border w-full py-3 font-bold cursor-pointer px-3 rounded">
+            <label for="my-modal-{item.id}" on:click={() => {promocaoSelecionada = item}} class="border w-full flex flex-nowrap justify-center items-center h-12 font-bold cursor-pointer px-3 rounded">
               <h2>{item.nome}</h2>
             </label>
-            <div class="bg-green-500 px-5 h-12 flex items-center rounded">
-              Ativo
+            <div class="{item.status == 'Ativo' ? 'bg-green-500' : 'bg-red-500'} px-5 h-12 flex items-center rounded">
+              {item.status}
             </div>
           </div>
         {/each}
@@ -182,5 +186,5 @@
 
 
 {#if Object.keys(promocaoSelecionada).length > 0}
-  <ModalPromocao promocao={promocaoSelecionada} />
+  <ModalPromocao on:disable={loadPromotions} promocao={promocaoSelecionada} />
 {/if}
