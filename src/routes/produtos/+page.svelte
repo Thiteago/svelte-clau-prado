@@ -5,18 +5,14 @@ import Footer from '$lib/components/footer/Footer.svelte'
 import Produto from '$lib/components/produto/Produto.svelte'
 import './produtos.scss'
 import {onMount} from 'svelte'
+import { fetchProducts } from '$lib/js/helpers';
 
 $: produtos = []
 
-async function getProdutos() {
-  const response = await fetch('http://localhost:3333/Produto')
-  const data = await response.json()
-  produtos = data
-}
-
 onMount(async () => {
-  await getProdutos()
+  produtos = await fetchProducts()
 })
+
 
 </script>
 
@@ -27,7 +23,7 @@ onMount(async () => {
 
   <div class="wrapper-produto">
     <aside class="container-filter">
-      <h1>Filtrar</h1>
+      <h1 class="font-bold text-xl my-3">Filtrar</h1>
 
       <div class="wrapper-filter">
         <div>
