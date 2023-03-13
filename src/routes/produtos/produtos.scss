@@ -7,7 +7,7 @@ body{
 }
 
 .container-produtos{
-  width: 80%;
+  width: 90%;
   height: 100%;
   background-color: #fbf7fb;
   min-height: 100vh;
@@ -20,15 +20,21 @@ body{
   text-align: center;
   padding-top: 15px;
   padding-right: 10px;
+  width: 100%;
+  max-width: 70%;
   flex-direction: column;
+  margin: 0 auto;
   min-height: 100vh;
 
   .wrapper-produto{
       margin: 20px 15px;
       display: flex;
+      width: 100%;
+      align-self: center;
       gap: 1rem;
 
       .container-filter{
+          width: 15%;
           height: auto;
           min-height: 70vh;
           background-color: white;

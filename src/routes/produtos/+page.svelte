@@ -8,11 +8,28 @@ import {onMount} from 'svelte'
 import { fetchProducts } from '$lib/js/helpers';
 
 $: produtos = []
+let filteredProducts = []
+let alugadosFiltered = false
+let vendaFiltered = false
 
 onMount(async () => {
   produtos = await fetchProducts()
 })
 
+$: {
+  if(produtos.length > 0){
+    if(alugadosFiltered && vendaFiltered){
+      filteredProducts = produtos.filter(item => (item.Aluguel != null && item.Aluguel.status_aluguel != 'Indisponível') || (item.Venda != null && item.Venda.status_venda != 'Indisponível'))
+    }else if(alugadosFiltered){
+      filteredProducts = produtos.filter(item => item.Aluguel != null && item.Aluguel.status_aluguel != 'Indisponível')
+    }else if(vendaFiltered){
+      filteredProducts = produtos.filter(item => item.Venda != null && item.Venda.status_venda != 'Indisponível')
+    }
+    else{
+      filteredProducts = produtos
+    }
+  }
+}
 
 </script>
 
@@ -23,27 +40,43 @@ onMount(async () => {
 
   <div class="wrapper-produto">
     <aside class="container-filter">
-      <h1 class="font-bold text-xl my-3">Filtrar</h1>
+      <h1 class="font-bold text-2xl my-3">Filtrar</h1>
 
       <div class="wrapper-filter">
-        <div>
-          <input name="Alugados" type="checkbox" /> <label for="Alugados">Alugados</label>
+        <div class="flex flex-col">
+          <label for="Alugados">
+            <input name="Alugados" type="checkbox" bind:checked={alugadosFiltered} /> Alugados
+          </label>
+          <label for="Venda">
+            <input name="Venda" type="checkbox" bind:checked={vendaFiltered}/> A Venda
+          </label>
         </div>
-        <div>
-          <input name="Venda" type="checkbox" /> <label for="Venda">A Venda</label>
+        
+        <div class="flex flex-col items-center">
+          <h1 class="font-bold text-2xl my-3">Ordenar</h1>
+          <select name="order" class="select select-bordered">
+            <option default value="low-price">Mais Barato</option>
+            <option value="high-price">Mais Caro</option>
+          </select>
         </div>
       </div>
     </aside>
     <div class="container-produtos">
-      {#each produtos as item}
-        {#if (item.Aluguel != null && item.Aluguel.status_aluguel != 'Indisponível') || (item.Venda != null && item.Venda.status_venda != 'Indisponível')}
-          <Produto id={item.id} title={item.nome} description={item.descricao} type={item.Aluguel != null ? 'Aluguel' : 'Venda'} buttonType={item.Aluguel != null ? 'Aluguel' : 'Venda'} valor={item.valor}></Produto>
-          {:else}
-          <div class="sem-produtos">
-            <h1>Nenhum produto encontrado</h1>
-          </div>
-        {/if}
-      {/each}
+      {#await produtos}
+        <div class="sem-produtos">
+          <h1>Nenhum produto encontrado</h1>
+        </div>
+        {:then}
+          {#each filteredProducts as item}
+            {#if (item.Aluguel != null && item.Aluguel.status_aluguel != 'Indisponível') || (item.Venda != null && item.Venda.status_venda != 'Indisponível')}
+              <Produto data={item}/>
+            {:else}
+              <div class="sem-produtos">
+                <h1>Nenhum produto encontrado</h1>
+              </div>
+            {/if}
+          {/each}
+      {/await}
       {#if produtos.length == 0}
         <div class="sem-produtos">
           <h1>Nenhum produto encontrado</h1>
