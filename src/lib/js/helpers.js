@@ -17,15 +17,29 @@ export async function fetchSales(userId){
 }
 
 export async function calculateDiscount(products){
-  products.forEach((item) => {
-    if(item.promocao != null && item.promocao.status == 'Ativo'){
-      if(item.promocao.tipo == 'valor_fixo'){
-        item.valor = item.valor - item.promocao.valor_desconto
-      } else {
-        item.valor = item.valor - (item.valor * (item.promocao.valor_desconto / 100))
+  if(products.length != 0 && products.length != undefined){
+    products.forEach((item) => {
+      if(item.promocao != null && item.promocao.status == 'Ativo'){
+        if(item.promocao.tipo == 'valor_fixo'){
+          item.valor = item.valor - item.promocao.valor_desconto
+        } else {
+          item.valor = item.valor - (item.valor * (item.promocao.valor_desconto / 100))
+        }
       }
+    })
+  }else{
+    if(products.promocao != null && products.promocao.status == 'Ativo'){
+      if(products.promocao.tipo == 'valor_fixo'){
+        products.valor = products.valor - products.promocao.valor_desconto
+        
+      } else {
+        products.valor = products.valor - (products.valor * (products.promocao.valor_desconto / 100))
+      
+      }
+      return Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(products.valor)
     }
-  })
+  }
+  
   return products
 }
 
@@ -34,7 +48,6 @@ export async function fetchProducts(){
   if(response.status === 200){
     let data = await response.json()
     if(data.length > 0){
-      data = await calculateDiscount(data)
       return data
     }
   }
@@ -45,7 +58,6 @@ export async function fetchProductsById(id){
   const response = await fetch(`http://localhost:3333/Produto/${id}`)
   let data = await response.json()
   data.dataFabricacao = formatDate(data.dataFabricacao)
-  await calculateDiscount([data])
 
   return data
 }
