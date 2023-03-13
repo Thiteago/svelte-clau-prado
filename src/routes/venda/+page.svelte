@@ -7,18 +7,20 @@
   import Header from '$lib/components/header/Header.svelte'
   import PreviousButton from '$lib/components/previousbutton/Previousbutton.svelte'
   import Footer from '$lib/components/footer/Footer.svelte'
-	import { fetchProductsById } from '$lib/js/helpers';
+	import { fetchProductsById, calculateDiscount } from '$lib/js/helpers';
 
   const produtoId = $page.url.searchParams.get('produto_id');
 
   let produto = {}
+  let promotionalValue
+  let formatedValue
   $: ativo = 'descricao'
   $: images = []
-  $: mainimage = images[0]
+  $: mainimage = ''
 
   function addToCart(){
     if(!$cart.find(produtos => produtos.id == produto.id)){
-      let product = {...produto, imagens: images[0], quantidade: 1}
+      let product = {...produto, imagens: produto.caminhos[0], quantidade: 1}
       $cart = [...$cart, product]
     }
   }
@@ -42,19 +44,11 @@
     }
   }
 
-
-
-  async function getImages(){
-
-    const response = await fetch(`http://localhost:3333/Produto/ImagePath/${produtoId}`)
-    const data = await response.json()
-    images = [...data.caminhos]
-
-  }
-
   onMount(async () => {
     produto = await fetchProductsById(produtoId)
-    getImages()
+    mainimage = produto.caminhos[0]
+    promotionalValue = await calculateDiscount(produto)
+    formatedValue = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(produto.valor)
   })
 
 
@@ -69,18 +63,14 @@
         <div class='wrapper-info'>
           <aside class='imagem-produto'>
               <div class="max-w-full justify-center flex pb-2">
-                {#if images.length > 0}
-                  <img class="h-80" src="http://localhost:3333/static/{mainimage}" alt="">
-                {/if}
+                <img class="h-80" src="http://localhost:3333/static/{mainimage}" alt="">
               </div>
               <div class="flex w-full gap-3">
-              {#if images.length > 0}
-                {#each images as img}
+                {#each produto.caminhos as img}
                   <div class="container-img">
                     <img class="img" on:click={() => {mainimage = img}} src="http://localhost:3333/static/{img}" alt="">
                   </div>
                 {/each}
-              {/if}
               </div>
           </aside>
           <div class='info-produto'>
@@ -94,8 +84,11 @@
               {:else}
               <div class='info-situation'>Disponivel apenas para {produto.Aluguel != null ? 'aluguel' : 'venda'}
               </div>
-              <div class='price-info'>
-                R${produto.valor}
+              {#if produto.promocao != null && produto.promocao.status != 'Inativo'}
+                <div></div>
+              {/if}
+              <div class='price-info flex-col'>
+                {formatedValue}<span class="text-sm">{produto.Aluguel != null ? '/Por dia' : ''}</span>
               </div>
                 <button on:click={() => {addToCart(), goto('/carrinho')}} class='button'>{produto.Aluguel != null ? 'Alugar' : 'Comprar'}</button>
               {/if}
