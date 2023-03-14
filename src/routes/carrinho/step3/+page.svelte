@@ -12,7 +12,7 @@
   let sendedPaymentRequest = false
 
   async function handlePayment(metodo){
-    // sendedPaymentRequest = true
+    sendedPaymentRequest = true
     if(metodo == 'boleto'){
       $resume = {...$resume, metodoPagamento: 'boleto'}
     }
@@ -24,11 +24,11 @@
       },
       body: JSON.stringify($resume)
     })
-    // if(response.status == 200){
-    //   goto('/carrinho/step4')
-    // }else{
-    //   alert('Erro ao gerar pedido')
-    // }
+    if(response.status == 200){
+      goto('/carrinho/step4')
+    }else{
+      alert('Erro ao gerar pedido')
+    }
   }
 
 </script>
