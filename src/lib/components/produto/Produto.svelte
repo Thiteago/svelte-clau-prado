@@ -37,9 +37,9 @@
                   <img src={cifrao} alt="#" />
               </div>
               <div class='situation'>
-                  {#if data.Aluguel != null}
+                  {#if data.Aluguel.length > 0}
                     <p>Aluguel</p>
-                    {:else if data.Venda != null}
+                    {:else if data.Venda.length > 0}
                     <p>Venda</p>
                   {/if}
               </div>
@@ -51,7 +51,7 @@
 
                 <p class="text-2xl font-bold">
                   {promotionalValue}
-                  {#if data.Aluguel != null}
+                  {#if data.Aluguel.length > 0}
                     <span class="text-sm">/por dia</span>
                   {/if}
                 </p>
@@ -60,14 +60,14 @@
               {#if data.promocao == null || data.promocao.status == 'Inativo'}
                 <p class="text-2xl font-bold">
                   {formatedValue}
-                  {#if data.Aluguel != null}
+                  {#if data.Aluguel.length > 0}
                     <span class="text-sm">/por dia</span>
                   {/if}
                 </p>
               {/if}
             </div>
             <a href="/venda?produto_id={data.id}">
-              <button class="botao">{data.Aluguel != null ? 'Alugar' : 'Comprar'}</button>
+              <button class="botao">{data.Aluguel.length > 0 ? 'Alugar' : 'Comprar'}</button>
             </a>
           </div>
       </div>

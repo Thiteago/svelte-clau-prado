@@ -19,11 +19,11 @@ onMount(async () => {
 $: {
   if(produtos.length > 0){
     if(alugadosFiltered && vendaFiltered){
-      filteredProducts = produtos.filter(item => (item.Aluguel != null && item.Aluguel.status_aluguel != 'Indisponível') || (item.Venda != null && item.Venda.status_venda != 'Indisponível'))
+      filteredProducts = produtos.filter(item => (item.Aluguel.length > 0 && item.Aluguel.status_aluguel != 'Indisponível') || (item.Venda.length > 0 && item.Venda.status_venda != 'Indisponível'))
     }else if(alugadosFiltered){
-      filteredProducts = produtos.filter(item => item.Aluguel != null && item.Aluguel.status_aluguel != 'Indisponível')
+      filteredProducts = produtos.filter(item => item.Aluguel.length > 0 && item.Aluguel.status_aluguel != 'Indisponível')
     }else if(vendaFiltered){
-      filteredProducts = produtos.filter(item => item.Venda != null && item.Venda.status_venda != 'Indisponível')
+      filteredProducts = produtos.filter(item => item.Venda.length > 0 && item.Venda.status_venda != 'Indisponível')
     }
     else{
       filteredProducts = produtos
@@ -68,12 +68,8 @@ $: {
         </div>
         {:then}
           {#each filteredProducts as item}
-            {#if (item.Aluguel != null && item.Aluguel.status_aluguel != 'Indisponível') || (item.Venda != null && item.Venda.status_venda != 'Indisponível')}
+            {#if (item.Aluguel.length > 0 && item.Aluguel.status_aluguel != 'Indisponível') || (item.Venda.length > 0 && item.Venda.status_venda != 'Indisponível')}
               <Produto data={item}/>
-            {:else}
-              <div class="sem-produtos">
-                <h1>Nenhum produto encontrado</h1>
-              </div>
             {/if}
           {/each}
       {/await}

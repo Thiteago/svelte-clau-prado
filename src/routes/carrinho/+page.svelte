@@ -34,8 +34,8 @@
   $: cepValidates = true
   $: selectedFreight = ''
   $: cep = '';
-  $: alugados = $cart.filter(element => element.Aluguel != null)
-  $: comprados = $cart.filter(element => element.Venda != null)
+  $: alugados = $cart.filter(element => element.Aluguel.length > 0)
+  $: comprados = $cart.filter(element => element.Venda.length > 0)
   $: data_inicio_aluguel = ''
   $: data_final_aluguel = ''
   $: diasAlugados = data_inicio_aluguel != '' && data_final_aluguel != '' ? (new Date(data_final_aluguel).getTime() - new Date(data_inicio_aluguel).getTime()) / (1000 * 3600 * 24) : 0
@@ -78,9 +78,11 @@
 
     if(alugados.length > 0){
       alugados.forEach(element => {
-        element.Aluguel.data_aluguel = data_inicio_aluguel
-        element.Aluguel.data_expiracao =  data_final_aluguel
-        element.Aluguel.dias_alugados = diasAlugados
+        element.Aluguel.forEach(item => {
+          item.data_aluguel = data_inicio_aluguel
+          item.data_expiracao =  data_final_aluguel
+          item.dias_alugados = diasAlugados
+        })
       })
     }
 
@@ -88,7 +90,7 @@
       total: total,
       tipo_frete: selectedFreight,
       valor_frete: selectedFreight == 'PAC' ? freightInfo?.valorpac : freightInfo?.valorsedex,
-      cartItens: $cart,
+      cartItens: $cart, 
       idUser: $user.id,
       endereco: selectedEndereco,
     }
