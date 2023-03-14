@@ -195,7 +195,7 @@
         <select class="select select-bordered w-full" bind:value={vezes}>
           <option value="avista" selected>À vista - R$ {$resume.total},00</option>
           {#each Array(12) as _, i}
-            <option value="parcelado">Parcelado em {i + 2}x de R$ {($resume.total / (i + 2)).toFixed(2)} </option>
+            <option value={i == 0 ? 'A vista' : i+1}>Parcelado em {i + 2}x de R$ {($resume.total / (i + 2)).toFixed(2)} </option>
           {/each}
         </select>
         <button on:click={() => handlePayment('cartao')} class="btn bg-[#7C3267] w-full mt-4">Prosseguir</button>
