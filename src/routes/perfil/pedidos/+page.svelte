@@ -1,5 +1,5 @@
 <script>
-  import {fetchSales} from '$lib/js/helpers.js'
+  import {fetchOrdersById} from '$lib/js/helpers.js'
   import { user } from '$lib/js/stores/login.js'
 	import { onMount } from 'svelte';
 	import ModalPedido from '$lib/components/modalPedido/ModalPedido.svelte';
@@ -8,12 +8,13 @@
   $: selectedPedido = {}
   let pedidos = []
 
-  async function loadSales(){
-    pedidos = await fetchSales($user.id)
+
+  async function loadOrders(){
+    pedidos = await fetchOrdersById($user.id)
   }
 
   onMount(async () => {
-    await loadSales()
+    await loadOrders()
   })
 
   function selectPedido(id){
