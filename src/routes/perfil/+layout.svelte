@@ -27,12 +27,14 @@
         <li class="item" on:keyup={() => {goto('/perfil/pagamento')}} on:click={() => {goto('/perfil/pagamento')}}>Formas de Pagamento</li>
         <li class="item" on:keyup={() => {goto('/perfil/pedidos')}} on:click={() => {goto('/perfil/pedidos')}}>Historico de Pedidos</li>
         {#if $user.cargo == 'Admin'}
-          <li class="item" on:keyup={() => {goto('/perfil/promocoes')}} on:click={() => {goto('/perfil/promocoes')}}>Promoções</li>
-          <li class="item" on:keyup={() => {goto('/perfil/produtos')}} on:click={() => {goto('/perfil/produtos')}}>Produtos</li>
-          <li class="item" on:keyup={() => {goto('/perfil/relatórios')}} on:click={() => {goto('/perfil/relatórios')}}>Relatórios</li>
-          <li class="item" on:keyup={() => {goto('/perfil/estoque')}} on:click={() => {goto('/perfil/estoque')}}>Estoque</li>
-          <li class="item" on:keyup={() => {goto('/perfil/permissoes')}} on:click={() => {goto('/perfil/permissoes')}}>Permissões</li>
-          <li class="item" on:keyup={() => {goto('/perfil/usuarios')}} on:click={() => {goto('/perfil/usuarios')}}>Usuarios Administrativos</li>
+          <span class="py-10 text-center font-bold">Funções<br/> Administrativas <br/>↓</span>
+          <li class="item" on:keyup={() => {goto('/perfil/admin/pedidos')}} on:click={() => {goto('/perfil/admin/pedidos')}}>Pedidos</li>
+          <li class="item" on:keyup={() => {goto('/perfil/admin/promocoes')}} on:click={() => {goto('/perfil/admin/promocoes')}}>Promoções</li>
+          <li class="item" on:keyup={() => {goto('/perfil/admin/produtos')}} on:click={() => {goto('/perfil/admin/produtos')}}>Produtos</li>
+          <li class="item" on:keyup={() => {goto('/perfil/admin/relatórios')}} on:click={() => {goto('/perfil/admin/relatórios')}}>Relatórios</li>
+          <li class="item" on:keyup={() => {goto('/perfil/admin/estoque')}} on:click={() => {goto('/perfil/admin/estoque')}}>Estoque</li>
+          <li class="item" on:keyup={() => {goto('/perfil/admin/permissoes')}} on:click={() => {goto('/perfil/admin/permissoes')}}>Permissões</li>
+          <li class="item" on:keyup={() => {goto('/perfil/admin/usuarios')}} on:click={() => {goto('/perfil/admin/usuarios')}}>Usuarios Administrativos</li>
         {/if}
     </ul>
   </aside>
