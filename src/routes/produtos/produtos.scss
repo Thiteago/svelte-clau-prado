@@ -14,6 +14,17 @@ body{
 
 }
 
+.sem-produtos{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  background-color: #fbf7fb;
+  min-height: 100vh;
+}
+
 
 .product-grid{
   display: flex;
@@ -34,7 +45,7 @@ body{
       gap: 1rem;
 
       .container-filter{
-          width: 15%;
+          width: 20%;
           height: auto;
           min-height: 70vh;
           background-color: white;
