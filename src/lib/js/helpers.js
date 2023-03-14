@@ -1,7 +1,7 @@
 
 export const cpfRegexp = /([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})/;
 
-export async function fetchSales(userId){
+export async function fetchOrdersById(userId){
   const response = await fetch(`http://localhost:3333/pedido/listar/${userId}`)
   if(response.status === 200){
     const data = await response.json()
@@ -10,6 +10,21 @@ export async function fetchSales(userId){
         sale.data_pedido = formatDate(sale.data_pedido)
       })
 
+      return data
+    }
+  }
+  return []
+}
+
+export async function fetchOrders(){
+  const response = await fetch('http://localhost:3333/pedido/listar')
+  if(response.status === 200){
+    const data = await response.json()
+    
+    if(data.length > 0){
+      data.forEach((sale) => {
+        sale.data_pedido = formatDate(sale.data_pedido)
+      })
       return data
     }
   }
@@ -85,10 +100,14 @@ export async function fetchDisable(id){
   return false
 }
 
+export function formatToCurrency(value){
+  return Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value)
+}
+
 export function formatDate(date){
   let data = new Date(date)
   let dia = data.getDate()
-  let mes = data.getMonth() + 1 // Adiciona 1 porque o mês começa em zero (janeiro = 0)
+  let mes = data.getMonth() + 1 
   let ano = data.getFullYear()
 
   return `${dia}/${mes}/${ano}`
