@@ -57,7 +57,6 @@ export async function fetchProducts(){
 export async function fetchProductsById(id){
   const response = await fetch(`http://localhost:3333/Produto/${id}`)
   let data = await response.json()
-  data.dataFabricacao = formatDate(data.dataFabricacao)
 
   return data
 }
