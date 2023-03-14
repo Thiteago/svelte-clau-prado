@@ -1,18 +1,21 @@
 <script>
   import {imask} from '@imask/svelte'
+	import { onMount } from 'svelte';
+  import { fetchProductsById } from '$lib/js/helpers.js'
   export let produto = {}	
 
-  $: result = {
+  $: resultUpdate = {
     alert:'',
     text: '',
   }
+  let today = new Date().toISOString().split('T')[0]
   let files 
+  let tipo = produto.Aluguel != null ? 'Aluguel' : 'Venda'
   if(Object.keys(produto).length > 0){
     files = produto.imagens
   }
 
   let formatedDatadeCriacao = new Date(produto.dataFabricacao).toISOString().split('T')[0]
-  let formatedDatadeDisponibilidade = new Date(produto.data_disponibilidade).toISOString().split('T')[0]
 
   const optionsValor = {
     mask: 'R$num',
@@ -23,6 +26,14 @@
       }
     }
   }
+
+  onMount(() => {
+    if(produto.Aluguel != null){
+      tipo == 'Aluguel'
+    }else if(produto.Venda != null){
+      tipo == 'Venda'
+    }
+  })
 
   async function handleSubmit(event){
     event.preventDefault()
@@ -38,31 +49,34 @@
     data.append('nome', produto.nome)
     data.append('categoria', produto.categoria)
     data.append('descricao', produto.descricao)
-    data.append('dataCriacao', produto.dataCriacao)
+    data.append('dataFabricacao', formatedDatadeCriacao)
     data.append('quantidade', produto.quantidadeEmEstoque)
-    data.append('tipo', produto.tipo)
+    data.append('tipo', tipo)
     data.append('valor', produto.valor)
+    data.append('peso', produto.peso)
     data.append('altura', produto.altura)
     data.append('largura', produto.largura)
     data.append('comprimento', produto.comprimento)
     data.append('material', produto.material)
 
-    fetch(`http://localhost:3333/Produto/${produto.id}/Alterar`,{
+    fetch(`http://localhost:3333/Produto/${produto.id}/Alterar`, {
       method: 'PATCH',
       body: data
-      }).then((response) => {
-          if(response.status == 201){
-              result.alert  = 'alert-success'
-              result.text = 'Produto Alterado com sucesso'
-              files = []
-          }
-      }).catch((error) => {
-          if(error.response.status == 500){
-            result.alert  = 'alert-error'
-            result.text = 'Erro ao Atualizar o produto'
-            files = []
-          }
-      })
+    }).then(async (response) => {
+      if (response.ok) {
+        resultUpdate.alert = 'alert-success';
+        resultUpdate.text = 'Produto Alterado com sucesso';
+        files = [];
+        produto = await fetchProductsById(produto.id);
+      } else {
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+    }).catch((error) => {
+      console.error(error);
+      resultUpdate.alert = 'alert-error';
+      resultUpdate.text = 'Erro ao Atualizar o produto';
+      files = [];
+    });
 
   }
 
@@ -103,6 +117,7 @@
   type="date" 
   class="border border-base-300 rounded input w-full"
   name="data-fabricacao"
+  max={today}
   bind:value={formatedDatadeCriacao}
   required
   />
@@ -120,33 +135,28 @@
 
   <label for="tipo">Tipo</label>
   <select 
-  name="tipo" 
+  name="tipoUpdate" 
   class="border border-base-300 rounded input w-full"
-  id="tipo"
-  bind:value={produto.tipo}
+  id="tipoUpdate"
+  bind:value={tipo}
   required
   >
     <option disabled>Selecione um tipo</option>
-    <option value="Aluguel" selected={produto.tipo == 'Aluguel' ? true : false}>Aluguel</option>
-    <option value="Venda" selected={produto.tipo == 'Venda' ? true : false}>Venda</option>
+    <option value="Aluguel">Aluguel</option>
+    <option value="Venda">Venda</option>
   </select>
 
-  <label for="valor">Valor {produto.tipo == 'Aluguel' ? '(Por dia)' : ''}</label>
+  <label for="valor">Valor {tipo == 'Aluguel' ? '(Por dia)' : ''}</label>
   <input use:imask={optionsValor} name="valor" type="text" placeholder="R$ 00,00" class="input w-full border border-base-300" 
   bind:value={produto.valor}
   required
   />
 
-  {#if produto.tipo == 'Aluguel'}
-    <label for="data-disponibilidade">Data de disponibilidade</label>
-    <input 
-    type="date" 
-    class="border border-base-300 rounded input w-full"
-    name="data-disponibilidade"
-    bind:value={formatedDatadeDisponibilidade}
-    required
-    />
-  {/if}
+  <label for="peso">Peso (Em quilogramas)</label>
+  <input type="text" name="peso" placeholder="12" class="input input-bordered w-full"
+  bind:value={produto.peso}
+  required
+  />
 
   <label for="altura">Altura (Em centimetros)</label>
   <input type="text" name="altura" placeholder="12" class="input input-bordered w-full"
@@ -177,11 +187,11 @@
 
   <button type="submit" class="btn mt-3">Alterar</button>
 
-  {#if result.alert != ''}
-    <div class="alert {result.alert} shadow-lg">
+  {#if resultUpdate.alert != ''}
+    <div class="alert {resultUpdate.alert} shadow-lg">
       <div>
         <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-        <span>{result.text}</span>
+        <span>{resultUpdate.text}</span>
       </div>
     </div>
   {/if}
