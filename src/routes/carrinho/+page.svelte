@@ -1,12 +1,13 @@
 <script>
   import Header from '$lib/components/header/Header.svelte';
 	import Steps from '$lib/components/steps/Steps.svelte';
-  import { fetchAddress } from '$lib/js/helpers';
+  import { fetchAddress, formatToCurrency } from '$lib/js/helpers';
   // @ts-ignore
   import { imask } from '@imask/svelte'
   import { cart, resume } from '$lib/js/stores/cart.js'
   import { user, signed } from '$lib/js/stores/login.js'
   import leftArrow from '$lib/assets/icons/left-arrow.svg'
+  import trash from '$lib/assets/icons/trash-icon.svg'
   import rightArrow from '$lib/assets/icons/right-arrow-qtde.svg'
   import location from '$lib/assets/icons/location-pin.svg'
   import truck from '$lib/assets/icons/truck-icon.svg'
@@ -103,6 +104,10 @@
     else{
       goto('/login?origin=carrinho')
     }
+  }
+
+  function removeProduct(id){
+    $cart = $cart.filter(element => element.id != id)
   }
 
   async function freightCalculate(){
@@ -254,7 +259,7 @@
                         <img src={leftArrow} alt="">
                       </button>
                       <input name="quantidade" class="input-number w-11 text-center" min="1" type="number" value={product.quantidade} readonly>
-                      <button on:click={() => product.quantidade++} class="w-4">
+                      <button on:click={() => {product.quantidade != product.Venda.length ? product.quantidade++ : ''}} class="w-4">
                         <img src={rightArrow} alt="">
                       </button>
                     </div>
@@ -262,8 +267,12 @@
                 </div>
                 <div class="text-right w-1/5">
                   <p>Preço à vista</p>
-                  <p class="font-bold text-[#7C3267]">R$ {product.quantidade * product.valor},00</p>
+                  <p class="font-bold text-[#7C3267]">{formatToCurrency(product.quantidade * product.valor)}</p>
                 </div>
+
+                  <div>
+                    <button on:click={() => {removeProduct(product.id)}} class="bg-[#7C3267] text-white px-3 py-1 rounded"><img width="25" height="25" src={trash} class="white-icon" alt="icon representing an trash"></button>
+                  </div>
               </div>
               <span class="bg-slate-200 w-full h-2"></span>
             {/each}
@@ -287,7 +296,7 @@
                       <img src={leftArrow} alt="">
                     </button>
                     <input name="quantidade" class="input-number w-11 text-center" min="1" type="number" value={product.quantidade} readonly>
-                    <button on:click={() => product.quantidade++} class="w-4">
+                    <button on:click={() => {product.quantidade != product.Aluguel.length ? product.quantidade++ : ''}} class="w-4">
                       <img src={rightArrow} alt="">
                     </button>
                   </div>
@@ -299,9 +308,12 @@
                   {#if diasAlugados > 0}
                     <span>{diasAlugados+1}x</span>
                   {/if}
-                  <p class="font-bold text-[#7C3267]">R$ { product.quantidade * product.valor}</p>
+                  <p class="font-bold text-[#7C3267]">{ formatToCurrency(product.quantidade * product.valor)}</p>
                 </div>
-                
+              </div>
+
+              <div>
+                <button on:click={() => {removeProduct(product.id)}} class="bg-[#7C3267] text-white px-3 py-1 rounded"><img width="25" height="25" src={trash} class="white-icon" alt="icon representing an trash"></button>
               </div>
             </div>
             <span class="bg-slate-200 w-full h-2"></span>
@@ -344,7 +356,7 @@
         <div class="w-48">
           <div class="flex justify-between mt-4">
             <span class="text-gray-500 pr-3">Subtotal</span>
-            <span class="text-gray-500">R$ {subtotal}</span>
+            <span class="text-gray-500">{formatToCurrency(subtotal)}</span>
           </div>
           <div class="flex justify-between mt-4">
             <span class="text-gray-500">Frete</span>
@@ -352,7 +364,7 @@
           </div>
           <div class="flex flex-col justify-center items-center bg-green-200 font-bold py-10 px-5 text-xl mt-4">
             <span class="text-black text-2xl">Total</span>
-            <span class="text-black">R$ {total }</span>
+            <span class="text-black">{formatToCurrency(total) }</span>
           </div>
           <div>
             <button on:click={handleRedirect} disabled={!validateForm} class="btn bg-[#7C3267] w-full mt-4">Finalizar compra</button>
@@ -362,3 +374,9 @@
     </div>
   </div>
 </div>
+
+<style>
+  .white-icon{
+    filter: invert(99%) sepia(0%) saturate(7500%) hue-rotate(228deg) brightness(102%) contrast(99%)
+  }
+</style>
