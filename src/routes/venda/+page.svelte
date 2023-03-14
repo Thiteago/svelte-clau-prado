@@ -7,7 +7,7 @@
   import Header from '$lib/components/header/Header.svelte'
   import PreviousButton from '$lib/components/previousbutton/Previousbutton.svelte'
   import Footer from '$lib/components/footer/Footer.svelte'
-	import { fetchProductsById, calculateDiscount } from '$lib/js/helpers';
+	import { fetchProductsById, calculateDiscount, formatDate, formatToCurrency } from '$lib/js/helpers';
 
   const produtoId = $page.url.searchParams.get('produto_id');
 
@@ -47,7 +47,8 @@
     produto = await fetchProductsById(produtoId)
     mainimage = produto.caminhos[0]
     promotionalValue = await calculateDiscount(produto)
-    formatedValue = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(produto.valor)
+    formatedValue = formatToCurrency(produto.valor)
+    produto.dataFabricacao = formatDate(produto.dataFabricacao)
   })
 
 
