@@ -66,12 +66,16 @@ $: {
         <div class="sem-produtos">
           <h1>Nenhum produto encontrado</h1>
         </div>
-        {:then}
-          {#each filteredProducts as item}
-            {#if (item.Aluguel.length > 0 && item.Aluguel.status_aluguel != 'Indisponível') || (item.Venda.length > 0 && item.Venda.status_venda != 'Indisponível')}
-              <Produto data={item}/>
-            {/if}
-          {/each}
+      {:then}
+        {#each filteredProducts as item}
+          {#if (item.Aluguel.length > 0 && item.Aluguel.status_aluguel != 'Indisponível') || (item.Venda.length > 0 && item.Venda.status_venda != 'Indisponível')}
+            <Produto data={item}/>
+          {:else}
+            <div class="sem-produtos">
+              <h1>Nenhum produto encontrado, tente ajustar o filtro novamente!</h1>
+            </div>
+          {/if}
+        {/each}
       {/await}
       {#if produtos.length == 0}
         <div class="sem-produtos">
