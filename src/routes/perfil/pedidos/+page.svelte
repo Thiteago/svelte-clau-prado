@@ -27,7 +27,7 @@
 <section class="p-6">
   <h1 class="text-2xl">Histórico de Pedidos</h1>
   <div class="mt-10">
-    <table class="table-auto">
+    <table class="table-auto w-full">
       <thead>
         <tr>
           <th class="px-4 py-2">Número do Pedido</th>
@@ -39,7 +39,7 @@
       <tbody>
         {#if pedidos.length === 0}
           <tr>
-            <td class="border px-4 py-2" colspan="4">Nenhum pedido encontrado</td>
+            <td class="border text-center px-4 py-2" colspan="4">Nenhum pedido encontrado</td>
           </tr>
         {:else}
           {#each pedidos as pedido}
