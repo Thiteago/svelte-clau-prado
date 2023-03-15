@@ -4,7 +4,7 @@
 	import FormUpdate from "$lib/components/formupdate/FormUpdate.svelte";
 	import { onMount } from "svelte";
 
-  let files
+  $: files = []	
   let idSelected
   let idDeleteSelected
   let produtos = []
@@ -43,13 +43,11 @@
         if(response.status == 201){
             result.alert  = 'alert-success'
             result.text = 'Produto deletado com sucesso'
-            files = []
         }
     }).catch((error) => {
         if(error.response.status == 500){
           result.alert  = 'alert-error'
           result.text = 'Erro ao deletar o produto'
-          files = []
         }
     })
   }
@@ -126,14 +124,12 @@
           if(response.status == 201){
               result.alert  = 'alert-success'
               result.text = 'Produto cadastrado com sucesso'
-              files = []
+          }else{
+            throw new Error(`Request failed with status ${response.status}`)
           }
       }).catch((error) => {
-          if(error.response.status == 500){
-            result.alert  = 'alert-error'
-            result.text = 'Erro ao cadastrar o produto'
-            files = []
-          }
+        result.alert  = 'alert-error'
+        result.text = 'Já existe um produto com esse nome'
       })
   }
 
