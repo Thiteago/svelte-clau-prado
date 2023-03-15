@@ -1,5 +1,6 @@
 <script>
   import Steps from '$lib/components/steps/Steps.svelte';
+  import { BACKEND_URL } from '$env/static/public'
   import Header from '$lib/components/header/Header.svelte';
   import moneyIcon from '$lib/assets/icons/money.svg'
   import boletoIcon from '$lib/assets/icons/boleto.svg'
@@ -17,7 +18,7 @@
       $resume = {...$resume, metodoPagamento: 'boleto'}
     }
 
-    const response = await fetch(`${process.env.BACKEND_URL}/pedido/gerar`, {
+    const response = await fetch(`${BACKEND_URL}/pedido/gerar`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

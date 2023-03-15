@@ -1,5 +1,6 @@
 <script>
   import { imask } from '@imask/svelte'
+  import { BACKEND_URL } from '$env/static/public'
   import { user } from '$lib/js/stores/login.js'
   export let endereco
   export let onUpdateEndereco
@@ -12,7 +13,7 @@
 
   async function handleSubmit(e){
     e.preventDefault()
-    const response = await fetch (`${process.env.BACKEND_URL}/Usuarios/${$user.id}/AtualizarEndereco`, {
+    const response = await fetch (`${BACKEND_URL}/Usuarios/${$user.id}/AtualizarEndereco`, {
       headers: {
         'Content-Type': 'application/json'
       },

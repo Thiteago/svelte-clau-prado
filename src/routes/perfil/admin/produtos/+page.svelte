@@ -1,6 +1,7 @@
 <script>
   import "./produtos.scss"
   import {imask} from '@imask/svelte'
+  import { BACKEND_URL } from '$env/static/public'
 	import FormUpdate from "$lib/components/formupdate/FormUpdate.svelte";
 	import { onMount } from "svelte";
 
@@ -37,7 +38,7 @@
   })
 
   function deleteProduct(id){
-    fetch(`${process.env.BACKEND_URL}/Produto/${id}/Deletar`,{
+    fetch(`${BACKEND_URL}/Produto/${id}/Deletar`,{
       method: 'DELETE',
     }).then((response) => {
         if(response.status == 201){
@@ -58,7 +59,7 @@
 
 
   async function getProdutos(){
-    const response = await fetch(`${process.env.BACKEND_URL}/Produto`)
+    const response = await fetch(`${BACKEND_URL}/Produto`)
     const data = await response.json()
     
     produtos = await data
@@ -117,7 +118,7 @@
       data.append('valor', valor)
     }
 
-    fetch(`${process.env.BACKEND_URL}/Produto/Cadastrar`,{
+    fetch(`${BACKEND_URL}/Produto/Cadastrar`,{
       method: 'POST',
       body: data
       }).then((response) => {

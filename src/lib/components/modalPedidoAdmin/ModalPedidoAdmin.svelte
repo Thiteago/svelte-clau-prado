@@ -1,5 +1,6 @@
 <script>
   import order from '$lib/assets/icons/order-icon.svg'
+  import { BACKEND_URL } from '$env/static/public'
   import pencil from '$lib/assets/icons/pencil.svg'
   import { formatToCurrency, formatDate } from '$lib/js/helpers.js'
   export let pedido
@@ -16,7 +17,7 @@
   
 
   async function handleUpdateVinculatedProducts(){
-    await fetch(`${process.env.BACKEND_URL}/pedido/alterar/produtos/${pedido.id}`, {
+    await fetch(`${BACKEND_URL}/pedido/alterar/produtos/${pedido.id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json'

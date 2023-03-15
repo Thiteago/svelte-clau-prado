@@ -1,5 +1,6 @@
 <script>
 	import ModalPromocao from "$lib/components/modalPromocao/modalPromocao.svelte";
+  import { BACKEND_URL } from '$env/static/public'
   import { fetchPromotions, fetchProducts } from '$lib/js/helpers.js'
   import { imask } from '@imask/svelte'
 	import { onMount } from "svelte";
@@ -55,7 +56,7 @@
   });
 
   async function handleSubmit(){
-    await fetch(`${process.env.BACKEND_URL}/promocao/cadastrar`, {
+    await fetch(`${BACKEND_URL}/promocao/cadastrar`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

@@ -1,5 +1,6 @@
 <script>
   import Header from '$lib/components/header/Header.svelte';
+  import { BACKEND_URL } from '$env/static/public'
 	import Steps from '$lib/components/steps/Steps.svelte';
   import { fetchAddress, formatToCurrency } from '$lib/js/helpers';
   // @ts-ignore
@@ -120,7 +121,7 @@
       cep = cep.replace('-', '')
     }
     if(cepValidates){
-      await fetch(`${process.env.BACKEND_URL}/carrinho/frete/${cep}`)
+      await fetch(`${BACKEND_URL}/carrinho/frete/${cep}`)
       .then(res => res.json())
       .then(data => {
         freightInfo = data

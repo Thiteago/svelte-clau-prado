@@ -1,6 +1,7 @@
 <script>
   import './dadoscad.scss'
   import { imask } from '@imask/svelte';
+  import { BACKEND_URL } from '$env/static/public'
   import {user} from '$lib/js/stores/login.js'
 	import { onMount } from 'svelte';
 
@@ -14,7 +15,7 @@
   };
 
   async function getUserData(){
-    let result = await fetch(`${process.env.BACKEND_URL}/Usuarios/${$user.id}/dados`)
+    let result = await fetch(`${BACKEND_URL}/Usuarios/${$user.id}/dados`)
     let data = await result.json()
     return data
   }
@@ -27,7 +28,7 @@
 
   async function handleSubmit(e) {
     e.preventDefault()
-    let result = await fetch(`${process.env.BACKEND_URL}/Usuarios/${$user.id}/Alterar`, {
+    let result = await fetch(`${BACKEND_URL}/Usuarios/${$user.id}/Alterar`, {
       headers: {
         'Content-Type': 'application/json'
       },

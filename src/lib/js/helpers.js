@@ -1,8 +1,9 @@
+import { PUBLIC_BACKEND_URL } from '$env/static/public'
 
 export const cpfRegexp = /([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})/;
 
 export async function fetchOrdersById(userId){
-  const response = await fetch(`${process.env.BACKEND_URL}/pedido/listar/${userId}`)
+  const response = await fetch(`${PUBLIC_BACKEND_URL}/pedido/listar/${userId}`)
   if(response.status === 200){
     const data = await response.json()
     if(data.length > 0){
@@ -17,7 +18,7 @@ export async function fetchOrdersById(userId){
 }
 
 export async function fetchOrders(){
-  const response = await fetch(`${process.env.BACKEND_URL}/pedido/listar`)
+  const response = await fetch(`${PUBLIC_BACKEND_URL}/pedido/listar`)
   if(response.status === 200){
     const data = await response.json()
     if(data.length > 0){
@@ -58,7 +59,7 @@ export async function calculateDiscount(products){
 }
 
 export async function fetchProducts(){
-  const response = await fetch(`${process.env.BACKEND_URL}/Produto`)
+  const response = await fetch(`${PUBLIC_BACKEND_URL}/Produto`)
   if(response.status === 200){
     let data = await response.json()
     if(data.length > 0){
@@ -69,14 +70,14 @@ export async function fetchProducts(){
 }
 
 export async function fetchProductsById(id){
-  const response = await fetch(`${process.env.BACKEND_URL}/Produto/${id}`)
+  const response = await fetch(`${PUBLIC_BACKEND_URL}/Produto/${id}`)
   let data = await response.json()
 
   return data
 }
 
 export async function fetchPromotions(){
-  const response = await fetch(`${process.env.BACKEND_URL}/promocao/listar`)
+  const response = await fetch(`${PUBLIC_BACKEND_URL}/promocao/listar`)
   if(response.status === 200){
     const data = await response.json()
     if(data.length > 0){
@@ -87,7 +88,7 @@ export async function fetchPromotions(){
 }
 
 export async function fetchDisable(id){
-  const response = await fetch(`${process.env.BACKEND_URL}/promocao/desabilitar/${id}`, {
+  const response = await fetch(`${BACKEND_URL}/promocao/desabilitar/${id}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json'
@@ -113,7 +114,7 @@ export function formatDate(date){
 }
 
 export async function fetchAddress(userId){
-  const response = await fetch(`${process.env.BACKEND_URL}/Usuarios/${userId}/Enderecos`)
+  const response = await fetch(`${BACKEND_URL}/Usuarios/${userId}/Enderecos`)
   const data = await response.json()
 
   return data

@@ -1,6 +1,7 @@
 <script>
   import "./registro.scss"
   import { imask } from '@imask/svelte'
+  import { BACKEND_URL } from '$env/static/public'
   import Previousbutton from "$lib/components/previousbutton/Previousbutton.svelte";
   import {goto} from '$app/navigation'
   import { validateCPF } from "$lib/js/helpers.js";
@@ -76,7 +77,7 @@
   async function handleSubmit(e) {
     e.preventDefault()
 
-    const response = await fetch(`${process.env.BACKEND_URL}/NovoUsuario`,{
+    const response = await fetch(`${BACKEND_URL}/NovoUsuario`,{
       headers: {
         'Content-Type': 'application/json'
       },
