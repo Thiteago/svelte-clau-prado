@@ -20,7 +20,6 @@ export async function fetchOrders(){
   const response = await fetch('http://localhost:3333/pedido/listar')
   if(response.status === 200){
     const data = await response.json()
-    
     if(data.length > 0){
       data.forEach((sale) => {
         sale.data_pedido = formatDate(sale.data_pedido)
