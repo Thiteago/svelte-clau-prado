@@ -4,11 +4,11 @@
   import { fetchOrdersById } from '$lib/js/helpers.js'
 	import { onMount } from 'svelte';
 
-  let sales = []
+  let orders = []
 
 
   onMount(async () => {
-    sales = await fetchOrdersById($user.id) 
+    orders = await fetchOrdersById($user.id) 
   })
   
   
@@ -24,21 +24,25 @@
   </div>
   
   <div class="containerUltimoPedido">
-    <h3 class="sectionTitle">Ultimos Pedidos</h3>
     <div class="containerPedido">
-      <div class="grid-container">
-        <div class="header col-4">Número do Pedido</div>
-        <div class="header col-4">Status</div>
-        <div class="header col-4">Data</div>
-        <div class="header col-4">Pagamento</div>
-        {#each sales as sale}
-          <div class="item col-4">{sale.id}</div>
-          <div class="item col-4">{sale.status}</div>
-          <div class="item col-4">{sale.data_pedido}</div>
-          <div class="item col-4">{sale.Pagamento.forma_pagamento}</div>
-        {/each}
-      </div>
-      <a href="/perfil/pedidos">Histórico de Pedidos</a>
+      {#if orders.length > 0}
+        <h3 class="font-bold text-xl">últimos Pedidos</h3>
+        <div class="grid-container justify-center">
+          <div class="header col-4">Número do Pedido</div>
+          <div class="header col-4">Status</div>
+          <div class="header col-4">Data</div>
+          <div class="header col-4">Pagamento</div>
+          {#each orders as order}
+            <div class="item col-4">{order.id}</div>
+            <div class="item col-4">{order.status}</div>
+            <div class="item col-4">{order.data_pedido}</div>
+            <div class="item col-4">{order.Pagamento.forma_pagamento}</div>
+          {/each}
+        </div>
+        {:else}
+          <div class="my-6">Seus últimos pedidos irão aparecer aqui</div>
+        {/if}
+      <a class="rounded p-4 bg-slate-500 text-white w-3/12" href="/perfil/pedidos">Histórico de Pedidos</a>
     </div>
   </div>
 </div>
