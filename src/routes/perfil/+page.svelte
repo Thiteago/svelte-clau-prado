@@ -1,14 +1,14 @@
 <script>
   import './perfil.scss'
   import { user } from '$lib/js/stores/login.js'
-  import { fetchOrdersById } from '$lib/js/helpers.js'
+  import { fetchOrdersByUserId } from '$lib/js/helpers.js'
 	import { onMount } from 'svelte';
 
   let orders = []
 
 
   onMount(async () => {
-    orders = await fetchOrdersById($user.id) 
+    orders = await fetchOrdersByUserId($user.id) 
   })
   
   
