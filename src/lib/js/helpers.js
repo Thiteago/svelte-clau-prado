@@ -2,8 +2,8 @@ import { PUBLIC_BACKEND_URL } from '$env/static/public'
 
 export const cpfRegexp = /([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})/;
 
-export async function fetchOrdersById(userId){
-  const response = await fetch(`${PUBLIC_BACKEND_URL}/pedido/listar/${userId}`)
+export async function fetchOrdersByUserId(userId){
+  const response = await fetch(`${PUBLIC_BACKEND_URL}/pedido/listar/user/${userId}`)
   if(response.status === 200){
     const data = await response.json()
     if(data.length > 0){
@@ -13,6 +13,15 @@ export async function fetchOrdersById(userId){
 
       return data
     }
+  }
+  return []
+}
+
+export async function fetchOrdersById(id){
+  const response = await fetch(`${PUBLIC_BACKEND_URL}/pedido/listar/${id}`)
+  if(response.status === 200){
+    const data = await response.json()
+    return data
   }
   return []
 }
