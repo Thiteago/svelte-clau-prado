@@ -70,10 +70,7 @@ $: {
         {#each filteredProducts as item}
           {#if (item.Aluguel.length > 0 && item.Aluguel.status_aluguel != 'Indisponível') || (item.Venda.length > 0 && item.Venda.status_venda != 'Indisponível')}
             <Produto data={item}/>
-          {:else}
-            <div class="sem-produtos">
-              <h1>Nenhum produto encontrado, tente ajustar o filtro novamente!</h1>
-            </div>
+
           {/if}
         {/each}
       {/await}

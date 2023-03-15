@@ -16,7 +16,7 @@
 
 <div class='wrapper-produtos'>
   <div class='icon-produto'>
-    <img class="object-cover w-60 h-60" src={`http://localhost:3333/static/${data.caminhos[0]}`} alt="" />
+    <img class="object-cover w-60 h-60" src={`http://localhost:3333/static/${data.imagens[0]}`} alt="" />
   </div>
   <div class='info-produto'>
       <div class="flex justify-between pr-5">

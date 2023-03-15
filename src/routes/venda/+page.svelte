@@ -19,7 +19,7 @@
 
   function addToCart(){
     if(!$cart.find(produtos => produtos.id == produto.id)){
-      let product = {...produto, imagens: produto.caminhos[0], quantidade: 1}
+      let product = {...produto, imagens: produto.imagens[0], quantidade: 1}
       $cart = [...$cart, product]
     }
   }
@@ -45,7 +45,7 @@
 
   onMount(async () => {
     produto = await fetchProductsById(produtoId)
-    mainimage = produto.caminhos[0]
+    mainimage = produto.imagens[0]
     promotionalValue = await calculateDiscount(produto)
     formatedValue = formatToCurrency(produto.valor)
     produto.dataFabricacao = formatDate(produto.dataFabricacao)
@@ -66,7 +66,7 @@
                 <img class="h-80" src="http://localhost:3333/static/{mainimage}" alt="">
               </div>
               <div class="flex w-full gap-3">
-                {#each produto.caminhos as img}
+                {#each produto.imagens as img}
                   <div class="container-img">
                     <img class="img" on:click={() => {mainimage = img}} src="http://localhost:3333/static/{img}" alt="">
                   </div>
