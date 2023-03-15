@@ -1,7 +1,7 @@
 <script>
   import { user } from  '$lib/js/stores/login.js'
   import {fetchAddress} from '$lib/js/helpers.js'
-  import { BACKEND_URL } from '$env/static/public'
+  import { PUBLIC_BACKEND_URL } from '$env/static/public'
 	import { onMount } from 'svelte';
   import { imask } from '@imask/svelte'
 	import ModalEndereco from '$lib/components/modalEndereco/ModalEndereco.svelte';
@@ -21,7 +21,7 @@
 
   async function handleSubmit(e) {
     e.preventDefault()
-    const response = await fetch (`${BACKEND_URL}/Usuarios/${$user.id}/NovoEndereco`, {
+    const response = await fetch (`${PUBLIC_BACKEND_URL}/Usuarios/${$user.id}/NovoEndereco`, {
       headers: {
         'Content-Type': 'application/json'
       },

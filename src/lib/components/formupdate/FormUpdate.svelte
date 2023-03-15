@@ -1,6 +1,6 @@
 <script>
   import {imask} from '@imask/svelte'
-  import { BACKEND_URL } from '$env/static/public'
+  import { PUBLIC_BACKEND_URL } from '$env/static/public'
 	import { onMount } from 'svelte';
   import { fetchProductsById } from '$lib/js/helpers.js'
   export let produto = {}	
@@ -60,7 +60,7 @@
     data.append('comprimento', produto.comprimento)
     data.append('material', produto.material)
 
-    fetch(`${BACKEND_URL}/Produto/${produto.id}/Alterar`, {
+    fetch(`${PUBLIC_BACKEND_URL}/Produto/${produto.id}/Alterar`, {
       method: 'PATCH',
       body: data
     }).then(async (response) => {

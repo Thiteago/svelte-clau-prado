@@ -88,7 +88,7 @@ export async function fetchPromotions(){
 }
 
 export async function fetchDisable(id){
-  const response = await fetch(`${BACKEND_URL}/promocao/desabilitar/${id}`, {
+  const response = await fetch(`${PUBLIC_BACKEND_URL}/promocao/desabilitar/${id}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json'
@@ -114,7 +114,7 @@ export function formatDate(date){
 }
 
 export async function fetchAddress(userId){
-  const response = await fetch(`${BACKEND_URL}/Usuarios/${userId}/Enderecos`)
+  const response = await fetch(`${PUBLIC_BACKEND_URL}/Usuarios/${userId}/Enderecos`)
   const data = await response.json()
 
   return data

@@ -1,11 +1,11 @@
 <script>
-  import { BACKEND_URL } from '$env/static/public'
+  import { PUBLIC_BACKEND_URL } from '$env/static/public'
   import order from '$lib/assets/icons/order-icon.svg'
   export let pedido
   export let isOpen
 
   async function handlePdf(){
-    await fetch(`${BACKEND_URL}/pagamento/boleto/${pedido.Pagamento.id}`)
+    await fetch(`${PUBLIC_BACKEND_URL}/pagamento/boleto/${pedido.Pagamento.id}`)
     .then(response => response.blob())
     .then(blob => {
     const file = new File([blob], 'file.pdf', { type: 'application/pdf' })

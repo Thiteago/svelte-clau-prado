@@ -1,6 +1,6 @@
 <script>
   import './login.scss'
-  import { BACKEND_URL } from '$env/static/public'
+  import { PUBLIC_BACKEND_URL } from '$env/static/public'
   import Previousbutton from '$lib/components/previousbutton/Previousbutton.svelte';
 
   import { goto } from '$app/navigation';
@@ -14,7 +14,7 @@
   async function handleSubmit(e) {
     e.preventDefault()
 
-    const response = await fetch(`${BACKEND_URL}/Autenticar`,{
+    const response = await fetch(`${PUBLIC_BACKEND_URL}/Autenticar`,{
       headers: {
         'Content-Type': 'application/json'
       },
