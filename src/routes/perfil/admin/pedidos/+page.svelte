@@ -42,7 +42,7 @@
   <div>
     <h2 class="text-left">Pendentes de pagamento</h2>
     <div class="flex flex-col items-center">
-      <table class="table table-zebra w-full mt-5">
+      <table class="table cazuza table-zebra w-full mt-5">
         <thead>
           <tr>
             <th>Id</th>
@@ -91,3 +91,9 @@
 {#if Object.keys(selectedPedido).length > 0}
   <ModalPedidoAdmin pedido={selectedPedido} />
 {/if}
+
+<style>
+  .cazuza :where(th, td) {
+    white-space: normal;
+  }
+</style>
