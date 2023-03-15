@@ -12,7 +12,7 @@
 
   async function handleSubmit(e){
     e.preventDefault()
-    const response = await fetch (`http://localhost:3333/Usuarios/${$user.id}/AtualizarEndereco`, {
+    const response = await fetch (`${process.env.BACKEND_URL}/Usuarios/${$user.id}/AtualizarEndereco`, {
       headers: {
         'Content-Type': 'application/json'
       },

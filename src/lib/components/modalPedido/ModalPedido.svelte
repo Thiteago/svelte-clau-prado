@@ -4,7 +4,7 @@
   export let isOpen
 
   async function handlePdf(){
-    await fetch(`http://localhost:3333/pagamento/boleto/${pedido.Pagamento.id}`)
+    await fetch(`${process.env.BACKEND_URL}/pagamento/boleto/${pedido.Pagamento.id}`)
     .then(response => response.blob())
     .then(blob => {
     const file = new File([blob], 'file.pdf', { type: 'application/pdf' })

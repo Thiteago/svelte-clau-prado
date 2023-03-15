@@ -14,7 +14,7 @@
   };
 
   async function getUserData(){
-    let result = await fetch(`http://localhost:3333/Usuarios/${$user.id}/dados`)
+    let result = await fetch(`${process.env.BACKEND_URL}/Usuarios/${$user.id}/dados`)
     let data = await result.json()
     return data
   }
@@ -27,7 +27,7 @@
 
   async function handleSubmit(e) {
     e.preventDefault()
-    let result = await fetch(`http://localhost:3333/Usuarios/${$user.id}/Alterar`, {
+    let result = await fetch(`${process.env.BACKEND_URL}/Usuarios/${$user.id}/Alterar`, {
       headers: {
         'Content-Type': 'application/json'
       },

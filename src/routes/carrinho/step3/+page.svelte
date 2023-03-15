@@ -17,7 +17,7 @@
       $resume = {...$resume, metodoPagamento: 'boleto'}
     }
 
-    const response = await fetch('http://localhost:3333/pedido/gerar', {
+    const response = await fetch(`${process.env.BACKEND_URL}/pedido/gerar`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

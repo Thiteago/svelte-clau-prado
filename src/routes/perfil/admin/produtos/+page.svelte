@@ -37,7 +37,7 @@
   })
 
   function deleteProduct(id){
-    fetch(`http://localhost:3333/Produto/${id}/Deletar`,{
+    fetch(`${process.env.BACKEND_URL}/Produto/${id}/Deletar`,{
       method: 'DELETE',
     }).then((response) => {
         if(response.status == 201){
@@ -58,7 +58,7 @@
 
 
   async function getProdutos(){
-    const response = await fetch('http://localhost:3333/Produto')
+    const response = await fetch(`${process.env.BACKEND_URL}/Produto`)
     const data = await response.json()
     
     produtos = await data
@@ -117,7 +117,7 @@
       data.append('valor', valor)
     }
 
-    fetch('http://localhost:3333/Produto/Cadastrar',{
+    fetch(`${process.env.BACKEND_URL}/Produto/Cadastrar`,{
       method: 'POST',
       body: data
       }).then((response) => {

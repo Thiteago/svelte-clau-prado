@@ -59,7 +59,7 @@
     data.append('comprimento', produto.comprimento)
     data.append('material', produto.material)
 
-    fetch(`http://localhost:3333/Produto/${produto.id}/Alterar`, {
+    fetch(`${process.env.BACKEND_URL}/Produto/${produto.id}/Alterar`, {
       method: 'PATCH',
       body: data
     }).then(async (response) => {

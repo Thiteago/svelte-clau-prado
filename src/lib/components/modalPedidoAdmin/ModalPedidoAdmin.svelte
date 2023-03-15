@@ -16,7 +16,7 @@
   
 
   async function handleUpdateVinculatedProducts(){
-    await fetch(`http://localhost:3333/pedido/alterar/produtos/${pedido.id}`, {
+    await fetch(`${process.env.BACKEND_URL}/pedido/alterar/produtos/${pedido.id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json'

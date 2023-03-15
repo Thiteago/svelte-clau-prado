@@ -55,7 +55,7 @@
   });
 
   async function handleSubmit(){
-    await fetch('http://localhost:3333/promocao/cadastrar', {
+    await fetch(`${process.env.BACKEND_URL}/promocao/cadastrar`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

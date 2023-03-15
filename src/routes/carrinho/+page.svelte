@@ -120,7 +120,7 @@
       cep = cep.replace('-', '')
     }
     if(cepValidates){
-      await fetch(`http://localhost:3333/carrinho/frete/${cep}`)
+      await fetch(`${process.env.BACKEND_URL}/carrinho/frete/${cep}`)
       .then(res => res.json())
       .then(data => {
         freightInfo = data

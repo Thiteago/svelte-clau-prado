@@ -76,7 +76,7 @@
   async function handleSubmit(e) {
     e.preventDefault()
 
-    const response = await fetch("http://localhost:3333/NovoUsuario",{
+    const response = await fetch(`${process.env.BACKEND_URL}/NovoUsuario`,{
       headers: {
         'Content-Type': 'application/json'
       },
