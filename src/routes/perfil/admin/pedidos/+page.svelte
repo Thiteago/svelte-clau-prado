@@ -11,10 +11,6 @@
   let currentPage = 1
   let pages = [];
 
-  $: if(selectedPedido){
-    console.log(selectedPedido)
-  }
-
   function selectPedido(id){
     selectedPedido = pedidos.find(pedido => pedido.id === id)
   }
