@@ -3,10 +3,28 @@
   import { PUBLIC_BACKEND_URL } from '$env/static/public'
   import pencil from '$lib/assets/icons/pencil.svg'
   import { formatToCurrency, formatDate, fetchOrdersById } from '$lib/js/helpers.js'
+  import { createEventDispatcher } from 'svelte';
+
+  const dispatch = createEventDispatcher();
   export let pedido
 
   $: selectedAluguelProduct = []
   $: selectedCompraProduct = []
+
+  function reloadOrders() {
+		dispatch('reload', {});
+	}
+
+
+  async function handleOrderCancelation(){
+    const response = await fetch(`${PUBLIC_BACKEND_URL}/pedido/cancelar/${pedido.id}`, {
+      method: 'DELETE',
+    })
+    if(response.status == 200){
+      pedido = await fetchOrdersById(pedido.id)
+      reloadOrders()
+    }
+  }
 
   async function handleUpdateVinculatedProducts(){
     const response = await fetch(`${PUBLIC_BACKEND_URL}/pedido/alterar/produtos`, {
@@ -22,18 +40,44 @@
     if(response.status == 200){
       pedido = await fetchOrdersById(pedido.id)
     }
-    
   }
 
 </script>
 
 {#if Object.keys(pedido).length > 0}
-  <input type="checkbox"  id="my-modal-{pedido.id}" class="modal-toggle" />
-  <label for="my-modal-{pedido.id}" class="modal">
+  <input type="checkbox" id="my-modal-{pedido.id}" class="modal-toggle" />
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <div class="modal">
     <label class="modal-box relative max-w-full" for="">
-      <div class="flex justify-between items-center">
-        <h3 class="text-lg font-bold flex items-center"><img class="h-8 w-8" src={order} alt="order icon"/>Pedido #{pedido.id} - Data do Pedido: {pedido.data_pedido}</h3>
-        <span class="{pedido.status == 'Pendente' ? 'bg-red-500' : 'bg-green-500'} font-bold p-3 rounded">{pedido.status}</span>
+      <label on:click={reloadOrders} for="my-modal-{pedido.id}" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+      <div class="flex justify-between items-center mr-5">
+        <div class="flex flex-col gap-3">
+          <div class="flex gap-3">
+            <h3 class="text-lg font-bold flex items-center"><img class="h-8 w-8" src={order} alt="order icon"/>Pedido #{pedido.id} - Data do Pedido: {pedido.data_pedido}</h3>
+            <span class="{pedido.status == 'Pendente' ? 'bg-red-500' : 'bg-green-500'} font-bold p-1 rounded">{pedido.status}</span>
+          </div>
+          <div class="flex gap-3">
+            <label for="my-modal-{`${pedido.data_pedido}${pedido.id}${pedido.endereco.rua}${pedido.endereco.numeroRua}`}" class="btn btn-error">Cancelar Pedido</label>
+          </div>
+        </div>
+      </div>
+
+      <input type="checkbox" id="my-modal-{`${pedido.data_pedido}${pedido.id}${pedido.endereco.rua}${pedido.endereco.numeroRua}`}" class="modal-toggle" />
+      <div class="modal">
+        <div class="modal-box relative">
+          <label for="my-modal-{`${pedido.data_pedido}${pedido.id}${pedido.endereco.rua}${pedido.endereco.numeroRua}`}" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+          <h3 class="text-lg font-bold">Cancelar Pedido</h3>
+          <p>Voce tem certeza que deseja cancelar esse pedido?</p>
+          {#if pedido.Pagamento.status == 'Confirmado'  ||  pedido.status == 'Aguardando Envio'}
+            <p class="font-bold text-md text-red">Esse pedido ja esta pago!!!</p>
+          {:else if pedido.status == 'Enviado'}
+            <p class="font-bold text-md text-red">Esse pedido ja foi enviado ao cliente!!!</p>
+          {/if}
+          <div class="flex justify-end gap-3 mt-1">
+            <label for="my-modal-3" class="btn btn-error">Nao</label>
+            <button on:click={handleOrderCancelation} class="btn btn-success">Sim</button>
+          </div>
+        </div>
       </div>
       
       <div class="mt-8 flex flex-col gap-5">
@@ -125,6 +169,10 @@
                       <th>Data de Aluguel</th>
                       <th>Data de Expiracao</th>
                       <th>Dias Alugados </th>
+                    {:else}
+                      <th></th>
+                      <th></th>
+                      <th></th>
                     {/if}
                     <th>Ações</th>
                   </tr>
@@ -160,7 +208,7 @@
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td class="flex justify-center">
+                      <td class="flex">
                         <div class="bg-stone-200 rounded-full p-3 hover:bg-stone-500 cursor-pointer">
                           <img height="25" width="25" src={pencil} alt="icon pencil">
                         </div>
@@ -204,7 +252,7 @@
                       <td class="text-center">
                         {aluguel.dias_alugados}
                       </td>
-                      <td class="flex justify-center">
+                      <td>
                         <div class="bg-stone-200 rounded-full p-3 hover:bg-stone-500 cursor-pointer">
                           <img height="25" width="25" src={pencil} alt="icon pencil">
                         </div>
@@ -218,5 +266,5 @@
         </div>
       </div>
     </label>
-  </label>
+  </div>
 {/if}
