@@ -15,6 +15,12 @@
     selectedPedido = pedidos.find(pedido => pedido.id === id)
   }
 
+  async function handleReload(){
+    pedidos = await fetchOrders()
+    displayedPedidos = displayPedidos(currentPage)
+    selectedPedido = []
+  }
+
   function displayPedidos(page) {
     currentPage = page;
     const startIndex = (page - 1) * productsPerPage;
@@ -85,7 +91,7 @@
 </section>
 
 {#if Object.keys(selectedPedido).length > 0}
-  <ModalPedidoAdmin pedido={selectedPedido} />
+  <ModalPedidoAdmin on:reload={handleReload} pedido={selectedPedido} />
 {/if}
 
 <style>
