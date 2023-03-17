@@ -56,9 +56,6 @@
             <h3 class="text-lg font-bold flex items-center"><img class="h-8 w-8" src={order} alt="order icon"/>Pedido #{pedido.id} - Data do Pedido: {pedido.data_pedido}</h3>
             <span class="{pedido.status == 'Pendente' ? 'bg-red-500' : 'bg-green-500'} font-bold p-1 rounded">{pedido.status}</span>
           </div>
-          <div class="flex gap-3">
-            <label for="my-modal-{`${pedido.data_pedido}${pedido.id}${pedido.endereco.rua}${pedido.endereco.numeroRua}`}" class="btn btn-error">Cancelar Pedido</label>
-          </div>
         </div>
       </div>
 
@@ -145,7 +142,8 @@
         <div class="flex justify-between items-center">
           <h1 class="font-bold text-xl">Vendas e Alugueis</h1>
           <div>
-            <button on:click={handleUpdateVinculatedProducts} class="btn btn-error">Remover</button>
+            <label for="my-modal-{`${pedido.data_pedido}${pedido.id}${pedido.endereco.rua}${pedido.endereco.numeroRua}`}" class="btn btn-error">Cancelar Pedido</label>
+            <button on:click={handleUpdateVinculatedProducts} class="btn btn-warning">Remover Item</button>
           </div>
         </div>
 
