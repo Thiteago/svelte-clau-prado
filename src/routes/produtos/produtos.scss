@@ -7,10 +7,14 @@ body{
 }
 
 .container-produtos{
+  border-radius: 1rem;
   width: 90%;
   height: 100%;
-  background-color: #fbf7fb;
+  background-color: #EDEBF4;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 0.50rem;
 
 }
 
@@ -38,28 +42,31 @@ body{
   min-height: 100vh;
 
   .wrapper-produto{
+    border-radius: 1rem 1rem 0 0;
       margin: 20px 15px;
       display: flex;
       width: 100%;
       align-self: center;
       gap: 1rem;
+      background-color: #fbf7fb;
 
       .container-filter{
-          width: 20%;
-          height: auto;
-          min-height: 70vh;
-          background-color: white;
-          border-top: 1px solid grey;
-          border-right: 15px solid;
-          border-image: linear-gradient(to bottom,rgb(124, 50, 103), rgb(124, 50, 103)) 1 100%;
+        border-radius: 1rem;
+        width: 20%;
+        height: auto;
+        min-height: 70vh;
+        background-color: white;
+        border-top: 1px solid grey;
+        border-right: 15px solid;
+        border-image: linear-gradient(to bottom,rgb(124, 50, 103), rgb(124, 50, 103)) 1 100%;
 
-          .wrapper-filter{
-              display: flex;
-              flex-direction: column;
-              justify-content: center;
-              align-items: center;
-              text-align: left;
-          }
+        .wrapper-filter{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: left;
+        }
       }
   }
 }
