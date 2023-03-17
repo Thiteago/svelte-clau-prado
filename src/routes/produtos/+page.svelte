@@ -11,6 +11,8 @@ $: produtos = []
 let filteredProducts = []
 let alugadosFiltered = false
 let vendaFiltered = false
+$: searchInput = ''
+
 
 onMount(async () => {
   produtos = await fetchProducts()
@@ -18,25 +20,35 @@ onMount(async () => {
 
 $: {
   if(produtos.length > 0){
-    if(alugadosFiltered && vendaFiltered){
-      filteredProducts = produtos.filter(item => (item.Aluguel.length > 0 && item.Aluguel.status_aluguel != 'Indisponível') || (item.Venda.length > 0 && item.Venda.status_venda != 'Indisponível'))
+    if(alugadosFiltered && vendaFiltered && searchInput !== ''){
+      filteredProducts = produtos.filter(
+        item => 
+        (item.Aluguel.length > 0 && item.Aluguel.status_aluguel != 'Indisponivel') 
+        || (item.Venda.length > 0 && item.Venda.status_venda != 'Indisponivel'))
+      .filter(item => item.nome.toLowerCase().includes(searchInput.toLowerCase()))
     }else if(alugadosFiltered){
-      filteredProducts = produtos.filter(item => item.Aluguel.length > 0 && item.Aluguel.status_aluguel != 'Indisponível')
+      filteredProducts = produtos.filter(item => 
+        item.Aluguel.length > 0 && item.Aluguel.status_aluguel != 'Indisponível')
+      .filter(item => item.nome.toLowerCase().includes(searchInput.toLowerCase()))
     }else if(vendaFiltered){
-      filteredProducts = produtos.filter(item => item.Venda.length > 0 && item.Venda.status_venda != 'Indisponível')
-    }
-    else{
+      filteredProducts = produtos.filter(item =>
+        item.Venda.length > 0 && item.Venda.status_venda != 'Indisponível')
+      .filter(item => item.nome.toLowerCase().includes(searchInput.toLowerCase()))
+    }else if(searchInput !== ''){
+      filteredProducts = produtos.filter(item => item.nome.toLowerCase().includes(searchInput.toLowerCase()))
+    }else{
       filteredProducts = produtos
     }
   }
 }
+
 
 </script>
 
 <Header tamanho="pequeno"></Header>
 
 <section class="product-grid">
-  <Busca></Busca>
+  <Busca bind:busca={searchInput}></Busca>
 
   <div class="wrapper-produto">
     <aside class="container-filter">
