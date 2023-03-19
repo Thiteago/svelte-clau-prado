@@ -54,7 +54,7 @@
         <div class="flex flex-col gap-3">
           <div class="flex gap-3">
             <h3 class="text-lg font-bold flex items-center"><img class="h-8 w-8" src={order} alt="order icon"/>Pedido #{pedido.id} - Data do Pedido: {pedido.data_pedido}</h3>
-            <span class="{pedido.status == 'Pendente' ? 'bg-red-500' : 'bg-green-500'} font-bold p-1 rounded">{pedido.status}</span>
+            <span class="{pedido.status == 'Pendente' ? 'bg-red-500' : pedido.status == 'A Enviar' ? 'bg-orange-500' : pedido.status == 'Enviado' ? 'bg-blue-500' : 'bg-green-500'} font-bold p-1 rounded">{pedido.status}</span>
           </div>
         </div>
       </div>
@@ -106,7 +106,7 @@
           </div>
         </div>
         
-        <h1 class="font-bold text-xl">Pagamento e Entrega  <span class="{pedido.Pagamento.status == 'Pendente' ? 'bg-red-500' : 'bg-green-500'} p-1 ml-2 rounded text-sm">{pedido.Pagamento.status}</span></h1>
+        <h1 class="font-bold text-xl">Pagamento <span class="{pedido.Pagamento.status == 'Pendente' ? 'bg-red-500' : 'bg-green-500'} p-1 ml-2 rounded text-sm">{pedido.Pagamento.status}</span></h1>
         <div class="flex gap-5 items-baseline">
           <div>
             <h2 class="font-bold text-sm">Informações do Pagamento</h2>
@@ -142,6 +142,9 @@
         <div class="flex justify-between items-center">
           <h1 class="font-bold text-xl">Vendas e Alugueis</h1>
           <div>
+            {#if pedido.status == 'A Enviar'}
+              <label for="my-modal-{`${pedido.data_pedido}${pedido.id}${pedido.endereco.rua}${pedido.endereco.numeroRua}enviar`}" class="btn btn-info">Marcar como Enviado</label>
+            {/if}
             <label for="my-modal-{`${pedido.data_pedido}${pedido.id}${pedido.endereco.rua}${pedido.endereco.numeroRua}`}" class="btn btn-error">Cancelar Pedido</label>
             <button on:click={handleUpdateVinculatedProducts} class="btn btn-warning">Remover Item</button>
           </div>
