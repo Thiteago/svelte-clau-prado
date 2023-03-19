@@ -6,6 +6,7 @@
   $: pedidos = []
   $: displayedPedidos = [];
   $: selectedPedido = []
+  $: selectedType = "Pendente"
   const productsPerPage = 5;
   let totalPages = 1;
   let currentPage = 1
@@ -42,7 +43,15 @@
   <h1 class="text-2xl font-bold">Pedidos</h1>
 
   <div>
-    <h2 class="text-left">Pendentes de pagamento</h2>
+    <label for="pedidos" class="label">
+      <span class="label-text">Selecione o tipo de pedidos a serem mostrados</span>
+    </label>
+    <select bind:value={selectedType} name="pedidos" class="select select-bordered">
+      <option selected value="Pendente">Pendentes de Pagamento</option>
+      <option value="A Enviar">Pendentes de Envio</option>
+      <option value="Enviado">Enviados</option>
+      <option value="Finalizado">Finalizados</option>
+    </select>
     <div class="flex flex-col items-center">
       <table class="table cazuza table-zebra w-full mt-5">
         <thead>
@@ -63,7 +72,7 @@
             </tr>
           {:else}
             {#each displayedPedidos as pedido}
-              {#if pedido.status === "Pendente"}
+              {#if pedido.status === selectedType}
                 <tr>
                   <td>{pedido.id}</td>
                   <td>{pedido.user.nome}</td>
@@ -82,9 +91,11 @@
         </tbody>
       </table>
       <div class="btn-group mt-2">
-        {#each pages as page}
-          <button class="btn {currentPage == page ? 'btn-active' : ''}" on:click={() => {displayedPedidos = displayPedidos(page)}}>{page}</button>
-        {/each}
+        {#if pages.length > 1}
+          {#each pages as page}
+            <button class="btn {currentPage == page ? 'btn-active' : ''}" on:click={() => {displayedPedidos = displayPedidos(page)}}>{page}</button>
+          {/each}
+        {/if}
       </div>
     </div>
   </div>
