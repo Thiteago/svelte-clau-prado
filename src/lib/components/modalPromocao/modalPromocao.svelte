@@ -34,7 +34,7 @@
         <div>
           {#if started > 0}
             <h1 class="font-bold">Status</h1>
-            <p>Ainda não iniciou</p>
+            <p>Inativo</p>
           {:else if left > 0}
             <h1 class="font-bold">Status</h1>
             <p>Em andamento</p>
@@ -55,7 +55,7 @@
 
         <div>
           <h1 class="font-bold">Desconto</h1>
-          <p>Tipo de Desconto: <i>{promocao.tipo}</i></p>
+          <p>Tipo de Desconto: <i>{promocao.tipo == 'valor_fixo' ? 'Valor Fixo' : 'Porcentual'}</i></p>
           <p>Valor do Desconto: {promocao.tipo == "porcentual" ? `${promocao.valor_desconto}%` : `R$ ${promocao.valor_desconto}`}</p>
         </div>
 
