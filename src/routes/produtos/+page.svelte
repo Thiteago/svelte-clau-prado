@@ -8,6 +8,7 @@ import {onMount} from 'svelte'
 import { fetchProducts } from '$lib/js/helpers';
 
 $: produtos = []
+$: selectedOrder = 'low-price'
 let filteredProducts = []
 let alugadosFiltered = false
 let vendaFiltered = false
@@ -39,6 +40,12 @@ $: {
     }else{
       filteredProducts = produtos
     }
+
+    if (selectedOrder === 'low-price') {
+      filteredProducts = filteredProducts.sort((a, b) => a.valor - b.valor);
+    } else if (selectedOrder === 'high-price') {
+      filteredProducts = filteredProducts.sort((a, b) => b.valor - a.valor);
+    }
   }
 }
 
@@ -66,7 +73,7 @@ $: {
         
         <div class="flex flex-col items-center">
           <h1 class="font-bold text-2xl my-3">Ordenar</h1>
-          <select name="order" class="select select-bordered">
+          <select bind:value={selectedOrder} name="order" class="select select-bordered">
             <option default value="low-price">Mais Barato</option>
             <option value="high-price">Mais Caro</option>
           </select>

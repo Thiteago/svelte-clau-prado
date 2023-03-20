@@ -6,7 +6,7 @@
   export let data
 
   let promotionalValue
-  let formatedValue = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(data.valor)
+  $: formatedValue = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(data.valor)
 
 
   onMount(async () => {
