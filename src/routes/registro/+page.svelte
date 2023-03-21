@@ -1,10 +1,9 @@
 <script>
   import "./registro.scss"
   import { imask } from '@imask/svelte'
-  import { PUBLIC_BACKEND_URL } from '$env/static/public'
   import Previousbutton from "$lib/components/previousbutton/Previousbutton.svelte";
   import {goto} from '$app/navigation'
-  import { validateCPF } from "$lib/js/helpers.js";
+  import { validateCPF, createNewUser } from "$lib/js/helpers.js";
 
   let today = new Date().toISOString().substr(0, 10)
   $: nome = ''
@@ -77,26 +76,20 @@
   async function handleSubmit(e) {
     e.preventDefault()
 
-    const response = await fetch(`${PUBLIC_BACKEND_URL}/NovoUsuario`,{
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      method: 'POST',
-      body: JSON.stringify({
-        nome: nome,
-        email: email,
-        dataNascimento: dataNascimento,
-        senha: senha,
-        cpf: cpf,
-        rua: rua,
-        numeroRua: numeroRua.toString(),
-        bairro: bairro,
-        cidade: cidade,
-        estado: estado,
-        cep: cep,
-        numeroTel: numeroTel,
-        numeroCel: numeroCel
-      })
+    const response = await createNewUser({
+      nome,
+      email,
+      dataNascimento,
+      senha,
+      cpf,
+      rua,
+      numeroRua,
+      bairro,
+      cidade,
+      estado,
+      cep,
+      numeroTel,
+      numeroCel
     })
     if(response.status == 201){
       goto("/login")
