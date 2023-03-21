@@ -9,7 +9,7 @@ import Testemunhos from '../lib/components/testemunhos/Testemunhos.svelte'
 import Footer from '../lib/components/footer/Footer.svelte'
 import {loadStorageData} from '$lib/js/stores/login.js'
 import './style.scss'
-	import { onMount } from 'svelte';
+import { onMount } from 'svelte';
 
 onMount(() => {
     loadStorageData()
