@@ -1,16 +1,15 @@
 <script>
-  import Steps from '$lib/components/steps/Steps.svelte';
   import { PUBLIC_BACKEND_URL } from '$env/static/public'
-  import Header from '$lib/components/header/Header.svelte';
   import moneyIcon from '$lib/assets/icons/money.svg'
   import boletoIcon from '$lib/assets/icons/boleto.svg'
   import cardIcon from '$lib/assets/icons/card.svg'
-  import { resume } from '$lib/js/stores/cart.js'
+  import { resume, currentStep } from '$lib/js/stores/cart.js'
 	import { goto } from '$app/navigation';
 	import CreditCard from '$lib/components/creditCard/CreditCard.svelte';
 
   $: selectedMethodPayment = 'boleto'
   let sendedPaymentRequest = false
+  $currentStep = 3
 
   async function handlePayment(metodo){
     sendedPaymentRequest = true
@@ -34,13 +33,7 @@
 
 </script>
 
-<Header />
-
 <div class="w-full bg-white flex flex-col items-center">
-  <div class="flex justify-center">
-    <Steps currentStep={3} />
-  </div>
-
   <div class="w-11/12 md:w-3/4 lg:w-1/2 flex flex-col mt-6">
     <div class="flex gap-2">
       <img class="w-8 h-8" src={moneyIcon} alt="">

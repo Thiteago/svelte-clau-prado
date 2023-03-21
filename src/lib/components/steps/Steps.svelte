@@ -7,7 +7,6 @@
   import check from '$lib/assets/icons/check-circle.svg'
 
   export let currentStep
-
 </script>
 
 <div class="container-steps">
