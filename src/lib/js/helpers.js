@@ -135,3 +135,13 @@ export function validateCPF(cpf){
   }
   return false
 }
+
+export async function createNewUser(user){
+  return await fetch(`${PUBLIC_BACKEND_URL}/NovoUsuario`,{
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    body: JSON.stringify(user)
+  })
+}
