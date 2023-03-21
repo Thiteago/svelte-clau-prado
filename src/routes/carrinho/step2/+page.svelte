@@ -1,0 +1,94 @@
+<script>
+  import { currentStep } from "$lib/js/stores/cart.js";
+  import { createNewUser, } from '$lib/js/helpers.js'
+  import { temporaryAddress } from '$lib/js/stores/cart.js'
+  import { imask } from '@imask/svelte'
+	import { goto } from "$app/navigation";
+
+  $currentStep = 2;
+  let response = {}	
+  $: user = {}
+  const optionsCPF = {
+    mask: '000.000.000-00',
+    lazy: true
+  };
+
+  const optionsCel = {
+    mask: '(00)00000-0000',
+    lazy: true
+  };
+
+  async function handleSubmit(){
+    user = {
+      ...user,
+      ...$temporaryAddress
+    }
+    response = await createNewUser(user)
+
+    if(response.status == 201){
+      goto('/step3')
+    }
+  }
+</script>
+
+<div class="flex mt-5 justify-center flex-col items-center">
+  <div class="flex w-6/12 mt-5 items-center justify-between">
+    <div class="flex flex-col gap-2">
+      <p class="text-2xl">Já tem uma conta?</p>
+      <a href="/login" class="btn bg-[#7C3267]">Faça login</a>
+    </div>
+    <div>
+      <p class="text-md font-bold">Não tem uma conta?</p>
+      <p>Faça seu cadastro de forma rapida</p>
+
+      <form on:submit={handleSubmit} class="flex flex-col mt-5 flex-wrap">
+        <input
+          type="text"
+          class="border border-gray-300 rounded-md p-2 mb-2"
+          placeholder="Nome"
+          bind:value={user.nome}
+        />
+        <input
+          type="text"
+          use:imask={optionsCPF}
+          class="border border-gray-300 rounded-md p-2 mb-2"
+          placeholder="CPF"
+          bind:value={user.cpf}
+        />
+        <input
+          type="text"
+          class="border border-gray-300 rounded-md p-2 mb-2"
+          placeholder="Email"
+          bind:value={user.email}
+        />
+        <input
+          type="password"
+          class="border border-gray-300 rounded-md p-2 mb-2"
+          placeholder="Senha"
+          bind:value={user.senha}
+        />
+        <input
+          type="password"
+          class="border border-gray-300 rounded-md p-2 mb-2"
+          placeholder="Confirmar senha"
+        />
+        <input
+          type="tel"
+          use:imask={optionsCel}
+          class="border border-gray-300 rounded-md p-2 mb-2"
+          placeholder="Celular"
+          bind:value={user.numeroCel}
+        />
+        <button
+          class="bg-[#7C3267] text-white rounded-md p-2 mt-5"
+          type="submit"
+        >
+          Cadastrar 
+        </button>
+        {#if response.status == 401}
+          <p class="text-red-500 text-center">O CPF ou o Email informado <br/>ja esta cadastrado</p>
+        {/if}
+      </form>
+    </div>
+  </div>
+</div>
