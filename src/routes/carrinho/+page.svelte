@@ -1,11 +1,9 @@
 <script>
-  import Header from '$lib/components/header/Header.svelte';
   import { PUBLIC_BACKEND_URL } from '$env/static/public'
-	import Steps from '$lib/components/steps/Steps.svelte';
   import { fetchAddress, formatToCurrency } from '$lib/js/helpers';
   // @ts-ignore
   import { imask } from '@imask/svelte'
-  import { cart, resume } from '$lib/js/stores/cart.js'
+  import { cart, resume, currentStep, temporaryAddress } from '$lib/js/stores/cart.js'
   import { user, signed } from '$lib/js/stores/login.js'
   import leftArrow from '$lib/assets/icons/left-arrow.svg'
   import trash from '$lib/assets/icons/trash-icon.svg'
@@ -59,6 +57,9 @@
         validateForm = false
       }
     }
+    if(selectedEndereco == undefined){
+      validateForm = false
+    }
   }else{
     validateForm = false
   }
@@ -75,6 +76,10 @@
       subtotal += element.quantidade * element.valor
     })
 };
+
+  function handleAddress(){
+    selectedEndereco = $temporaryAddress
+  }
 
   function createResume(){
 
@@ -99,11 +104,11 @@
   }
 
   function handleRedirect(){
-    createResume()
-    if($signed )
+    if($signed){
+      createResume()
       goto('/carrinho/step3')
-    else{
-      goto('/login?origin=carrinho')
+    }else{
+      goto('carrinho/step2')
     }
   }
 
@@ -133,7 +138,7 @@
     loading = false
   }
 
-  $: if(selectedFreight == 'PAC'){
+  $: if(selectedFreight == 'PAC' && Object.keys(freightInfo).length > 0){
     total = subtotal + parseFloat(freightInfo?.valorpac)
   }else if(selectedFreight == 'SEDEX'){
     total = subtotal + parseFloat(freightInfo?.valorsedex)
@@ -142,18 +147,16 @@
   }
 
   onMount(async () => {
-    enderecos = await fetchAddress($user.id)
+    if($user){
+      enderecos = await fetchAddress($user.id)
+    }
+    $currentStep = 1
     selectedEndereco = enderecos.find(element => element.principal == true)
   })
 
 </script>
 
-<Header />
 <div class="w-full bg-white flex flex-col items-center">
-  <div class="flex justify-center">
-    <Steps currentStep={1} />
-  </div>
-
   <div class="flex w-11/12 mt-8">
     <div class="flex w-full gap-10">
       <div class="w-4/12">
@@ -210,32 +213,80 @@
             <h1 class="text-xl font-poppins font-bold">Selecione seu endereço</h1>
           </div>
           <div>
-            {#each enderecos as endereco}
-              {#if endereco.principal}
-                <div class="flex flex-col bg-[#7C3267] py-2 rounded px-2 w-full my-2">
-                  <div class="flex">
-                    <div class="w-11/12 text-white">
+            {#if enderecos.length > 0}
+              {#each enderecos as endereco}
+                {#if endereco.principal}
+                  <div class="flex flex-col bg-[#7C3267] py-2 rounded px-2 w-full my-2">
+                    <div class="flex">
+                      <div class="w-11/12 text-white">
+                        {endereco.rua}, {endereco.numeroRua}, {endereco.bairro}, {endereco.cidade} - {endereco.estado}, {endereco.cep}
+                      </div>
+                      <div class="w-1/12">
+                        <input name="endereco" bind:group={selectedEndereco} type="radio" value={endereco}>
+                      </div>
+                    </div>
+                    <div class="flex justiy-left pt-3">
+                      <span class="text-white font-bold text-left">PRINCIPAL</span>
+                    </div>
+                  </div>
+                {:else}
+                  <div class="flex py-2 px-2 w-3/4 items-center my-2 justify-center">
+                    <div class="w-11/12">
                       {endereco.rua}, {endereco.numeroRua}, {endereco.bairro}, {endereco.cidade} - {endereco.estado}, {endereco.cep}
                     </div>
                     <div class="w-1/12">
                       <input name="endereco" bind:group={selectedEndereco} type="radio" value={endereco}>
                     </div>
                   </div>
-                  <div class="flex justiy-left pt-3">
-                    <span class="text-white font-bold text-left">PRINCIPAL</span>
+                {/if}
+              {/each}
+            {:else}
+              <div class="flex flex-col py-2 rounded px-2 w-full my-2">
+                <div class="flex">
+                  <div class="w-11/12 text-center">
+                    <h2>Você não possui endereços cadastrados</h2>
+                    <div class="collapse mt-2">
+                      <input class="min-h-0" type="checkbox" /> 
+                      <div class="collapse-title min-h-0 rounded-t-lg font-medium text-white bg-[#7C3267]">
+                        Informe seu endereço
+                      </div>
+                      <div class="collapse-content bg-[#f3f1ff]"> 
+                        <form class="p-2 flex flex-col gap-2" action="">
+                          <div class="flex flex-col gap-2">
+                            <label for="rua">Rua</label>
+                            <input required bind:value={$temporaryAddress.rua} type="text" placeholder="Ex: Av Tarcisio Meireles" class="input input-bordered" />
+                          </div>
+                          <div class="flex flex-col gap-2">
+                            <label for="numero">Número</label>
+                            <input required bind:value={$temporaryAddress.numeroRua} type="text" placeholder="Ex: 2667" class="input input-bordered" />
+                          </div>
+                          <div class="flex flex-col gap-2">
+                            <label for="bairro">Bairro</label>
+                            <input required bind:value={$temporaryAddress.bairro} type="text" placeholder="Ex: Interlagos" class="input input-bordered" />
+                          </div>
+                          <div class="flex flex-col gap-2">
+                            <label for="cidade">Cidade</label>
+                            <input required bind:value={$temporaryAddress.cidade} type="text" placeholder="Ex: São Paulo" class="input input-bordered" />
+                          </div>
+                          <div class="flex flex-col gap-2">
+                            <label for="estado">Estado</label>
+                            <input required bind:value={$temporaryAddress.estado} type="text" placeholder="Ex: São Paulo" class="input input-bordered" />
+                          </div>
+                          <div class="flex flex-col gap-2">
+                            <label for="cep">CEP</label>
+                            <input required bind:value={$temporaryAddress.cep} type="text" class="input input-bordered" placeholder="Ex: 12460-000" use:imask={optionsCEP} />
+                          </div>
+                          <div class="flex justify-center mt-2">
+                            <button on:click={handleAddress} type="submit" class="btn bg-[#7C3267]">Cadastrar</button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              {:else}
-                <div class="flex py-2 px-2 w-3/4 items-center my-2 justify-center">
-                  <div class="w-11/12">
-                    {endereco.rua}, {endereco.numeroRua}, {endereco.bairro}, {endereco.cidade} - {endereco.estado}, {endereco.cep}
-                  </div>
-                  <div class="w-1/12">
-                    <input name="endereco" bind:group={selectedEndereco} type="radio" value={endereco}>
-                  </div>
-                </div>
-              {/if}
-            {/each}
+              </div>
+            {/if}
+
           </div>
         </div>
       </div>
@@ -323,7 +374,7 @@
               <h2 class="rounded text-xl w-full text-black font-bold pl-3">Para quais dias voce precisa</h2>
               <span class="text-sm">(válido para os itens alugados)</span>
             </div>
-            <div class="w-11/12 flex flex-col m-auto">
+            <div class="w-11/12 flex flex-col">
               <div class="w-full flex flex-col">
                 <span>Do dia</span>
                 <input bind:value={data_inicio_aluguel} class="input input-bordered input-date" min={today} type="date">
@@ -342,7 +393,7 @@
           {/if}
         {/if}
         {#if $cart.length == 0}
-          <div class="flex flex-col items-center absolute top-1/2 right-1/2">
+          <div class="flex flex-col items-center">
             <div class="w-20 h-20">
               <img class="max-w-full" src="" alt="">
             </div>
