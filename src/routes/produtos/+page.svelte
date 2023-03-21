@@ -20,8 +20,7 @@ onMount(async () => {
 })
 
 $: {
-  if(produtos.length > 0){
-    if(alugadosFiltered && vendaFiltered && searchInput !== ''){
+    if(alugadosFiltered && vendaFiltered){
       filteredProducts = produtos.filter(
         item => 
         (item.Aluguel.length > 0 && item.Aluguel.status_aluguel != 'Indisponivel') 
@@ -46,7 +45,6 @@ $: {
     } else if (selectedOrder === 'high-price') {
       filteredProducts = filteredProducts.sort((a, b) => b.valor - a.valor);
     }
-  }
 }
 
 
