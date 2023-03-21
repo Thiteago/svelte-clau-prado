@@ -3,6 +3,15 @@
   import { loadStorageData} from '$lib/js/stores/login.js'
 	import { onMount } from "svelte";
 
+
+  const CLEANUP_INTERVAL =  15 * 24 * 60 * 60 * 1000;
+
+  function clearLocalStorage() {
+    localStorage.clear();
+  }
+
+  setInterval(clearLocalStorage, CLEANUP_INTERVAL);
+
   onMount(async () => {
     loadStorageData()
   })
