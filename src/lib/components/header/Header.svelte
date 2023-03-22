@@ -2,6 +2,7 @@
 import {user, signed, logout} from '$lib/js/stores/login.js'
 import { page } from '$app/stores';
 import {cart} from '$lib/js/stores/cart.js'
+import trash from '$lib/assets/icons/trash-icon.svg' 
 import './header.scss'
 import avatar from '$lib/assets/img/avatar-login.png'
 import logobig from '$lib/assets/img/logo-clau.png'
@@ -16,6 +17,12 @@ if(tamanho == "grande"){
     logo = logobig
 }else if(tamanho == "pequeno"){
     logo = logomin
+}
+
+function  handleRemoveItem(id){
+  cart.update((cart) => {
+    return cart.filter((item) => item.id != id)
+  })
 }
 
 </script>
@@ -34,10 +41,11 @@ if(tamanho == "grande"){
     
 
     <div class="container-right-content">
-      <div class="cart-container">
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <div on:click={() => carrinhoAtivo == true ? carrinhoAtivo = false : carrinhoAtivo = true} class="cart-container">
         {#if !$page.url.pathname.includes("/carrinho")}
-          <img on:click={() => carrinhoAtivo == true ? carrinhoAtivo = false : carrinhoAtivo = true} src={carts} alt="">
-          <span>{$cart.length} itens no carrinho</span>
+          <img src={carts} alt="">
+          <span>{$cart.length > 0 ? `${$cart.length}` : ''} {$cart.length > 1 ? ` Itens  no carrinho` : $cart.length == 0 ? 'Nenhum item no carrinho' : ` Item no carrinho`}</span>
         {/if}
       </div>
       {#if carrinhoAtivo == true}
@@ -49,10 +57,8 @@ if(tamanho == "grande"){
                 <div class="produto">
                   <div class="produto-info">
                     <h3>{produto.nome}</h3>
-                    <div class="adicional-info-wrapper">
-                      <span>Quantidade: 1</span>
-                      <span>R$ {produto.valor}</span>
-                    </div>
+                    <!-- svelte-ignore a11y-click-events-have-key-events -->
+                    <span on:click={handleRemoveItem(produto.id)} class="trash"><img width="25" height="25" src={trash} alt="icone de lata de lixo"></span>
                   </div>
                 </div>
               {/each}
@@ -89,8 +95,9 @@ if(tamanho == "grande"){
     <div class="container-right-content">
       <div class="cart-container">
         {#if $page.url.pathname != "/carrinho"}
+          <!-- svelte-ignore a11y-click-events-have-key-events -->
           <img on:click={() => carrinhoAtivo == true ? carrinhoAtivo = false : carrinhoAtivo = true} src={carts} alt="">
-          <span>{$cart.length} itens no carrinho</span>
+          <span>{$cart.length > 0 ? `${$cart.length}` : ''} {$cart.length > 1 ? ` Itens  no carrinho` : $cart.length == 0 ? 'Nenhum item no carrinho' : ` Item no carrinho`}</span>
         {/if}
       </div>
       {#if carrinhoAtivo == true}
@@ -103,8 +110,7 @@ if(tamanho == "grande"){
                   <div class="produto-info">
                     <h3>{produto.nome}</h3>
                     <div class="adicional-info-wrapper">
-                      <span>Quantidade: 1</span>
-                      <span>R$ {produto.valor.toFixed(2)}</span>
+                      <span><img src={trash} alt="icone de lata de lixo"></span>
                     </div>
                   </div>
                 </div>
