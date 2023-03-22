@@ -20,6 +20,7 @@
   function addToCart(){
     if(!$cart.find(produtos => produtos.id == produto.id)){
       let product = {...produto, imagens: produto.imagens[0], quantidade: 1}
+      localStorage.setItem('cart', JSON.stringify([...$cart, product]))
       $cart = [...$cart, product]
     }
   }
@@ -68,6 +69,7 @@
               <div class="flex w-full gap-3">
                 {#each produto.imagens as img}
                   <div class="container-img">
+                    <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <img class="img" on:click={() => {mainimage = img}} src="http://localhost:3333/static/{img}" alt="">
                   </div>
                 {/each}
@@ -98,6 +100,7 @@
     </div>
     <div class='more-info'>
         <nav class="wrapper-menu">
+          <!-- svelte-ignore a11y-click-events-have-key-events -->
             <ul class='container-menu'>
                 <li on:click={toggleActive} class='ativo'>Descrição</li>
                 <li on:click={toggleActive}>Especificações Técnicas</li>
@@ -112,17 +115,14 @@
           <div class="overflow-x-auto">
             <table class="table w-11/12 ml-2">
               <tbody>
-                <!-- row 1 -->
                 <tr>
                   <td>Data de fabricação:</td>
                   <td>{produto.dataFabricacao}</td>
                 </tr>
-                <!-- row 2 -->
                 <tr>
                   <td>Material:</td>
                   <td>{produto.material}</td>
                 </tr>
-                <!-- row 3 -->
                 <tr>
                   <td>Altura:</td>
                   <td>{produto.altura}cm</td>

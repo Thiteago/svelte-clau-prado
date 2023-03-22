@@ -79,6 +79,8 @@
 
   function handleAddress(){
     selectedEndereco = $temporaryAddress
+    localStorage.setItem('temporaryAddress', JSON.stringify(selectedEndereco))
+    enderecos.push($temporaryAddress)
   }
 
   function createResume(){
@@ -114,6 +116,7 @@
 
   function removeProduct(id){
     $cart = $cart.filter(element => element.id != id)
+    localStorage.setItem('cart', JSON.stringify($cart))
   }
 
   async function freightCalculate(){
@@ -152,6 +155,8 @@
     }
     $currentStep = 1
     selectedEndereco = enderecos.find(element => element.principal == true)
+    localStorage.getItem('cart') ? $cart = JSON.parse(localStorage.getItem('cart')) : $cart = []
+    localStorage.getItem('temporaryAddress') ? enderecos.push(JSON.parse(localStorage.getItem('temporaryAddress'))) : $temporaryAddress = {}
   })
 
 </script>
@@ -160,53 +165,57 @@
   <div class="flex w-11/12 mt-8">
     <div class="flex w-full gap-10">
       <div class="w-4/12">
-        <div class="flex items-center gap-2 ">
-          <img class="w-6 h-6" src={truck} alt="">
-          <h1 class="text-xl font-poppins font-bold">Calcular prazo e frete</h1>
-        </div>
-        <div class="mt-3">
-          <form class="flex w-11/12 gap-2 items-center" on:submit={freightCalculate}>
-            <input required bind:value={cep} type="text" placeholder="CEP" use:imask={optionsCEP} class="input input-bordered w-full max-w-xs" />
-            <button disabled={$cart.length < 1 ? true : false} type="submit" class="btn bg-[#7C3267]">Calcular</button>
-          </form>
-          {#if cepValidates != true}
-            <span class="text-red-500 font-bold block mt-2">CEP Inválido!</span>
-          {/if}
-        </div>
-        {#if loading}
-          <div class="w-9/12 flex justify-center mt-4">
-            <Loading />
-          </div>
-        {/if}
-        {#if Object.keys(freightInfo).length > 0 && freightInfo?.valorpac != '0,00' && freightInfo?.valorsedex != '0,00'}
+        {#if enderecos.length > 0}
           <div>
-            <div class="mt-4">
-              <h1 class="text-xl font-poppins font-bold">Frete</h1>
-              <div class="mt-2 w-9/12 flex flex-col justify-center">
-                <div class="flex justify-between">
-                  <div class="flex gap-2">
-                    <input bind:group={selectedFreight} name="frete" type="radio" value="PAC">
-                    <label for="frete" class="text-gray-500">PAC - Até {freightInfo?.prazopac} dias úteis</label>
+            <div class="flex items-center gap-2 ">
+              <img class="w-6 h-6" src={truck} alt="">
+              <h1 class="text-xl font-poppins font-bold">Calcular prazo e frete</h1>
+            </div>
+            <div class="mt-3">
+              <form class="flex w-11/12 gap-2 items-center" on:submit={freightCalculate}>
+                <input required bind:value={cep} type="text" placeholder="CEP" use:imask={optionsCEP} class="input input-bordered w-full max-w-xs" />
+                <button disabled={$cart.length < 1 ? true : false} type="submit" class="btn bg-[#7C3267]">Calcular</button>
+              </form>
+              {#if cepValidates != true}
+                <span class="text-red-500 font-bold block mt-2">CEP Inválido!</span>
+              {/if}
+            </div>
+            {#if loading}
+              <div class="w-9/12 flex justify-center mt-4">
+                <Loading />
+              </div>
+            {/if}
+            {#if Object.keys(freightInfo).length > 0 && freightInfo?.valorpac != '0,00' && freightInfo?.valorsedex != '0,00'}
+              <div>
+                <div class="mt-4">
+                  <h1 class="text-xl font-poppins font-bold">Frete</h1>
+                  <div class="mt-2 w-9/12 flex flex-col justify-center">
+                    <div class="flex justify-between">
+                      <div class="flex gap-2">
+                        <input bind:group={selectedFreight} name="frete" type="radio" value="PAC">
+                        <label for="frete" class="text-gray-500">PAC - Até {freightInfo?.prazopac} dias úteis</label>
+                      </div>
+                      <span class="text-gray-500">R$ {freightInfo?.valorpac}</span>
+                    </div>
+                    
+                    <div class="flex justify-between">
+                      <div class="flex gap-2">
+                        <input bind:group={selectedFreight} name="frete" type="radio" value="SEDEX">
+                        <label for="frete" class="text-gray-500">SEDEX - Até {freightInfo?.prazosedex} dias úteis</label>
+                      </div>
+                      <span class="text-gray-500">R$ {freightInfo?.valorsedex}</span>
+                    </div>
                   </div>
-                  <span class="text-gray-500">R$ {freightInfo?.valorpac}</span>
-                </div>
-                
-                <div class="flex justify-between">
-                  <div class="flex gap-2">
-                    <input bind:group={selectedFreight} name="frete" type="radio" value="SEDEX">
-                    <label for="frete" class="text-gray-500">SEDEX - Até {freightInfo?.prazosedex} dias úteis</label>
-                  </div>
-                  <span class="text-gray-500">R$ {freightInfo?.valorsedex}</span>
                 </div>
               </div>
-            </div>
+            {/if}
+          </div>
+          <div class="w-full flex items-center gap-5 py-5">
+            <div class="w-1/2 h-px bg-black"></div>
+            <span>Ou</span>
+            <div class="w-1/2 h-px bg-black"></div>
           </div>
         {/if}
-        <div class="w-full flex items-center gap-5 py-5">
-          <div class="w-1/2 h-px bg-black"></div>
-          <span>Ou</span>
-          <div class="w-1/2 h-px bg-black"></div>
-        </div>
         <div>
           <div class="flex gap-2">
             <img class="w-6 h-6" src={location} alt="">
@@ -239,6 +248,7 @@
                     </div>
                   </div>
                 {/if}
+                <label>Inserir novo endereço</label>
               {/each}
             {:else}
               <div class="flex flex-col py-2 rounded px-2 w-full my-2">
@@ -286,7 +296,6 @@
                 </div>
               </div>
             {/if}
-
           </div>
         </div>
       </div>

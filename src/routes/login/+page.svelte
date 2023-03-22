@@ -2,7 +2,6 @@
   import './login.scss'
   import { PUBLIC_BACKEND_URL } from '$env/static/public'
   import Previousbutton from '$lib/components/previousbutton/Previousbutton.svelte';
-
   import { goto } from '$app/navigation';
 
   let email = ''
