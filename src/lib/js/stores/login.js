@@ -12,7 +12,8 @@ export const user = writable({
 export const signed = writable(false)
 
 export function logout(){
-  localStorage.clear()
+  localStorage.removeItem('@Auth:user')
+  localStorage.removeItem('@Auth:token')
   user.set({
     cargo: '',
     email: '',
