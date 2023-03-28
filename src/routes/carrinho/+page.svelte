@@ -1,6 +1,6 @@
 <script>
   import { PUBLIC_BACKEND_URL } from '$env/static/public'
-  import { fetchAddress, formatToCurrency } from '$lib/js/helpers';
+  import { fetchAddress, formatToCurrency, saveNewAddress } from '$lib/js/helpers';
   // @ts-ignore
   import { imask } from '@imask/svelte'
   import { cart, resume, currentStep, temporaryAddress } from '$lib/js/stores/cart.js'
@@ -28,6 +28,7 @@
   let subtotal = 0
   let selectedEndereco
   let enderecos = []
+  let count = 0
 
   $: limitDate = ''
   $: validateForm = true
@@ -75,12 +76,20 @@
     comprados.forEach(element => {
       subtotal += element.quantidade * element.valor
     })
-};
+  }
 
-  function handleAddress(){
-    selectedEndereco = $temporaryAddress
-    localStorage.setItem('temporaryAddress', JSON.stringify(selectedEndereco))
-    enderecos.push($temporaryAddress)
+  async function handleAddress(){
+    if(count == 0 && !$user){
+      count++
+      $temporaryAddress = {...$temporaryAddress, principal: true}
+    }
+    enderecos = [...enderecos, $temporaryAddress]
+    localStorage.setItem('temporaryAddress', JSON.stringify(enderecos))
+
+    if($user){
+      await saveNewAddress($temporaryAddress, $user.id)
+    }
+    $temporaryAddress = {}
   }
 
   function createResume(){
@@ -95,23 +104,29 @@
       })
     }
 
-    $resume = {
+    if($signed){
+      $resume = {
       total: total,
       tipo_frete: selectedFreight,
       valor_frete: selectedFreight == 'PAC' ? freightInfo?.valorpac : freightInfo?.valorsedex,
       cartItens: $cart, 
       idUser: $user.id,
-      endereco: selectedEndereco,
+      enderecoDeEntrega: selectedEndereco
+      }
+    }else{
+      $resume = {
+      total: total,
+      tipo_frete: selectedFreight,
+      valor_frete: selectedFreight == 'PAC' ? freightInfo?.valorpac : freightInfo?.valorsedex,
+      cartItens: $cart,
+      enderecoDeEntrega: selectedEndereco
+      }
     }
   }
 
   function handleRedirect(){
-    if($signed){
-      createResume()
-      goto('/carrinho/step3')
-    }else{
-      goto('carrinho/step2')
-    }
+    createResume()
+    $signed ? goto('/carrinho/step3') : goto('/carrinho/step2')
   }
 
   function removeProduct(id){
@@ -150,13 +165,16 @@
   }
 
   onMount(async () => {
-    if($user){
+    await import('$lib/js/stores/login.js')
+    if($user || $user.id != undefined || $user.id != '' || $user.id != 0 ){
       enderecos = await fetchAddress($user.id)
     }
     $currentStep = 1
     selectedEndereco = enderecos.find(element => element.principal == true)
     localStorage.getItem('cart') ? $cart = JSON.parse(localStorage.getItem('cart')) : $cart = []
-    localStorage.getItem('temporaryAddress') ? enderecos.push(JSON.parse(localStorage.getItem('temporaryAddress'))) : $temporaryAddress = {}
+    localStorage.getItem('temporaryAddress') ? enderecos = JSON.parse(localStorage.getItem('temporaryAddress')) : $temporaryAddress = {}
+  
+    
   })
 
 </script>
@@ -180,7 +198,7 @@
                 <span class="text-red-500 font-bold block mt-2">CEP Inválido!</span>
               {/if}
             </div>
-            {#if loading}
+            {#if loading && cepValidates}
               <div class="w-9/12 flex justify-center mt-4">
                 <Loading />
               </div>
@@ -239,7 +257,7 @@
                     </div>
                   </div>
                 {:else}
-                  <div class="flex py-2 px-2 w-3/4 items-center my-2 justify-center">
+                  <div class="flex py-2 px-2 items-center my-2 justify-center">
                     <div class="w-11/12">
                       {endereco.rua}, {endereco.numeroRua}, {endereco.bairro}, {endereco.cidade} - {endereco.estado}, {endereco.cep}
                     </div>
@@ -248,54 +266,53 @@
                     </div>
                   </div>
                 {/if}
-                <label>Inserir novo endereço</label>
               {/each}
             {:else}
               <div class="flex flex-col py-2 rounded px-2 w-full my-2">
                 <div class="flex">
                   <div class="w-11/12 text-center">
                     <h2>Você não possui endereços cadastrados</h2>
-                    <div class="collapse mt-2">
-                      <input class="min-h-0" type="checkbox" /> 
-                      <div class="collapse-title min-h-0 rounded-t-lg font-medium text-white bg-[#7C3267]">
-                        Informe seu endereço
-                      </div>
-                      <div class="collapse-content bg-[#f3f1ff]"> 
-                        <form class="p-2 flex flex-col gap-2" action="">
-                          <div class="flex flex-col gap-2">
-                            <label for="rua">Rua</label>
-                            <input required bind:value={$temporaryAddress.rua} type="text" placeholder="Ex: Av Tarcisio Meireles" class="input input-bordered" />
-                          </div>
-                          <div class="flex flex-col gap-2">
-                            <label for="numero">Número</label>
-                            <input required bind:value={$temporaryAddress.numeroRua} type="text" placeholder="Ex: 2667" class="input input-bordered" />
-                          </div>
-                          <div class="flex flex-col gap-2">
-                            <label for="bairro">Bairro</label>
-                            <input required bind:value={$temporaryAddress.bairro} type="text" placeholder="Ex: Interlagos" class="input input-bordered" />
-                          </div>
-                          <div class="flex flex-col gap-2">
-                            <label for="cidade">Cidade</label>
-                            <input required bind:value={$temporaryAddress.cidade} type="text" placeholder="Ex: São Paulo" class="input input-bordered" />
-                          </div>
-                          <div class="flex flex-col gap-2">
-                            <label for="estado">Estado</label>
-                            <input required bind:value={$temporaryAddress.estado} type="text" placeholder="Ex: São Paulo" class="input input-bordered" />
-                          </div>
-                          <div class="flex flex-col gap-2">
-                            <label for="cep">CEP</label>
-                            <input required bind:value={$temporaryAddress.cep} type="text" class="input input-bordered" placeholder="Ex: 12460-000" use:imask={optionsCEP} />
-                          </div>
-                          <div class="flex justify-center mt-2">
-                            <button on:click={handleAddress} type="submit" class="btn bg-[#7C3267]">Cadastrar</button>
-                          </div>
-                        </form>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
             {/if}
+            <div class="collapse mt-2 mb-2">
+              <input class="min-h-0" type="checkbox" /> 
+              <div class="collapse-title min-h-0 rounded-t-lg font-medium text-white bg-[#7C3267]">
+                Insira um novo endereço
+              </div>
+              <div class="collapse-content bg-[#f3f1ff]"> 
+                <form class="p-2 flex flex-col gap-2" action="">
+                  <div class="flex flex-col gap-2">
+                    <label for="rua">Rua</label>
+                    <input required bind:value={$temporaryAddress.rua} type="text" placeholder="Ex: Av Tarcisio Meireles" class="input input-bordered" />
+                  </div>
+                  <div class="flex flex-col gap-2">
+                    <label for="numero">Número</label>
+                    <input required bind:value={$temporaryAddress.numeroRua} type="text" placeholder="Ex: 2667" class="input input-bordered" />
+                  </div>
+                  <div class="flex flex-col gap-2">
+                    <label for="bairro">Bairro</label>
+                    <input required bind:value={$temporaryAddress.bairro} type="text" placeholder="Ex: Interlagos" class="input input-bordered" />
+                  </div>
+                  <div class="flex flex-col gap-2">
+                    <label for="cidade">Cidade</label>
+                    <input required bind:value={$temporaryAddress.cidade} type="text" placeholder="Ex: São Paulo" class="input input-bordered" />
+                  </div>
+                  <div class="flex flex-col gap-2">
+                    <label for="estado">Estado</label>
+                    <input required bind:value={$temporaryAddress.estado} type="text" placeholder="Ex: São Paulo" class="input input-bordered" />
+                  </div>
+                  <div class="flex flex-col gap-2">
+                    <label for="cep">CEP</label>
+                    <input required bind:value={$temporaryAddress.cep} type="text" class="input input-bordered" placeholder="Ex: 12460-000" use:imask={optionsCEP} />
+                  </div>
+                  <div class="flex justify-center mt-2">
+                    <button on:click={handleAddress} type="submit" class="btn bg-[#7C3267]">Cadastrar</button>
+                  </div>
+                </form>
+              </div>
+            </div>
           </div>
         </div>
       </div>
