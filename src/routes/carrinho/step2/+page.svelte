@@ -1,7 +1,7 @@
 <script>
   import { currentStep } from "$lib/js/stores/cart.js";
   import { createNewUser, } from '$lib/js/helpers.js'
-  import { temporaryAddress } from '$lib/js/stores/cart.js'
+  import { temporaryAddress, resume } from '$lib/js/stores/cart.js'
   import { imask } from '@imask/svelte'
 	import { goto } from "$app/navigation";
 
@@ -18,15 +18,24 @@
     lazy: true
   };
 
+  async function handleLogin(){
+    localStorage.setItem('resume', JSON.stringify($resume))
+    goto("/login?carrinho=true")
+  }
+
   async function handleSubmit(){
-    user = {
-      ...user,
-      ...$temporaryAddress
+    if(Object.keys($temporaryAddress).length > 0){
+      user = {
+        ...user,
+        endereco: $temporaryAddress
+      }
+    }else{
+      localStorage.getItem('temporaryAddress') ? user = { ...user, endereco: JSON.parse(localStorage.getItem('temporaryAddress')) } : user = { ...user, endereco: {}}
     }
     response = await createNewUser(user)
 
     if(response.status == 201){
-      goto('/step3')
+      goto('/carrinho/step3')
     }
   }
 </script>
@@ -35,7 +44,7 @@
   <div class="flex w-6/12 mt-5 items-center justify-between">
     <div class="flex flex-col gap-2">
       <p class="text-2xl">Já tem uma conta?</p>
-      <a href="/login" class="btn bg-[#7C3267]">Faça login</a>
+      <button on:click={handleLogin} class="btn bg-[#7C3267]">Faça login</button>
     </div>
     <div>
       <p class="text-md font-bold">Não tem uma conta?</p>
