@@ -1,6 +1,6 @@
 <script>
   import { PUBLIC_BACKEND_URL } from '$env/static/public'
-  import { fetchAddress, formatToCurrency, saveNewAddress } from '$lib/js/helpers';
+  import { fetchAddress, formatToCurrency, saveNewAddress, checkIfCartIsAvailable } from '$lib/js/helpers';
   // @ts-ignore
   import { imask } from '@imask/svelte'
   import { cart, resume, currentStep, temporaryAddress } from '$lib/js/stores/cart.js'
@@ -124,7 +124,12 @@
     }
   }
 
-  function handleRedirect(){
+  async function handleRedirect(){
+    const available = await checkIfCartIsAvailable($cart)
+    if(!available){
+      alert('Alguns produtos do seu carrinho não estão mais disponíveis')
+      return
+    }
     createResume()
     $signed ? goto('/carrinho/step3') : goto('/carrinho/step2')
   }

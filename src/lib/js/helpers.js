@@ -2,6 +2,21 @@ import { PUBLIC_BACKEND_URL } from '$env/static/public'
 
 export const cpfRegexp = /([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})/;
 
+export async function checkIfCartIsAvailable(carrinho){
+  const response = await fetch(`${PUBLIC_BACKEND_URL}/carrinho/verificarDisponibilidade`,{
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    body: JSON.stringify(carrinho)
+  })
+  if(response.status === 200){
+    return true
+  }
+  return false
+}
+
+
 export async function saveNewAddress(address, userId){
   const response = await fetch (`${PUBLIC_BACKEND_URL}/Usuarios/${userId}/NovoEndereco`, {
     headers: {
