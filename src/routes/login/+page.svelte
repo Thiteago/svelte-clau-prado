@@ -3,12 +3,19 @@
   import { PUBLIC_BACKEND_URL } from '$env/static/public'
   import Previousbutton from '$lib/components/previousbutton/Previousbutton.svelte';
   import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
 
   let email = ''
   let senha = ''
+  let queryParam = ''
 
   $: current = "container"
   $: statusAuth = false
+
+  onMount(() => {
+    const params = new URLSearchParams(window.location.search);
+    queryParam = params.get('carrinho');
+  });
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -27,7 +34,11 @@
       let data = await response.json()
       localStorage.setItem('@Auth:user', JSON.stringify(data.user))
       localStorage.setItem('@Auth:token', JSON.stringify(data.token))
-      goto("/")
+      if(queryParam == 'true'){
+        goto('/carrinho/step3')
+      }else{
+        goto('/')
+      }
     }else{
       statusAuth = true
     }
