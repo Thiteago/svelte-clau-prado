@@ -6,10 +6,21 @@
   import { resume, currentStep } from '$lib/js/stores/cart.js'
 	import { goto } from '$app/navigation';
 	import CreditCard from '$lib/components/creditCard/CreditCard.svelte';
+	import { onMount } from 'svelte';
 
   $: selectedMethodPayment = 'boleto'
   let sendedPaymentRequest = false
   $currentStep = 3
+
+  onMount(() => {
+    if($resume == null || $resume == undefined || Object.keys($resume).length == 0){
+      if(localStorage.getItem('resume') != null){
+        $resume = JSON.parse(localStorage.getItem('resume'))
+      }else{
+        goto('/carrinho/step1')
+      }
+    }
+  })
 
   async function handlePayment(metodo){
     sendedPaymentRequest = true
