@@ -17,7 +17,7 @@
       if(localStorage.getItem('resume') != null){
         $resume = JSON.parse(localStorage.getItem('resume'))
       }else{
-        goto('/carrinho/step1')
+        goto('/carrinho')
       }
     }
   })
