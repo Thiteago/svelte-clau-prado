@@ -2,6 +2,22 @@ import { PUBLIC_BACKEND_URL } from '$env/static/public'
 
 export const cpfRegexp = /([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})/;
 
+export async function saveNewAddress(address, userId){
+  const response = await fetch (`${PUBLIC_BACKEND_URL}/Usuarios/${userId}/NovoEndereco`, {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    body: JSON.stringify({
+      endereco: address
+    })
+  })
+  if(response.status === 201){
+    return true
+  }
+  return false
+}
+
 export async function fetchOrdersByUserId(userId){
   const response = await fetch(`${PUBLIC_BACKEND_URL}/pedido/listar/user/${userId}`)
   if(response.status === 200){
