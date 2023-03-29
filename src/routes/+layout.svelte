@@ -7,6 +7,7 @@
   const CLEANUP_INTERVAL =  15 * 24 * 60 * 60 * 1000;
 
   function clearLocalStorage() {
+    console.log('clearing local storage')
     localStorage.clear();
   }
 
