@@ -33,6 +33,7 @@
 	"type": "module",
 	"dependencies": {
 		"@imask/svelte": "^6.4.3",
+		"@paypal/paypal-js": "^5.1.6",
 		"dotenv": "^16.0.3",
 		"node-sass": "^8.0.0",
 		"styled-components": "^5.3.6"
