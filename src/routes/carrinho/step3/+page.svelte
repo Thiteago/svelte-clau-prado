@@ -1,8 +1,10 @@
 <script>
   import { PUBLIC_BACKEND_URL } from '$env/static/public'
+  import PayPalButton from '$lib/components/paypalbutton/PaypalButton.svelte'
   import moneyIcon from '$lib/assets/icons/money.svg'
   import boletoIcon from '$lib/assets/icons/boleto.svg'
   import cardIcon from '$lib/assets/icons/card.svg'
+  import paypalIcon from '$lib/assets/icons/paypal-icon.svg'
   import { resume, currentStep } from '$lib/js/stores/cart.js'
 	import { goto } from '$app/navigation';
 	import CreditCard from '$lib/components/creditCard/CreditCard.svelte';
@@ -59,6 +61,9 @@
         <div class="flex items-center gap-2 w-full">
           <button on:click={() => {selectedMethodPayment = 'cartao'}} class="hover:bg-fuchsia-800 hover:text-white w-full flex gap-2 border-2 rounded border-fuchsia-900 py-2 pl-2 pr-5"><img class="w-6 h-6" src={cardIcon} alt=""> Cartão de Crédito</button>
         </div>
+        <div class="flex items-center gap-2 w-full">
+          <button on:click={() => {selectedMethodPayment = 'paypal'}} class="hover:bg-fuchsia-800 hover:text-white w-full flex gap-2 border-2 rounded border-fuchsia-900 py-2 pl-2 pr-5"><img class="w-6 h-6" src={paypalIcon} alt=""> Paypal</button>
+        </div>
       </div>
       <div class="w-9/12 flex flex-col gap-10 mt-4">
         {#if selectedMethodPayment == 'boleto'}
@@ -75,14 +80,19 @@
               <button disabled={sendedPaymentRequest}  on:click={() => handlePayment('boleto')} class="btn bg-[#7C3267] w-full mt-4">Prosseguir</button>
             </div>
           </div>
-        {:else}
+        {:else if selectedMethodPayment == 'cartao'}
           <div class="mb-5">
             <h1 class="text-xl font-bold mb-2 ">Cartao de Crédito</h1>
             <p>Aceitamos as bandeiras de cartão VISA, MasterCard, ELO, HiperCard, American Express e Diners</p>
             <CreditCard submitPayment={handlePayment}/>
+          </div>
+        {:else}
+          <div>
+            <PayPalButton />
           </div>
         {/if}
       </div>
     </div>
   </div>
 </div>
+
