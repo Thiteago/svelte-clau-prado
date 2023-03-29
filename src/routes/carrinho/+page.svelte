@@ -122,6 +122,7 @@
       enderecoDeEntrega: selectedEndereco
       }
     }
+    localStorage.setItem('resume', JSON.stringify($resume))
   }
 
   async function handleRedirect(){
