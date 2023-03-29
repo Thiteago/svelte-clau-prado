@@ -4,6 +4,7 @@
   import { temporaryAddress, resume } from '$lib/js/stores/cart.js'
   import { imask } from '@imask/svelte'
 	import { goto } from "$app/navigation";
+	import { onMount } from "svelte";
 
   $currentStep = 2;
   let response = {}	
@@ -18,8 +19,11 @@
     lazy: true
   };
 
-  async function handleLogin(){
+  onMount(() => {
     localStorage.setItem('resume', JSON.stringify($resume))
+  })
+
+  async function handleLogin(){
     goto("/login?carrinho=true")
   }
 
