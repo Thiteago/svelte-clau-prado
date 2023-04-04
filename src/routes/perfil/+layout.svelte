@@ -31,8 +31,7 @@
           <li class="item" on:keyup={() => {goto('/perfil/admin/pedidos')}} on:click={() => {goto('/perfil/admin/pedidos')}}>Pedidos</li>
           <li class="item" on:keyup={() => {goto('/perfil/admin/promocoes')}} on:click={() => {goto('/perfil/admin/promocoes')}}>Promoções</li>
           <li class="item" on:keyup={() => {goto('/perfil/admin/produtos')}} on:click={() => {goto('/perfil/admin/produtos')}}>Produtos</li>
-          <li class="item" on:keyup={() => {goto('/perfil/admin/relatórios')}} on:click={() => {goto('/perfil/admin/relatórios')}}>Relatórios</li>
-          <li class="item" on:keyup={() => {goto('/perfil/admin/permissoes')}} on:click={() => {goto('/perfil/admin/permissoes')}}>Permissões</li>
+          <li class="item" on:keyup={() => {goto('/perfil/admin/relatorios')}} on:click={() => {goto('/perfil/admin/relatorios')}}>Relatórios</li>
           <li class="item" on:keyup={() => {goto('/perfil/admin/usuarios')}} on:click={() => {goto('/perfil/admin/usuarios')}}>Usuarios Administrativos</li>
         {/if}
     </ul>
