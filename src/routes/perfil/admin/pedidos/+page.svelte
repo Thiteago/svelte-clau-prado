@@ -1,11 +1,15 @@
 <script>
 	import { onMount } from "svelte";
-  import { fetchOrders, formatToCurrency } from "$lib/js/helpers.js";
+  import { fetchOrders, formatToCurrency, updateToSended } from "$lib/js/helpers.js";
+  import packageIcon from '$lib/assets/icons/package.svg'
+  import pencilIcon from '$lib/assets/icons/pencil.svg'
 	import ModalPedidoAdmin from "$lib/components/modalPedidoAdmin/ModalPedidoAdmin.svelte";
 
   $: pedidos = []
   $: displayedPedidos = [];
-  $: selectedPedido = []
+  $: selectedPedido = {}
+  $: codigorastreio = ''
+  $: flashMessage = ''
   $: selectedType = "Pendente"
   const productsPerPage = 5;
   let totalPages = 1;
@@ -14,6 +18,20 @@
 
   function selectPedido(id){
     selectedPedido = pedidos.find(pedido => pedido.id === id)
+  }
+
+  async function handleSended(id){
+    if (await updateToSended(id, codigorastreio)){
+      flashMessage = 'Pedido atualizado com sucesso'
+      setTimeout(() => {
+        flashMessage = ''
+      }, 3000);
+    }else{
+      flashMessage = 'Erro ao atualizar pedido'
+      setTimeout(() => {
+        flashMessage = ''
+      }, 3000);
+    }
   }
 
   async function handleReload(){
@@ -48,7 +66,7 @@
     </label>
     <select bind:value={selectedType} name="pedidos" class="select select-bordered">
       <option selected value="Pendente">Pendentes de Pagamento</option>
-      <option value="A Enviar">Pendentes de Envio</option>
+      <option value="Aguardando Envio">Pendentes de Envio</option>
       <option value="Enviado">Enviados</option>
       <option value="Finalizado">Finalizados</option>
     </select>
@@ -81,10 +99,39 @@
                   <td>{pedido.endereco.rua}, {pedido.endereco.numeroRua}, {pedido.endereco.bairro}, {pedido.endereco.cidade}, {pedido.endereco.estado}</td>
                   <td>{pedido.status}</td>
                   <td>
-                    <!-- svelte-ignore a11y-click-events-have-key-events -->
-                    <label for="my-modal-{pedido.id}" on:click={() => selectPedido(pedido.id)} class="btn btn-primary rounded">Detalhes</label>
+                    {#if selectedType != 'Aguardando Envio'}
+                      <!-- svelte-ignore a11y-click-events-have-key-events -->
+                      <label for="my-modal-{pedido.id}" on:click={() => selectPedido(pedido.id)} class="btn btn-primary rounded">Detalhes</label>
+                    {:else}
+                      <div class="flex gap-5">  
+                        <label for="my-modal-{pedido.id + '-enviar'}" class="cursor-pointer">
+                          <img width="30" height="30" src={packageIcon} alt="">
+                        </label>
+                        <!-- svelte-ignore a11y-click-events-have-key-events -->
+                        <label for="my-modal-{pedido.id}" on:click={() => selectPedido(pedido.id)} class="cursor-pointer">
+                          <img width="30" height="30" src={pencilIcon} alt="">
+                        </label>
+                      </div>
+                    {/if}
                   </td>
                 </tr>
+                <input type="checkbox" id="my-modal-{pedido.id + '-enviar'}" class="modal-toggle" />
+                <label for="my-modal-{pedido.id + '-enviar'}" class="modal cursor-pointer">
+                  <label class="modal-box relative" for="">
+                    {#if flashMessage != ''}
+                      <span>{flashMessage}</span>
+                    {/if}
+                    <h3 class="text-lg font-bold">Informar Envio</h3>
+                    <div class="flex gap-3 items-center">
+                      <label for="codigo-rastreio">Código de Rastreio:</label>
+                      <input bind:value={codigorastreio} type="text" name="codigo-rastreio" class="input input-bordered">
+                    </div>
+                    <div class="mt-3">
+                      <button on:click={handleSended(pedido.id)} class="btn btn-success">Confirmar</button>
+                      <label for="my-modal-{pedido.id + '-enviar'}" class="btn btn-error">Cancelar</label>
+                    </div>
+                  </label>
+                </label>
               {/if}
             {/each}
           {/if}
@@ -100,6 +147,8 @@
     </div>
   </div>
 </section>
+
+
 
 {#if Object.keys(selectedPedido).length > 0}
   <ModalPedidoAdmin on:reload={handleReload} pedido={selectedPedido} />
