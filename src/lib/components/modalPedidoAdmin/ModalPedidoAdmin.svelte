@@ -15,7 +15,6 @@
 		dispatch('reload', {});
 	}
 
-
   async function handleOrderCancelation(){
     const response = await fetch(`${PUBLIC_BACKEND_URL}/pedido/cancelar/${pedido.id}`, {
       method: 'DELETE',
@@ -146,7 +145,9 @@
               <label for="my-modal-{`${pedido.data_pedido}${pedido.id}${pedido.endereco.rua}${pedido.endereco.numeroRua}enviar`}" class="btn btn-info">Marcar como Enviado</label>
             {/if}
             <label for="my-modal-{`${pedido.data_pedido}${pedido.id}${pedido.endereco.rua}${pedido.endereco.numeroRua}`}" class="btn btn-error">Cancelar Pedido</label>
-            <button on:click={handleUpdateVinculatedProducts} class="btn btn-warning">Remover Item</button>
+            {#if pedido.status != 'Aguardando Envio'}
+              <button on:click={handleUpdateVinculatedProducts} class="btn btn-warning">Remover Item</button>
+            {/if}
           </div>
         </div>
 
