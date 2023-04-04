@@ -75,7 +75,7 @@
     promocao = await fetchPromotions();
   }
 </script>
-<section class="p-6">
+<section>
   <h1 class="text-2xl font-bold">Promoções</h1>
 
   <div class="collapse border border-base-300 bg-base-100 rounded-box mt-2">
