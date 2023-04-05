@@ -33,6 +33,7 @@ export async function updateToSended(id, codigo){
         codigo_rastreio: codigo
       })
   }).then((response) => {
+    console.log(response.status)
     if(response.status === 200){
       return true
     }
