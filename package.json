@@ -34,8 +34,10 @@
 	"dependencies": {
 		"@imask/svelte": "^6.4.3",
 		"@paypal/paypal-js": "^5.1.6",
+		"chart.js": "^4.2.1",
 		"dotenv": "^16.0.3",
 		"node-sass": "^8.0.0",
-		"styled-components": "^5.3.6"
+		"styled-components": "^5.3.6",
+		"svelte-chartjs": "^3.1.2"
 	}
 }
