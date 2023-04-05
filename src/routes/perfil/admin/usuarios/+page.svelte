@@ -33,7 +33,7 @@
       alert.time = 3000
     }else{
       alert.message = 'Erro ao atualizar usuário'
-      alert.type = 'danger'
+      alert.type = 'error'
       alert.time = 3000
     }
     clicked = true
