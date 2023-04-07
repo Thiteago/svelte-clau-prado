@@ -26,7 +26,7 @@
   }
 
   async function handleUpdateVinculatedProducts(){
-    const response = await fetch(`${PUBLIC_BACKEND_URL}/pedido/alterar/produtos`, {
+    const response = await fetch(`${PUBLIC_BACKEND_URL}/pedido/alterar/produtos/${pedido.id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json'
@@ -269,7 +269,7 @@
                       <td class="text-center">
                         {aluguel.dias_alugados}
                       </td>
-                      <td>
+                      <td class="flex">
                         <div class="bg-stone-200 rounded-full p-3 hover:bg-stone-500 cursor-pointer">
                           <img height="25" width="25" src={pencil} alt="icon pencil">
                         </div>
@@ -278,6 +278,10 @@
                   {/each}
                 </tbody>
               </table>
+            </div>
+          {:else}
+            <div style="min-height: 20rem;" class="flex justify-center items-center">
+              <h3 class="text-lg font-bold text-slate-300">Nenhum produto vinculado a este pedido</h3>
             </div>
           {/if}
         </div>
