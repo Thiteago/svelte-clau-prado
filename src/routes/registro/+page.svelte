@@ -189,7 +189,7 @@
         </label>
         <input
         class="input input-bordered w-full "
-        name="dataNascimento" placeholder="Data de Nascimento" type="date" max={today} required 
+        name="dataNascimento" placeholder="DD/MM/YYYY" type="date" max={today} required 
         bind:value={dataNascimento}
         />
 
