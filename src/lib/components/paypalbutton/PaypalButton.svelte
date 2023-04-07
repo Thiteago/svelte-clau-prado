@@ -3,6 +3,7 @@
   import { goto } from '$app/navigation';
   import { loadScript } from "@paypal/paypal-js";
   import { resume } from '$lib/js/stores/cart.js'
+  import Loading from '$lib/components/loading/Loading.svelte'
 
   let paypal;
 
@@ -59,5 +60,9 @@
   }
   loadPaypal()
 </script>
-
+{#if !paypal}
+  <div class="flex justify-center">
+    <Loading />
+  </div>
+{/if}
 <div id="paypal-button-container"></div>
