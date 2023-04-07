@@ -6,6 +6,7 @@
   import cardIcon from '$lib/assets/icons/card.svg'
   import paypalIcon from '$lib/assets/icons/paypal-icon.svg'
   import { resume, currentStep } from '$lib/js/stores/cart.js'
+  import { checkIfCartIsAvailable } from '$lib/js/helpers.js'
 	import { goto } from '$app/navigation';
 	import CreditCard from '$lib/components/creditCard/CreditCard.svelte';
 	import { onMount } from 'svelte';
@@ -13,8 +14,9 @@
   $: selectedMethodPayment = 'boleto'
   let sendedPaymentRequest = false
   $currentStep = 3
+  let available = false
 
-  onMount(() => {
+  onMount(async() => {
     if($resume == null || $resume == undefined || Object.keys($resume).length == 0){
       if(localStorage.getItem('resume') != null){
         $resume = JSON.parse(localStorage.getItem('resume'))
@@ -22,8 +24,9 @@
         goto('/carrinho')
       }
     }
+    available = await checkIfCartIsAvailable($resume.cartItens)
   })
-
+  
   async function handlePayment(metodo){
     sendedPaymentRequest = true
     if(metodo == 'boleto'){
@@ -87,9 +90,13 @@
             <CreditCard submitPayment={handlePayment}/>
           </div>
         {:else}
-          <div>
+          {#if available}
             <PayPalButton />
-          </div>
+          {:else}
+            <div>
+              Algum item do carrinho nao esta mais disponivel , por favor, realize uma nova compra
+            </div>
+          {/if}
         {/if}
       </div>
     </div>
