@@ -7,7 +7,6 @@
   let data = {}
 
   $: if(content){
-    console.log(content)
     formatContent()
     data = {
     labels: labels,
