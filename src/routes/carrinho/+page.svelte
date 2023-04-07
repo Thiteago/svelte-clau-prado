@@ -95,31 +95,31 @@
   function createResume(){
 
     if(alugados.length > 0){
-      alugados.forEach(element => {
+      $cart.forEach(element => {
         element.Aluguel.forEach(item => {
           item.data_aluguel = data_inicio_aluguel
           item.data_expiracao =  data_final_aluguel
-          item.dias_alugados = diasAlugados
+          item.dias_alugados = diasAlugados + 1
         })
       })
     }
 
     if($signed){
       $resume = {
-      total: total,
-      tipo_frete: selectedFreight,
-      valor_frete: selectedFreight == 'PAC' ? freightInfo?.valorpac : freightInfo?.valorsedex,
-      cartItens: $cart, 
-      idUser: $user.id,
-      enderecoDeEntrega: selectedEndereco
+        total: total,
+        tipo_frete: selectedFreight,
+        valor_frete: selectedFreight == 'PAC' ? freightInfo?.valorpac : freightInfo?.valorsedex,
+        cartItens: $cart, 
+        idUser: $user.id,
+        enderecoDeEntrega: selectedEndereco
       }
     }else{
       $resume = {
-      total: total,
-      tipo_frete: selectedFreight,
-      valor_frete: selectedFreight == 'PAC' ? freightInfo?.valorpac : freightInfo?.valorsedex,
-      cartItens: $cart,
-      enderecoDeEntrega: selectedEndereco
+        total: total,
+        tipo_frete: selectedFreight,
+        valor_frete: selectedFreight == 'PAC' ? freightInfo?.valorpac : freightInfo?.valorsedex,
+        cartItens: $cart,
+        enderecoDeEntrega: selectedEndereco
       }
     }
     localStorage.setItem('resume', JSON.stringify($resume))
@@ -178,9 +178,7 @@
     $currentStep = 1
     selectedEndereco = enderecos.find(element => element.principal == true)
     localStorage.getItem('cart') ? $cart = JSON.parse(localStorage.getItem('cart')) : $cart = []
-    localStorage.getItem('temporaryAddress') ? enderecos = JSON.parse(localStorage.getItem('temporaryAddress')) : $temporaryAddress = {}
-  
-    
+    localStorage.getItem('temporaryAddress') ? enderecos.push(JSON.parse(localStorage.getItem('temporaryAddress'))) : $temporaryAddress = {}    
   })
 
 </script>
@@ -189,7 +187,7 @@
   <div class="flex w-11/12 mt-8">
     <div class="flex w-full gap-10">
       <div class="w-4/12">
-        {#if enderecos.length > 0}
+        {#if enderecos!= undefined && enderecos.length > 0}
           <div>
             <div class="flex items-center gap-2 ">
               <img class="w-6 h-6" src={truck} alt="">
@@ -246,7 +244,7 @@
             <h1 class="text-xl font-poppins font-bold">Selecione seu endereço</h1>
           </div>
           <div>
-            {#if enderecos.length > 0}
+            {#if enderecos!= undefined && enderecos.length > 0}
               {#each enderecos as endereco}
                 {#if endereco.principal}
                   <div class="flex flex-col bg-[#7C3267] py-2 rounded px-2 w-full my-2">
