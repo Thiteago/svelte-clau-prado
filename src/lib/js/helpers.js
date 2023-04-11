@@ -2,6 +2,23 @@ import { PUBLIC_BACKEND_URL } from '$env/static/public'
 
 export const cpfRegexp = /([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})/;
 
+export async function changeOrderAddress(orderId, addressId){
+  const response = await fetch(`${PUBLIC_BACKEND_URL}/pedido/alterar/endereco/${orderId}`,{
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    method: 'PATCH',
+    body: JSON.stringify({
+      enderecoId: addressId
+    })
+
+  })
+  if(response.status === 200){
+    return true
+  }
+  return false
+}
+
 export async function getUsers(){
   const response = await fetch(`${PUBLIC_BACKEND_URL}/Usuarios`)
   const usuarios = await response.json()
@@ -76,6 +93,7 @@ export async function fetchOrdersById(id){
   const response = await fetch(`${PUBLIC_BACKEND_URL}/pedido/listar/${id}`)
   if(response.status === 200){
     const data = await response.json()
+    data.data_pedido = formatDate(data.data_pedido)
     return data
   }
   return []
