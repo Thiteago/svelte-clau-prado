@@ -2,18 +2,25 @@
   import order from '$lib/assets/icons/order-icon.svg'
   import { PUBLIC_BACKEND_URL } from '$env/static/public'
   import pencil from '$lib/assets/icons/pencil.svg'
-  import { formatToCurrency, formatDate, fetchOrdersById } from '$lib/js/helpers.js'
-  import { createEventDispatcher } from 'svelte';
+  import { formatToCurrency, formatDate, fetchOrdersById, fetchAddress, changeOrderAddress } from '$lib/js/helpers.js'
+  import { createEventDispatcher, onMount } from 'svelte';
 
   const dispatch = createEventDispatcher();
   export let pedido
+  let enderecos = []
+  let selectedAddress = pedido.enderecoId
 
   $: selectedAluguelProduct = []
   $: selectedCompraProduct = []
 
+
   function reloadOrders() {
 		dispatch('reload', {});
 	}
+
+  onMount(async () => {
+    enderecos = await fetchAddress(pedido.userId)
+  })
 
   async function handleOrderCancelation(){
     const response = await fetch(`${PUBLIC_BACKEND_URL}/pedido/cancelar/${pedido.id}`, {
@@ -37,6 +44,13 @@
       })
     })
     if(response.status == 200){
+      pedido = await fetchOrdersById(pedido.id)
+    }
+  }
+
+  async function handleAddressChange(){
+    const response = await changeOrderAddress(pedido.id, selectedAddress)
+    if(response){
       pedido = await fetchOrdersById(pedido.id)
     }
   }
@@ -99,9 +113,10 @@
               <p>{pedido.endereco.rua}, {pedido.endereco.numeroRua} - {pedido.endereco.bairro}</p>
               <p>{pedido.endereco.cidade}, {pedido.endereco.estado} <br/> {pedido.endereco.cep}</p>
             </div>
-            <div class="bg-stone-300 rounded-full p-2 hover:bg-stone-500 cursor-pointer">
+            <label for="my-modal-{`${pedido.data_pedido}${pedido.id}${pedido.endereco.rua}${pedido.endereco.numeroRua}enviar`}" class="bg-stone-300 rounded-full p-2 hover:bg-stone-500 cursor-pointer">
               <img width="30" height="30" src={pencil} alt="pencil icon">
-            </div>
+            </label>
+
           </div>
         </div>
         
@@ -141,9 +156,6 @@
         <div class="flex justify-between items-center">
           <h1 class="font-bold text-xl">Vendas e Alugueis</h1>
           <div>
-            {#if pedido.status == 'A Enviar'}
-              <label for="my-modal-{`${pedido.data_pedido}${pedido.id}${pedido.endereco.rua}${pedido.endereco.numeroRua}enviar`}" class="btn btn-info">Marcar como Enviado</label>
-            {/if}
             <label for="my-modal-{`${pedido.data_pedido}${pedido.id}${pedido.endereco.rua}${pedido.endereco.numeroRua}`}" class="btn btn-error">Cancelar Pedido</label>
             {#if pedido.status != 'Aguardando Envio'}
               <button on:click={handleUpdateVinculatedProducts} class="btn btn-warning">Remover Item</button>
@@ -157,12 +169,27 @@
         />
 
         <div class="modal">
-          <div class="modal-box relative">
+          <div class="modal-box relative max-w-full w-2/3">
             <label 
             for="my-modal-{`${pedido.data_pedido}${pedido.id}${pedido.endereco.rua}${pedido.endereco.numeroRua}enviar`}" 
             class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
-            <h3 class="text-lg font-bold">Informações do envio</h3>
-            <p class="py-4">You've been selected for a chance to get one year of subscription to use Wikipedia for free!</p>
+            <h3 class="text-lg font-bold">Endereço de entrega</h3>
+            <div class="mt-2 flex flex-col gap-3">
+              {#if enderecos.length > 0 }
+                {#each enderecos as endereco}
+                  <div class="flex items-center gap-3">
+                    <label>
+                      <input type="radio" bind:group={selectedAddress} name="endereco" value={endereco.id} />
+                    </label>
+                    <p>{endereco.rua}, {endereco.numeroRua} - {endereco.bairro} </p>
+                    <p>{endereco.cidade}, {endereco.estado} {endereco.cep}</p>
+                  </div>
+                {/each}
+                <button on:click={handleAddressChange} class="btn btn-success">Atualizar Endereço</button>
+              {:else}
+                <p class="text-center">O Usuario não possui endereços cadastrados</p>
+              {/if}
+            </div>
           </div>
         </div>
 
