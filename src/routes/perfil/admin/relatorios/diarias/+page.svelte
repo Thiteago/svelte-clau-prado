@@ -5,16 +5,35 @@
   import { formatDate } from '$lib/js/helpers.js';
 
   let content = []
-
+  let labels = []
+  let info = []
+  
   onMount(async () => {
     const response = await fetch(`${PUBLIC_BACKEND_URL}/relatorio/vendasDiarias`);
     content = await response.json();
+    content = await formatContent()
   });
+
+  async function formatContent(){
+    content.forEach((item) => {
+      let repeatedIndex = []
+      const date = formatDate(item.data_pedido)
+      if(labels.includes(date)){
+        repeatedIndex.push(labels.indexOf(date))
+        info[repeatedIndex[0]] += item.alugueis.length + item.vendas.length
+        return
+      }
+      let qtdeVendas = item.alugueis.length + item.vendas.length
+      info.push(qtdeVendas)
+      labels.push(date)
+    })  
+    return content
+  }
 </script>
 <div class="text-center">
   <h1 class="text-2xl my-8">Esse gráfico reflete a quantidade de vendas e aluguéis nos últimos 7 Dias</h1>
 </div>
-<BarChart {content}/>
+<BarChart {content} {labels} {info}/>
 <section>
   <h2 class="text-2xl">Pedidos</h2>
   <table class="table mt-4 w-full">
