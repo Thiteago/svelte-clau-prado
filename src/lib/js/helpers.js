@@ -2,6 +2,13 @@ import { PUBLIC_BACKEND_URL } from '$env/static/public'
 
 export const cpfRegexp = /([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})/;
 
+
+export async function registerVisit(){
+  await fetch(`${PUBLIC_BACKEND_URL}/Usuarios/visita`, {
+    method: 'POST',
+  })
+}
+
 export async function changeOrderAddress(orderId, addressId){
   const response = await fetch(`${PUBLIC_BACKEND_URL}/pedido/alterar/endereco/${orderId}`,{
     headers: {
