@@ -24,7 +24,8 @@
   );
 
   let content = []
-  let info = []
+  let qtdeVendas = []
+  let qtdeVisitantes = []
   let labels = []
   let data
   
@@ -33,7 +34,28 @@
     data = {
       labels: labels,
       datasets: [
-
+        {
+          label: 'Qtde de vendas/aluguel',
+          data: qtdeVendas,
+          backgroundColor: [
+            'rgba(255, 134,159,0.4)',
+          ],
+          borderWidth: 2,
+          borderColor: [
+            'rgba(255, 134, 159, 1)',
+          ],
+        },
+        {
+          label: 'Qtde de visitantes',
+          data: qtdeVisitantes,
+          backgroundColor: [
+            'rgba(98,  182, 239,0.4)',
+          ],
+          borderWidth: 2,
+          borderColor: [
+            'rgba(98,  182, 239, 1)',
+          ],
+        },
       ]
     };
   }
@@ -67,40 +89,24 @@
     });
 
     labels = [...uniqueDates].sort((a, b) => new Date(a) - new Date(b));
+
+    labels.forEach(label => {
+      let qtdeVendasPorData = content.pedido.filter(pedido => pedido.data_pedido === label)
+      let qtdeVisitantesPorData = content.visitas.filter(visita => visita.date === label).length
+
+      qtdeVendasPorData.forEach((item) => {
+        qtdeVendas.push(item.vendas.length + item.alugueis.length)
+      })
+      qtdeVisitantes.push(qtdeVisitantesPorData)
+    })
   }
 </script>
 <div class="text-center">
-  <h1 class="text-2xl my-8">Esse gráfico reflete a quantidade de vendas e aluguéis nos últimos 7 Dias</h1>
+  <h1 class="text-2xl my-8">Esse gráfico reflete a quantidade de visitantes e as de venda nos ultimos 7 dias</h1>
 </div>
 
-
-<Bar {data} options={{ responsive: true }} />
-
-
-
-
-<!-- <section>
-  <h2 class="text-2xl">Pedidos</h2>
-  <table class="table mt-4 w-full">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Data do Pedido</th>
-        <th>Valor Total</th>
-        <th>Qtde. Vendidos</th>
-        <th>Qtde. Alugados</th>
-      </tr>
-    </thead>
-{#each content as item}
-      <tbody>
-        <tr>
-          <th>{item.id}</th>
-          <td>{formatDate(item.data_pedido)}</td>
-          <td>R${item.valor}</td>
-          <td>{item.vendas.length}</td>
-          <td>{item.alugueis.length}</td>
-        </tr>
-      </tbody>
-    {/each}
-  </table>
-</section> -->
+<div class="w-full flex justify-center">
+  <div class="w-3/4">
+    <Bar {data} options={{ responsive: true }} />
+  </div>
+</div>
