@@ -32,6 +32,7 @@
           <li class="item" on:keyup={() => {goto('/perfil/admin/promocoes')}} on:click={() => {goto('/perfil/admin/promocoes')}}>Promoções</li>
           <li class="item" on:keyup={() => {goto('/perfil/admin/produtos')}} on:click={() => {goto('/perfil/admin/produtos')}}>Produtos</li>
           <li class="item" on:keyup={() => {goto('/perfil/admin/relatorios')}} on:click={() => {goto('/perfil/admin/relatorios')}}>Relatórios</li>
+          <li class="item" on:keyup={() => {goto('/perfil/admin/despesas')}} on:click={() => {goto('/perfil/admin/despesas')}}>Fluxo de Despesas</li>
           <li class="item" on:keyup={() => {goto('/perfil/admin/usuarios')}} on:click={() => {goto('/perfil/admin/usuarios')}}>Usuarios Administrativos</li>
         {/if}
     </ul>
