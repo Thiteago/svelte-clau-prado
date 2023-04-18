@@ -1,5 +1,6 @@
 <script>
   import './venda.scss'
+  import { PUBLIC_BACKEND_URL } from '$env/static/public'
   import { cart, idCart } from '$lib/js/stores/cart.js'
   import { onMount } from 'svelte';
   import { page } from '$app/stores';
@@ -73,6 +74,10 @@
     promotionalValue = await calculateDiscount(produto)
     formatedValue = formatToCurrency(produto.valor)
     produto.dataFabricacao = formatDate(produto.dataFabricacao)
+
+    await fetch(`${PUBLIC_BACKEND_URL}/Produto/Visualizou/${produtoId}`, {
+      method: 'POST',
+    })
   })
 
 
