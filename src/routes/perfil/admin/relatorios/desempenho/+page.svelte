@@ -28,8 +28,10 @@
         {#each produtos as produto}
           <tr>
             <td>{produto.nome}</td>
-            <td>{produto.quantidadeVendida}</td>
-            <td>{produto.valorTotal}</td>
+            <td>{produto.statisticProduct.qtdeVendida}</td>
+            <td>{produto.statisticProduct.qtdeAlugada}</td>
+            <td>{produto.statisticProduct.qtdeVisualizada}</td>
+            <td>{produto.statisticProduct.totalLucro}</td>
           </tr>
         {/each}
       </tbody>
