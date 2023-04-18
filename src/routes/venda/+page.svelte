@@ -1,13 +1,13 @@
 <script>
   import './venda.scss'
-  import { cart } from '$lib/js/stores/cart.js'
+  import { cart, idCart } from '$lib/js/stores/cart.js'
   import { onMount } from 'svelte';
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
   import Header from '$lib/components/header/Header.svelte'
   import PreviousButton from '$lib/components/previousbutton/Previousbutton.svelte'
   import Footer from '$lib/components/footer/Footer.svelte'
-	import { fetchProductsById, calculateDiscount, formatDate, formatToCurrency } from '$lib/js/helpers';
+	import { fetchProductsById, calculateDiscount, formatDate, formatToCurrency, createdCart } from '$lib/js/helpers';
 
   const produtoId = $page.url.searchParams.get('produto_id');
 
@@ -17,7 +17,30 @@
   $: ativo = 'descricao'
   $: mainimage = ''
 
+  function createCart(){
+    const now = new Date();
+    let storedData = localStorage.getItem('idCart')
+
+    if (storedData != null && now.getTime() > new Date(storedData.expiration).getTime()) {
+      $idCart = 0
+      localStorage.removeItem(key);
+    }
+
+    if($idCart == 0 || localStorage.getItem('idCart') == null){
+      $idCart = Math.floor((Math.random() * 100) + 1)
+      
+      let expirationMs = 180 * 60 * 1000;
+      let expiration = new Date(now.getTime() + expirationMs);
+      let data = { idCart: $idCart, expiration: expiration };
+      localStorage.setItem('idCart', JSON.stringify(data))
+      createdCart($idCart)
+    }else{
+      $idCart = localStorage.getItem('idCart').idCart
+    }
+  }
+
   function addToCart(){
+    createCart()
     if(!$cart.find(produtos => produtos.id == produto.id)){
       let product = {...produto, imagens: produto.imagens[0], quantidade: 1}
       localStorage.setItem('cart', JSON.stringify([...$cart, product]))

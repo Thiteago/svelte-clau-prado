@@ -3,7 +3,7 @@
   import { fetchAddress, formatToCurrency, saveNewAddress, checkIfCartIsAvailable } from '$lib/js/helpers';
   // @ts-ignore
   import { imask } from '@imask/svelte'
-  import { cart, resume, currentStep, temporaryAddress } from '$lib/js/stores/cart.js'
+  import { cart, resume, currentStep, temporaryAddress, idCart } from '$lib/js/stores/cart.js'
   import { user, signed } from '$lib/js/stores/login.js'
   import leftArrow from '$lib/assets/icons/left-arrow.svg'
   import trash from '$lib/assets/icons/trash-icon.svg'
@@ -125,6 +125,12 @@
     localStorage.setItem('resume', JSON.stringify($resume))
   }
 
+  async function checkAsAbandoned(id){
+    await fetch (`${PUBLIC_BACKEND_URL}/carrinho/marcarabandono/${id}`, {
+      method: 'POST',
+    })
+  }
+
   async function handleRedirect(){
     const available = await checkIfCartIsAvailable($cart)
     if(!available){
@@ -138,6 +144,17 @@
   function removeProduct(id){
     $cart = $cart.filter(element => element.id != id)
     localStorage.setItem('cart', JSON.stringify($cart))
+    if($cart.length == 0){
+      if($idCart != 0){
+        checkAsAbandoned($idCart)
+        localStorage.removeItem('idCart')
+      }else{
+        let JSONparse = JSON.parse(localStorage.getItem('idCart'))
+        $idCart = JSONparse.idCart
+        checkAsAbandoned($idCart)
+        localStorage.removeItem('idCart')
+      }
+    }
   }
 
   async function freightCalculate(){

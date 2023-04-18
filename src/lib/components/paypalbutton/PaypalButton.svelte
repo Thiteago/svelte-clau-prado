@@ -2,10 +2,16 @@
   import { PUBLIC_BACKEND_URL } from '$env/static/public'
   import { goto } from '$app/navigation';
   import { loadScript } from "@paypal/paypal-js";
-  import { resume } from '$lib/js/stores/cart.js'
+  import { resume, idCart } from '$lib/js/stores/cart.js'
   import Loading from '$lib/components/loading/Loading.svelte'
 
   let paypal;
+
+  async function checkCartAsSaled(id){
+    await fetch(`${PUBLIC_BACKEND_URL}/carrinho/marcarvenda/${id}`, {
+      method: 'POST',
+    })
+  }
 
   async function loadPaypal(){
     try {
@@ -43,7 +49,11 @@
             .then((response) => response.json())
             .then((orderData) => {
               const transaction = orderData.purchase_units[0].payments.captures[0];
+              if($idCart == 0 || $idCart == undefined){
+                $idCart = JSON.parse(localStorage.getItem('idCart')).idCart
+              }
               if(transaction.status == 'COMPLETED'){
+                checkCartAsSaled($idCart)
                 goto('/carrinho/step4')
               }else{
                 alert('Erro ao gerar pedido')

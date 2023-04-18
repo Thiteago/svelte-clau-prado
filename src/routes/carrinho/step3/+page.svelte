@@ -5,7 +5,7 @@
   import boletoIcon from '$lib/assets/icons/boleto.svg'
   import cardIcon from '$lib/assets/icons/card.svg'
   import paypalIcon from '$lib/assets/icons/paypal-icon.svg'
-  import { resume, currentStep } from '$lib/js/stores/cart.js'
+  import { resume, currentStep, idCart } from '$lib/js/stores/cart.js'
   import { checkIfCartIsAvailable } from '$lib/js/helpers.js'
 	import { goto } from '$app/navigation';
 	import CreditCard from '$lib/components/creditCard/CreditCard.svelte';
@@ -24,8 +24,20 @@
         goto('/carrinho')
       }
     }
+
+    if($idCart == 0 || $idCart == undefined){
+      $idCart = JSON.parse(localStorage.getItem('idCart')).idCart
+    }
+
     available = await checkIfCartIsAvailable($resume.cartItens)
   })
+
+  async function checkCartAsSaled(id){
+    console.log(id)
+    await fetch(`${PUBLIC_BACKEND_URL}/carrinho/marcarvenda/${id}`, {
+      method: 'POST',
+    })
+  }
   
   async function handlePayment(metodo){
     sendedPaymentRequest = true
@@ -41,6 +53,7 @@
       body: JSON.stringify($resume)
     })
     if(response.status == 200){
+      checkCartAsSaled($idCart)
       goto('/carrinho/step4')
     }else{
       alert('Erro ao gerar pedido')
