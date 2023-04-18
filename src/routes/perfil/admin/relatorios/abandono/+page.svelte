@@ -72,20 +72,23 @@
   async function formatContent(){
     let uniqueDates = new Set();
 
-    content.carts.forEach(item => {
+    content.cartsAbandoned.forEach(item => {
       item.date = formatDate(item.date)
+      uniqueDates.add(item.date);
     })
 
-    content.carts.forEach(cart => {
-      uniqueDates.add(cart.date);
-    });
+    content.cartsCreated.forEach(item => {
+      item.date = formatDate(item.date)
+      uniqueDates.add(item.date);
+    })
+
 
 
     labels = [...uniqueDates].sort((a, b) => new Date(a) - new Date(b));
 
 
-    qtdeCarrinhosAbandonados.push(content.carts.length)
-    qtdeCarrinhosCriados.push(content.cartsCount)
+    qtdeCarrinhosAbandonados.push(content.cartsAbandoned.length)
+    qtdeCarrinhosCriados.push(content.cartsCreated.length)
   }
 </script>
 <div class="text-center">
