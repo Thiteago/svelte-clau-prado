@@ -4,10 +4,13 @@
   import fotoClau from '$lib/assets/img/foto-clau.png'
   import logoInstagram from '$lib/assets/img/instagram-logo.png'
   import logoFacebook from '$lib/assets/img/facebook-logo.png'
+	import SubHeader from "$lib/components/subHeader/SubHeader.svelte";
 
 </script>
-
-<Header tamanho="grande"></Header>
+<div class="bg-white">
+  <SubHeader/>
+  <Header tamanho="grande"/>
+</div>
 <section class="main-sobre">
   <div class="wrapper-sobre">
     <h1>Sobre</h1>

@@ -1,7 +1,7 @@
 <script>
+import SubHeader from '$lib/components/subHeader/SubHeader.svelte'
 import Header from '$lib/components/header/Header.svelte'
 import Busca from '$lib/components/busca/Busca.svelte'
-import Footer from '$lib/components/footer/Footer.svelte'
 import Produto from '$lib/components/produto/Produto.svelte'
 import './produtos.scss'
 import {onMount} from 'svelte'
@@ -49,8 +49,10 @@ $: {
 
 
 </script>
-
-<Header tamanho="pequeno"></Header>
+<div class="bg-white">
+  <SubHeader/>
+  <Header tamanho="pequeno"/>
+</div>
 
 <section class="product-grid">
   <Busca bind:busca={searchInput}></Busca>
@@ -98,6 +100,4 @@ $: {
       {/if}
     </div>
   </div>
-
 </section>
-<Footer></Footer>
