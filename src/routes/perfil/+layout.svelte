@@ -24,7 +24,6 @@
         <li class="item" on:keyup={() => {goto('/perfil')}} on:click={() => {goto('/perfil')}}>Perfil</li>
         <li class="item" on:keyup={() => {goto('/perfil/dados')}} on:click={() => {goto('/perfil/dados')}}>Dados Cadastrais</li>
         <li class="item" on:keyup={() => {goto('/perfil/enderecos')}} on:click={() => {goto('/perfil/enderecos')}}>Endereços</li>
-        <li class="item" on:keyup={() => {goto('/perfil/pagamento')}} on:click={() => {goto('/perfil/pagamento')}}>Formas de Pagamento</li>
         <li class="item" on:keyup={() => {goto('/perfil/pedidos')}} on:click={() => {goto('/perfil/pedidos')}}>Historico de Pedidos</li>
         {#if $user.cargo == 'Admin'}
           <span class="py-10 text-center font-bold">Funções<br/> Administrativas <br/>↓</span>
