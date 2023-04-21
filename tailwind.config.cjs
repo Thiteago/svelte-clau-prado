@@ -6,6 +6,9 @@ module.exports = {
       sans: ['poppins', 'sans-serif'],
     },
     extend: {
+      zIndex: {
+        '10': '10',
+      },
       inset : {
         '12%' : '12%',
       }
