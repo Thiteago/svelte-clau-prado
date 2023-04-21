@@ -27,9 +27,9 @@ export function loadStorageData(){
   if(browser){
     user.set(JSON.parse(localStorage.getItem("@Auth:user"))) 
     if(localStorage.getItem("@Auth:user")!= null){
-     signed.set(true)
+      signed.set(true)
     }else{
-     signed.set(false)
+      signed.set(false)
     }
   }
 }
