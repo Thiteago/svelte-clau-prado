@@ -7,7 +7,6 @@
   import { goto } from '$app/navigation';
   import Header from '$lib/components/header/Header.svelte'
   import PreviousButton from '$lib/components/previousbutton/Previousbutton.svelte'
-  import Footer from '$lib/components/footer/Footer.svelte'
 	import { fetchProductsById, calculateDiscount, formatDate, formatToCurrency, createdCart } from '$lib/js/helpers';
 
   const produtoId = $page.url.searchParams.get('produto_id');
@@ -173,7 +172,6 @@
     </div> 
   </section>
   {/if}
-  <Footer></Footer>
 </div>
 
 
