@@ -92,7 +92,7 @@
             <label for="my-modal-{item.id}" on:click={() => {promocaoSelecionada = item}} class="border w-full flex flex-nowrap justify-center items-center h-12 font-bold cursor-pointer px-3 rounded">
               <h2>{item.nome}</h2>
             </label>
-            <div class="{item.status == 'Ativo' ? 'bg-green-500' : 'bg-red-500'} px-5 h-12 flex items-center rounded">
+            <div class="{item.status == 'Ativo' ? 'bg-green-500' : item.status == 'Agendado' ? 'bg-orange-500' : 'bg-red-500'} px-5 h-12 flex items-center rounded">
               {item.status}
             </div>
           </div>
