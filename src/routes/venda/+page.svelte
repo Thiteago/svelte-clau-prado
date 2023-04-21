@@ -8,6 +8,7 @@
   import Header from '$lib/components/header/Header.svelte'
   import PreviousButton from '$lib/components/previousbutton/Previousbutton.svelte'
 	import { fetchProductsById, calculateDiscount, formatDate, formatToCurrency, createdCart } from '$lib/js/helpers';
+	import Footer from '$lib/components/footer/Footer.svelte';
 
   const produtoId = $page.url.searchParams.get('produto_id');
 
@@ -173,6 +174,7 @@
   </section>
   {/if}
 </div>
+<Footer/>
 
 
 <style>

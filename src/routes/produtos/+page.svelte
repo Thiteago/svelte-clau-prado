@@ -6,6 +6,7 @@ import Produto from '$lib/components/produto/Produto.svelte'
 import './produtos.scss'
 import {onMount} from 'svelte'
 import { fetchProducts } from '$lib/js/helpers';
+	import Footer from '$lib/components/footer/Footer.svelte';
 
 $: produtos = []
 $: selectedOrder = 'low-price'
@@ -101,3 +102,4 @@ $: {
     </div>
   </div>
 </section>
+<Footer/>
