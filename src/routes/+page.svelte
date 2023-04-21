@@ -162,11 +162,25 @@ onMount(async () => {
             <p>aidqkadiqeiwqeiqweiqwieqwi</p>
           </div>
           <div class="flex flex-col items-center">
-            <h1 class="font-bold text-2xl">Sensacional</h1>
+            <h1 class="font-bold text-2xl flex">
+              <i class="w-3">
+                <img class="w-6" src={leftquote} alt=""/>
+              </i>
+                Sensacional 
+                <i class="w-3"><img class="w-6" src={quotes} alt=""/>
+              </i>
+            </h1>
             <p>aidqkadiqeiwqeiqweiqwieqwi</p>
           </div>
           <div class="flex flex-col items-center">
-            <h1 class="font-bold text-2xl">Sensacional</h1>
+            <h1 class="font-bold text-2xl flex">
+              <i class="w-3">
+                <img class="w-6" src={leftquote} alt=""/>
+              </i>
+                Sensacional 
+                <i class="w-3"><img class="w-6" src={quotes} alt=""/>
+              </i>
+            </h1>
             <p>aidqkadiqeiwqeiqweiqwieqwi</p>
           </div>
         </Carousel>
