@@ -1,5 +1,6 @@
 <script>
   import { fetchDisable, formatDate } from "$lib/js/helpers.js";
+  import { PUBLIC_BACKEND_URL } from '$env/static/public'
   import { createEventDispatcher } from 'svelte';
   export let promocao
 
@@ -18,6 +19,15 @@
     dispatch('disable', {});
   }
 
+  async function handleDelete(){
+    const response = await fetch(`${PUBLIC_BACKEND_URL}/promocao/excluir/${promocao.id}`, {
+      method: 'DELETE',
+    })
+    if(response){
+      dispatch('disable', {});
+    }
+  }
+
 
 </script>
   <input type="checkbox" id="my-modal-{promocao.id}" class="modal-toggle" />
@@ -26,7 +36,7 @@
     <label class="modal-box relative max-w-4xl" for="">
       <div class="flex justify-between">
         <h3 class="text-lg font-bold flex items-center">Promocao {promocao.nome}</h3>
-        <span class="rounded p-3 {promocao.status == 'Ativo' ? 'bg-green-500' : 'bg-red-500'}">{promocao.status}</span>
+        <span class="rounded p-3 {promocao.status == 'Ativo' ? 'bg-green-500' : promocao.status == 'Agendado' ? 'bg-orange-500' : 'bg-red-500'}">{promocao.status}</span>
       </div>
       
       <div class="mt-8 flex flex-col gap-5">
@@ -78,7 +88,8 @@
             {/each}
           </ul> 
         </div>
-        <div class="flex justify-end">
+        <div class="flex gap-3 justify-end">
+          <button class="btn btn-error" on:click={handleDelete}>Excluir promocao</button>
           <button disabled={promocao.status == 'Inativo'} class="btn btn-warning" on:click={handleDisable}>Desativar promocao</button>
         </div>
       </div>
