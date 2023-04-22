@@ -8,8 +8,8 @@ export async function createdCart(id){
   })
 }
 
-export async function registerVisit(){
-  await fetch(`${PUBLIC_BACKEND_URL}/Usuarios/visita`, {
+export async function registerVisit(logado = false){
+  await fetch(`${PUBLIC_BACKEND_URL}/Usuarios/visita/${logado}`, {
     method: 'POST',
   })
 }
