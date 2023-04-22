@@ -7,14 +7,16 @@
 
   let email = ''
   let senha = ''
-  let queryParam = ''
+  let queryParamCarrinho = ''
+  let queryParamVenda = ''
 
   $: current = "container"
   $: statusAuth = false
 
   onMount(() => {
     const params = new URLSearchParams(window.location.search);
-    queryParam = params.get('carrinho');
+    queryParamCarrinho = params.get('carrinho');
+    queryParamVenda = params.get('Venda');
   });
 
   async function handleSubmit(e) {
@@ -34,8 +36,10 @@
       let data = await response.json()
       localStorage.setItem('@Auth:user', JSON.stringify(data.user))
       localStorage.setItem('@Auth:token', JSON.stringify(data.token))
-      if(queryParam == 'true'){
+      if(queryParamCarrinho == 'true'){
         goto('/carrinho/step3')
+      }else if(queryParamVenda){
+        goto(`/venda?produto_id=${queryParamVenda}`)
       }else{
         goto('/')
       }
