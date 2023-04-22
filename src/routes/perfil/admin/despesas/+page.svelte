@@ -164,8 +164,6 @@
   }
 
   async function handleDeleteDespesa(){
-
-
     try{
       const response = await fetch(`${PUBLIC_BACKEND_URL}/despesas/deletar`, {
         method: 'DELETE',
@@ -174,8 +172,8 @@
         },
         body: JSON.stringify(selectedItems)        
       })
-        console.log(response)
         if(response.status == 201){
+          selectedItems = []
           handleFlashMessages('success', 'Despesa(s) deletada(s) com sucesso!')
           await fetchDespesas(selectedMonth, selectedDay)
         }
@@ -359,7 +357,7 @@
             <!-- svelte-ignore a11y-invalid-attribute -->
             <div class="modal-action">
               <a href="#" class="btn">Cancelar</a>
-              <button on:click={handleDeleteDespesa} class="btn btn-error">Deletar</button>
+              <a href="#"><button on:click={handleDeleteDespesa} class="btn btn-error">Deletar</button></a>
             </div>
           </div>
         </div>
