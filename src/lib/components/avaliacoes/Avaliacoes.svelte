@@ -82,6 +82,12 @@
       body: JSON.stringify(object)
     })
     avaliacoes = await fetchAvaliacoes()
+    hasBuyed = await fetchHasBuyed()
+    avaliacoes.map((item) => {
+      if(item.userId == $user.id){
+        hasPosted = true
+      }
+    })
   }
 
   async function fetchHasBuyed(){
@@ -114,7 +120,7 @@
   {#if !$signed}
     <div class="flex items-center flex-col w-full">
       <h1>Para avaliar o produto, você precisa estar logado</h1>
-      <a class="btn bg-[#632c52] w-4/12" href="/login">Clique aqui para logar</a>
+      <a class="btn bg-[#632c52] w-4/12" href="/login?Venda={produtoId}">Clique aqui para logar</a>
     </div>
   {:else}
     {#if hasBuyed}
@@ -140,7 +146,7 @@
       </div>
     {/if}
   {/if}
-  <div class="flex flex-col px-3 mt-6 gap-3">
+  <div class="flex flex-col px-3 py-6 gap-3">
     {#each avaliacoes as item}
       <div class="w-full border-2 p-3 rounded-lg">
         <div class="flex justify-between">
@@ -155,7 +161,9 @@
         </div>
         <p class="text-lg">{item.descricao}</p>
         <div class="flex justify-between mt-1">
-          <p class="text-sm text-gray-500">Por {item.user.nome.split(' ')[0]} {item.user.nome.split(' ')[1]}</p>
+          <p class="text-sm text-gray-500">
+            Por {item.user.nome.split(' ')[0]} {item.user.nome.split(' ')[1] ? item.user.nome.split(' ')[1] : ''}
+          </p>
           <p>Em {item.data} </p>
         </div>
       </div>
