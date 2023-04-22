@@ -203,7 +203,7 @@ export function formatDate(date){
   let dia = data.getDate()
   let mes = data.getMonth() + 1 
   let ano = data.getFullYear()
-
+  
   return `${dia}/${mes}/${ano}`
 }
 

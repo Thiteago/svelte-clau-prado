@@ -7,11 +7,67 @@
   let content = []
   let labels = []
   let info = []
+  $: diaMaisPedidos = ''
+  $: maiorLucro = ''
+  $: maisVendas = {}
+  $: maisAlugueis = {}
+  $: pedidoMaisProdutos = {}
+  
+  async function loadStatistics(content){
+    diaMaisPedidos = content.filter((item) => 
+      item.alugueis.length + item.vendas.length == Math.max(...content.map((item) => 
+      item.alugueis.length + item.vendas.length)))[0]?.data_pedido
+    diaMaisPedidos = formatDate(diaMaisPedidos)
+    
+    maiorLucro = content.reduce((maior, atual) => {
+      if (atual.valor > maior.valor) {
+        return atual.valor;
+      } else {
+        return maior.valor;
+      }
+    });
+
+    maisVendas = content.reduce((maior, atual) => {
+      if (atual.vendas.length > maior.vendas.length) {
+        return atual;
+      } else {
+        return maior;
+      }
+    });
+
+    maisAlugueis = content.reduce((maior, atual) => {
+      if (atual.alugueis.length > maior.alugueis.length) {
+        return atual;
+      } else {
+        return maior;
+      }
+    });
+
+    pedidoMaisProdutos = content.reduce((maior, atual) => {
+      if (atual.alugueis.length + atual.vendas.length > maior.alugueis.length + maior.vendas.length) {
+        return atual;
+      } else {
+        return maior;
+      }
+    });
+    console.log(pedidoMaisProdutos)
+  }
   
   onMount(async () => {
     const response = await fetch(`${PUBLIC_BACKEND_URL}/relatorio/vendasDiarias`);
     content = await response.json();
     content = await formatContent()
+    if(content.length > 0){
+      loadStatistics(content)
+    }else{
+      diaMaisPedidos = ' - '
+      maiorLucro = ' - '
+      maisVendas = {
+        id: ' - ',
+        valor: ' - '
+      }
+    }
+    
   });
 
   async function formatContent(){
@@ -33,8 +89,47 @@
 <div class="text-center">
   <h1 class="text-2xl my-8">Esse gráfico reflete a quantidade de vendas e aluguéis nos últimos 7 Dias</h1>
 </div>
-<BarChart {content} {labels} {info}/>
-<section>
+<div class="w-6/12 flex m-auto">
+  <BarChart {content} {labels} {info}/>
+</div>
+<section class="mt-6">
+  <div class="flex items-start justify-evenly">
+    <div class="text-center">
+      <h2 class="font-bold text-2xl">{diaMaisPedidos}</h2>
+      <p>Data com mais pedidos</p>
+    </div>
+    <div class="text-center">
+      <h2 class="font-bold text-2xl">R${maiorLucro}</h2>
+      <p>Maior lucro em um pedido</p>
+    </div>
+    <div class="text-center">
+      <h2 class="font-bold text-2xl">
+        {#if maisVendas.vendas}
+          {maisVendas.vendas.length}
+        {/if}
+      </h2>
+      <span>ID do Pedido: {maisVendas.id}</span>
+      <p>Pedido com mais vendas</p>
+    </div>
+    <div class="text-center">
+      <h2 class="font-bold text-2xl">
+        {#if maisAlugueis.alugueis}
+          {maisAlugueis.alugueis.length}
+        {/if}
+      </h2>
+      <span>ID do Pedido: {maisAlugueis.id}</span>
+      <p>Pedido com mais vendas</p>
+    </div>
+    <div class="text-center">
+      <h2 class="font-bold text-2xl">
+        {#if pedidoMaisProdutos.alugueis || pedidoMaisProdutos.vendas}
+          {pedidoMaisProdutos.alugueis.length + pedidoMaisProdutos.vendas.length}
+        {/if}
+      </h2>
+      <span>ID do Pedido: {pedidoMaisProdutos.id}</span>
+      <p>Pedido com mais produtos</p>
+    </div>
+  </div>
   <h2 class="text-2xl">Pedidos</h2>
   <table class="table mt-4 w-full">
     <thead>
