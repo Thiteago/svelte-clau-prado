@@ -12,7 +12,7 @@
 
 </script>
 
-<section class="flex justify-center w-full mt-4">
+<section class="flex gap-3 items-center w-full flex-col mt-4">
   {#if produtos.length > 0}
     {#each produtos as produto }
       <ProductPerformanceCard {produto} />
