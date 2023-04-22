@@ -82,24 +82,26 @@ $: {
       </div>
     </aside>
     <div class="container-produtos">
-      {#await produtos}
+      {#each filteredProducts as item}
+        {#if (item.Aluguel.length > 0 && item.Aluguel.status_aluguel != 'Indisponível') || (item.Venda.length > 0 && item.Venda.status_venda != 'Indisponível')}
+          <Produto data={item}/>
+        {:else}
+          <div class="m-auto">
+            Infelizmente não temos nenhum produto disponível no momento 😥
+          </div>
+        {/if}
+      {/each}
+      {#if filteredProducts.length == 0 && !(alugadosFiltered || vendaFiltered)}
         <div class="sem-produtos">
           <h1>Nenhum produto encontrado</h1>
         </div>
-      {:then}
-        {#each filteredProducts as item}
-          {#if (item.Aluguel.length > 0 && item.Aluguel.status_aluguel != 'Indisponível') || (item.Venda.length > 0 && item.Venda.status_venda != 'Indisponível')}
-            <Produto data={item}/>
-
-          {/if}
-        {/each}
-      {/await}
-      {#if produtos.length == 0}
-        <div class="sem-produtos">
-          <h1>Nenhum produto encontrado</h1>
-        </div>
+        {:else if alugadosFiltered || vendaFiltered }
+          <div class="m-auto">
+            Nenhum resultado com os filtros selecionados, tente novamente 🥹
+          </div>
       {/if}
     </div>
   </div>
 </section>
 <Footer/>
+
