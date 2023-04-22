@@ -7,6 +7,7 @@
   import { goto } from '$app/navigation';
   import Header from '$lib/components/header/Header.svelte'
   import PreviousButton from '$lib/components/previousbutton/Previousbutton.svelte'
+  import Avaliacoes from '$lib/components/avaliacoes/Avaliacoes.svelte';
 	import { fetchProductsById, calculateDiscount, formatDate, formatToCurrency, createdCart } from '$lib/js/helpers';
 	import Footer from '$lib/components/footer/Footer.svelte';
 
@@ -140,34 +141,34 @@
           <p class='container-descricao'>{produto.descricao}</p>
         {:else}
           {#if ativo == 'especificacoes'}
-          <div class="overflow-x-auto">
-            <table class="table w-11/12 ml-2">
-              <tbody>
-                <tr>
-                  <td>Data de fabricação:</td>
-                  <td>{produto.dataFabricacao}</td>
-                </tr>
-                <tr>
-                  <td>Material:</td>
-                  <td>{produto.material}</td>
-                </tr>
-                <tr>
-                  <td>Altura:</td>
-                  <td>{produto.altura}cm</td>
-                </tr>
-                <tr>
-                  <td>Largura:</td>
-                  <td>{produto.largura}cm</td>
-                </tr>
-                <tr>
-                  <td>Comprimento:</td>
-                  <td>{produto.comprimento}cm</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+            <div class="overflow-x-auto">
+              <table class="table w-11/12 ml-2">
+                <tbody>
+                  <tr>
+                    <td>Data de fabricação:</td>
+                    <td>{produto.dataFabricacao}</td>
+                  </tr>
+                  <tr>
+                    <td>Material:</td>
+                    <td>{produto.material}</td>
+                  </tr>
+                  <tr>
+                    <td>Altura:</td>
+                    <td>{produto.altura}cm</td>
+                  </tr>
+                  <tr>
+                    <td>Largura:</td>
+                    <td>{produto.largura}cm</td>
+                  </tr>
+                  <tr>
+                    <td>Comprimento:</td>
+                    <td>{produto.comprimento}cm</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           {:else}
-            <p class='container-descricao'>{produto.avaliações}</p>
+            <Avaliacoes produtoId={produto.id}/>
           {/if}
         {/if}
     </div> 
