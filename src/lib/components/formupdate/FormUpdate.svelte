@@ -11,7 +11,7 @@
   }
   let today = new Date().toISOString().split('T')[0]
   let files 
-  let tipo = produto.Aluguel != null ? 'Aluguel' : 'Venda'
+  let tipo = produto.tipo
   if(Object.keys(produto).length > 0){
     files = produto.imagens
   }
