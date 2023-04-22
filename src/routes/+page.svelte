@@ -6,13 +6,13 @@ import Header from '$lib/components/header/Header.svelte'
 import SubHeader from '$lib/components/subHeader/SubHeader.svelte'
 import Slide from '$lib/components/slide/Slide.svelte'
 import BuyInfo from '$lib/components/buyinfo/Buyinfo.svelte'
-import {loadStorageData} from '$lib/js/stores/login.js'
+import {loadStorageData, user} from '$lib/js/stores/login.js'
 import { registerVisit,fetchProducts } from '$lib/js/helpers.js'
 import './style.scss'
 import Carousel from 'svelte-carousel'
 import { browser } from '$app/environment';
 import { onMount } from 'svelte';
-	import Footer from '$lib/components/footer/Footer.svelte';
+import Footer from '$lib/components/footer/Footer.svelte';
 
 let hasSpecialSale = false
 let products = []
@@ -46,7 +46,7 @@ async function orderProducts(){
 
 onMount(async () => {
     await loadStorageData()
-    await registerVisit()
+    await registerVisit($user ? true : false)
     await checkIfHasSpecialSale()
     await orderProducts()
 })
