@@ -106,7 +106,7 @@
 </div>
 
 <div class="w-full flex justify-center">
-  <div class="w-3/4">
+  <div class="w-2/4">
     <Bar {data} options={{ responsive: true }} />
   </div>
 </div>
