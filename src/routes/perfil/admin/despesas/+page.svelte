@@ -44,6 +44,7 @@
   const days = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,
                 21,22,23,24,25,26,27,28,29,30,31]
   let willAddDespesa = false
+  let today = DateTime.local()
   let recorrente = false
 
   const optionsValor = {
@@ -84,9 +85,10 @@
         selectedDay = dia
         selectedMonth = mes
       }else{
-        let today = DateTime.local()
         selectedDay = today.day
         selectedMonth = today.month
+        console.log(selectedDay)
+        console.log(selectedMonth)
       }
 
       if(data.length > 0){
@@ -211,8 +213,10 @@
     try{
       if(object.hasOwnProperty('data')){
         await fetchDespesas(object.data.split('-')[1], object.data.split('-')[2])
+        selectedItems = []
       }else{
-        await fetchDespesas()
+        await fetchDespesas(today.month, today.day)
+        selectedItems = []
       }
       if(response.status == 201){
         handleFlashMessages('success', 'Despesa alterada com sucesso!')
@@ -244,13 +248,13 @@
         {year}
       </div>
     </div>
-    <div class="flex flex-col gap-2 my-5 items-center justify-center">
-      <div class="flex gap-12 bg-[#7c3267] px-1 meses-container rounded-lg py-1"> <!--Meses-->
+    <div class="flex flex-col w-full gap-2 my-5 items-center justify-center">
+      <div class="flex gap-2 justify-center 4xl:gap-12 w-full bg-[#7c3267] px-1 meses-container rounded-lg py-1"> <!--Meses-->
         {#each months as month, i}
           <button on:click={() => {selectedMonth = i+1; selectedDay = undefined}} class="text-white {i+1 == selectedMonth ? 'selecionado' : ''}">{month}</button>
         {/each}
       </div>
-      <div class="flex gap-6 bg-[#7c3267] px-2 dias-container rounded-lg py-1"><!-- Dias -->
+      <div class="flex justify-center gap-0.5 4xl:gap-6 w-full bg-[#7c3267] px-2 dias-container rounded-lg py-1"><!-- Dias -->
         {#each days as day}
           <button on:click={() => {selectedDay = day}} class="text-white {day == selectedDay ? 'selecionado' : ''}">{day}</button>
         {/each}
@@ -324,7 +328,7 @@
 
     <div style="min-height: 500px" class="items-start px-2 justify-end relative gap-12 mt-3 flex">
       <div style="width: 300px" class="absolute left-2 gap-1 flex flex-col">
-        <a href={selectedItems.length > 0 ? '#my-modal-2' : ''}>
+        <a class="z-10" href={selectedItems.length > 0 ? '#my-modal-2' : ''}>
           <button 
             on:mouseenter={(e) => 
               { e.target.classList.add('w-6/12'); 
@@ -479,6 +483,12 @@
     border: none;
     border-radius: 5px;
     padding: 5px 10px;
+  }
+
+  @media (max-width: 1921px) {
+    .meses-container button {
+      padding: 0 2px;
+    }
   }
 
   .selecionado{
