@@ -2,8 +2,6 @@
   import "./style.scss"
   import Header from '$lib/components/header/Header.svelte'
   import fotoClau from '$lib/assets/img/foto-clau.png'
-  import logoInstagram from '$lib/assets/img/instagram-logo.png'
-  import logoFacebook from '$lib/assets/img/facebook-logo.png'
 	import SubHeader from "$lib/components/subHeader/SubHeader.svelte";
 
 </script>
@@ -25,16 +23,5 @@
       
     <img class="profile" src={fotoClau} alt="foto clau" />
 
-
-    <div class="wrapper-social">
-        <div class="social-media">
-            <img src={logoInstagram} alt="logo instagram" />
-            <p>@artes_que_encantam_byclauprado</p>
-        </div>
-        <div class="social-media">
-            <img src={logoFacebook} alt="logo" />
-            <p>/ClauPrado</p>
-        </div>
-    </div>
   </div>
 </section>
