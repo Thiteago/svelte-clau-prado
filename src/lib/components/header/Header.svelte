@@ -4,6 +4,7 @@ import { fade } from 'svelte/transition';
 import { page } from '$app/stores';
 import {cart} from '$lib/js/stores/cart.js'
 import trash from '$lib/assets/icons/trash-icon.svg' 
+import {browser} from '$app/environment'
 import { Hamburger } from 'svelte-hamburgers'
 import './header.scss'
 import avatar from '$lib/assets/img/avatar-login.png'
@@ -11,24 +12,36 @@ import logobig from '$lib/assets/img/logo-clau.png'
 import logomin from '$lib/assets/img/logomin.jpg'
 import carts from  '$lib/assets/icons/cart2.svg'
 import { onMount } from 'svelte';
-export let tamanho = "grande"
+
 
 let currentRoute;
-let logo
+$: tamanho = 'grande'
 let carrinhoAtivo = false
 let open
+let logo = logobig
+
+
 
 onMount(() => {
-  currentRoute = window.location.pathname;
+  if(browser){
+    currentRoute = window.location.pathname;
+  }
+
+  function handleResize(){
+    let windowWidth = window.innerWidth
+
+    if(windowWidth <= 768){
+      tamanho = 'pequeno'
+      logo = logomin
+    }else{
+      tamanho = 'grande'
+      logo = logobig
+    }
+  }
+
+  window.addEventListener('resize', handleResize);
 });
 
-
-
-if(tamanho == "grande"){
-    logo = logobig
-}else if(tamanho == "pequeno"){
-    logo = logomin
-}
 
 function  handleRemoveItem(id){
   cart.update((cart) => {
@@ -38,10 +51,9 @@ function  handleRemoveItem(id){
 
 </script>
 <header class="main-header">
-
   <div class="container-left-content">
     <div class="wrapper-logo {tamanho == "grande" ? "" : "-pequeno"}">
-      <img src={logo} alt="logo clau prado"/>
+      <img class="{tamanho == "grande" ? "" : "-pequeno"}" src={logo} alt="logo clau prado"/>
     </div>
     <nav class="nav">
       <a class="main-action" href={"/#"}>Inicio</a>

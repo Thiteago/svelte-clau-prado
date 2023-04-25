@@ -114,7 +114,7 @@ onMount(async () => {
         </div>
       </section>
     {/if}
-    <section class="flex flex-col w-9/12 m-auto mt-6 gap-4 ">
+    <section class="flex flex-col w-9/12 m-auto my-6 gap-4 ">
       <div>
         <h1 class="font-italic text-3xl">Novos Produtos</h1>
         <p>Os mais recentes trabalhos da Clau 😍</p>

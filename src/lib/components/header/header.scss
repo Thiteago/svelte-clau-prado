@@ -39,6 +39,7 @@
 	}
 }
 .-pequeno{
+	width: 100px;
 	padding-top: 0 !important;
 }
 
@@ -256,6 +257,12 @@ padding: 1rem 0.15rem;
 .ativo{
 	background-color: #7C3267;
 	color: white;
+}
+
+@media (max-width: 768px) {
+	.container-right-content{
+		gap: 0;
+	}
 }
 
 @media (max-width: 1024px){
