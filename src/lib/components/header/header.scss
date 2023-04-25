@@ -45,10 +45,11 @@
 
 .cart-preview-container{
 	position: absolute;
-	top: 6.5rem;
+	top: 7.05rem;
 	background-color: white;
 	z-index: 12;
 	width: 60%;
+	min-width: 320px;
 }
 
 .wrapper-logo{
@@ -263,6 +264,10 @@ padding: 1rem 0.15rem;
 	.container-right-content{
 		gap: 0;
 	}
+
+	.cart-preview-container{
+		right: 0;
+	}
 }
 
 @media (max-width: 1024px){
@@ -273,6 +278,10 @@ padding: 1rem 0.15rem;
 	.menu-container{
 		display: flex;
 		position: absolute;
+	}
+
+	.cart-preview-container{
+		top: 6.25rem;
 	}
 
 	.hamburguer{
