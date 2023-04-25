@@ -30,3 +30,42 @@
   width: 95%;
   background-color: #FFFFFF;
 }
+
+.slide-desk{
+  display: block;
+}
+
+.slide-mob{
+  width: 65%;
+  padding-top: 20px;
+  display: none;
+  margin: 0 auto;
+}
+
+.carousel-desktop{
+  display: block;
+  width: 100%;
+}
+
+.carousel-mobile{
+  width: 100%;
+  display: none;
+}
+
+@media(max-width: 928px){
+  .slide-desk{
+    display: none;
+  }
+
+  .carousel-desktop{
+    display: none;
+  }
+
+  .carousel-mobile{
+    display: block;
+  }
+
+  .slide-mob{
+    display: flex;
+  }
+}

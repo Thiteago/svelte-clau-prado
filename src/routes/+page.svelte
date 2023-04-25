@@ -12,6 +12,8 @@ import './style.scss'
 import Carousel from 'svelte-carousel'
 import { browser } from '$app/environment';
 import { onMount } from 'svelte';
+import produto1 from '$lib/assets/img/produto-3.jpeg'
+import produto2 from '$lib/assets/img/produto-5.jpg'
 import Footer from '$lib/components/footer/Footer.svelte';
 
 let hasSpecialSale = false
@@ -55,7 +57,24 @@ onMount(async () => {
 <div class="container-home">
 	<SubHeader/>
   <Header tamanho="grande"/>
-	<Slide/>
+  <div>
+    <div class="slide-desk">
+      <Slide/>
+    </div>
+    <div class="slide-mob">
+      {#if browser}
+        <Carousel
+            autoplay
+            autoplayDuration={5000}
+            autoplayProgressVisible
+            arrows={false}
+          >
+          <img src={produto1} alt="">
+          <img src={produto2} alt="">
+        </Carousel>
+      {/if}
+    </div>
+  </div>
  
   <div class="container-Content">
 		<BuyInfo />
@@ -89,7 +108,7 @@ onMount(async () => {
           {/if}
         </div>
         <div class="flex justify-center">
-          <a href="/produtos" class="flex rounded-lg justify-center w-2/12 items-center bg-[#b14897] hover:bg-[#92397a] cursor-pointer mt-3 py-3">
+          <a href="/produtos" class="flex rounded-lg justify-center  w-full sm:w-2/12 items-center bg-[#b14897] hover:bg-[#92397a] cursor-pointer mt-3 py-3">
             <div class="font-bold text-white">Ver todos os produtos</div>
           </a>
         </div>
@@ -125,7 +144,7 @@ onMount(async () => {
         {/if}
       </div>
       <div class="flex justify-center">
-        <a href="/produtos" class="flex rounded-lg justify-center w-2/12 items-center bg-[#F0F0F0] hover:bg-[#c6c6c6] cursor-pointer mt-3 py-3">
+        <a href="/produtos" class="flex rounded-lg justify-center w-full sm:w-2/12 px-2 text-center items-center bg-[#F0F0F0] hover:bg-[#c6c6c6] cursor-pointer mt-3 py-3">
           <div class="font-bold">Ver todos os produtos</div>
         </a>
       </div>
@@ -139,51 +158,101 @@ onMount(async () => {
 
       <div style="min-height: 12rem" class="flex items-center">
         {#if browser}
-        <Carousel
-        particlesToShow={3}
-        particlesToScroll={2}
-        autoplayDuration={5000}
-        duration={5000}
-        autoplay
-        pauseOnFocus={true}
-        dots={false}
-        arrows={false}
+          <div class="carousel-desktop">
+            <Carousel
+            particlesToShow={3}
+            particlesToScroll={2}
+            autoplayDuration={5000}
+            duration={5000}
+            autoplay
+            pauseOnFocus={true}
+            dots={false}
+            arrows={false}
 
-        >
-          <div class="flex flex-col items-center">
-            <h1 class="font-bold text-2xl flex">
-              <i class="w-3">
-                <img class="w-6" src={leftquote} alt=""/>
-              </i>
-                Sensacional 
-                <i class="w-3"><img class="w-6" src={quotes} alt=""/>
-              </i>
-            </h1>
-            <p>aidqkadiqeiwqeiqweiqwieqwi</p>
+            >
+              <div class="flex flex-col items-center">
+                <h1 class="font-bold text-2xl flex">
+                  <i class="w-3">
+                    <img class="w-6" src={leftquote} alt=""/>
+                  </i>
+                    Sensacional 
+                    <i class="w-3"><img class="w-6" src={quotes} alt=""/>
+                  </i>
+                </h1>
+                <p>aidqkadiqeiwqeiqweiqwieqwi</p>
+              </div>
+              <div class="flex flex-col items-center">
+                <h1 class="font-bold text-2xl flex">
+                  <i class="w-3">
+                    <img class="w-6" src={leftquote} alt=""/>
+                  </i>
+                    Sensacional 
+                    <i class="w-3"><img class="w-6" src={quotes} alt=""/>
+                  </i>
+                </h1>
+                <p>aidqkadiqeiwqeiqweiqwieqwi</p>
+              </div>
+              <div class="flex flex-col items-center">
+                <h1 class="font-bold text-2xl flex">
+                  <i class="w-3">
+                    <img class="w-6" src={leftquote} alt=""/>
+                  </i>
+                    Sensacional 
+                    <i class="w-3"><img class="w-6" src={quotes} alt=""/>
+                  </i>
+                </h1>
+                <p>aidqkadiqeiwqeiqweiqwieqwi</p>
+              </div>
+            </Carousel>
           </div>
-          <div class="flex flex-col items-center">
-            <h1 class="font-bold text-2xl flex">
-              <i class="w-3">
-                <img class="w-6" src={leftquote} alt=""/>
-              </i>
-                Sensacional 
-                <i class="w-3"><img class="w-6" src={quotes} alt=""/>
-              </i>
-            </h1>
-            <p>aidqkadiqeiwqeiqweiqwieqwi</p>
+          <div class="carousel-mobile">
+            <Carousel
+            particlesToShow={1}
+            particlesToScroll={1}
+            autoplayDuration={5000}
+            duration={5000}
+            autoplay
+            pauseOnFocus={true}
+            dots={false}
+            arrows={false}
+
+            >
+              <div class="flex flex-col items-center">
+                <h1 class="font-bold text-2xl flex">
+                  <i class="w-3">
+                    <img class="w-6" src={leftquote} alt=""/>
+                  </i>
+                    Sensacional 
+                    <i class="w-3"><img class="w-6" src={quotes} alt=""/>
+                  </i>
+                </h1>
+                <p>aidqkadiqeiwqeiqweiqwieqwi</p>
+              </div>
+              <div class="flex flex-col items-center">
+                <h1 class="font-bold text-2xl flex">
+                  <i class="w-3">
+                    <img class="w-6" src={leftquote} alt=""/>
+                  </i>
+                    Sensacional 
+                    <i class="w-3"><img class="w-6" src={quotes} alt=""/>
+                  </i>
+                </h1>
+                <p>aidqkadiqeiwqeiqweiqwieqwi</p>
+              </div>
+              <div class="flex flex-col items-center">
+                <h1 class="font-bold text-2xl flex">
+                  <i class="w-3">
+                    <img class="w-6" src={leftquote} alt=""/>
+                  </i>
+                    Sensacional 
+                    <i class="w-3"><img class="w-6" src={quotes} alt=""/>
+                  </i>
+                </h1>
+                <p>aidqkadiqeiwqeiqweiqwieqwi</p>
+              </div>
+            </Carousel>
           </div>
-          <div class="flex flex-col items-center">
-            <h1 class="font-bold text-2xl flex">
-              <i class="w-3">
-                <img class="w-6" src={leftquote} alt=""/>
-              </i>
-                Sensacional 
-                <i class="w-3"><img class="w-6" src={quotes} alt=""/>
-              </i>
-            </h1>
-            <p>aidqkadiqeiwqeiqweiqwieqwi</p>
-          </div>
-        </Carousel>
+         
         {/if}
       </div>
     </section>

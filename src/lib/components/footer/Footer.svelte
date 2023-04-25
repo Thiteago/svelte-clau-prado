@@ -10,7 +10,7 @@
         ClauPrado
       </a>
   </div>
-  <div class="w-8/12 py-12 flex justify-between ">
+  <div class="w-8/12 py-12 flex flex-col sm:flex-row justify-between ">
     <div class="flex flex-col gap-2">
       <p class="text-white">📞 (12)997431974</p>
       <p class="text-white">✉️ clauprado@gmail.com</p>

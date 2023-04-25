@@ -1,17 +1,28 @@
 <script>
 import {user, signed, logout} from '$lib/js/stores/login.js'
+import { fade } from 'svelte/transition';
 import { page } from '$app/stores';
 import {cart} from '$lib/js/stores/cart.js'
 import trash from '$lib/assets/icons/trash-icon.svg' 
+import { Hamburger } from 'svelte-hamburgers'
 import './header.scss'
 import avatar from '$lib/assets/img/avatar-login.png'
 import logobig from '$lib/assets/img/logo-clau.png'
 import logomin from '$lib/assets/img/logomin.jpg'
 import carts from  '$lib/assets/icons/cart2.svg'
-
+import { onMount } from 'svelte';
 export let tamanho = "grande"
+
+let currentRoute;
 let logo
 let carrinhoAtivo = false
+let open
+
+onMount(() => {
+  currentRoute = window.location.pathname;
+});
+
+
 
 if(tamanho == "grande"){
     logo = logobig
@@ -44,7 +55,7 @@ function  handleRemoveItem(id){
       {#if $page.url.pathname != "/carrinho"}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <img on:click={() => carrinhoAtivo == true ? carrinhoAtivo = false : carrinhoAtivo = true} src={carts} alt="">
-        <span>{$cart.length > 0 ? `${$cart.length}` : ''} {$cart.length > 1 ? ` Itens  no carrinho` : $cart.length == 0 ? 'Nenhum item no carrinho' : ` Item no carrinho`}</span>
+        <span class="cart-label">{$cart.length > 0 ? `${$cart.length}` : ''} {$cart.length > 1 ? ` Itens  no carrinho` : $cart.length == 0 ? 'Nenhum item no carrinho' : ` Item no carrinho`}</span>
       {/if}
     </div>
     {#if carrinhoAtivo == true}
@@ -63,7 +74,7 @@ function  handleRemoveItem(id){
             {/each}
           {:else}
             <div class="text-center mt-2">
-              <h3>Nenhum produto no carrinho</h3>
+              <h3 class="cart-label">Nenhum produto no carrinho</h3>
             </div>
           {/if}
           <div class="wrapper-button-cart">
@@ -72,12 +83,25 @@ function  handleRemoveItem(id){
         </div>
       </div>
     {/if}
-    {#if $signed == false}
-    <div class="wrapper-login">
-      <a class="main-action -second" href={"/login"}>Login</a>
-      <a class="main-action -third" href={"/login"}>ou Cadastre-se</a>
-      <img src={avatar} alt="imagem para cadastro" height="105" class="img_avatar"/>
+
+    <div class="hamburguer">
+      <Hamburger bind:open />
     </div>
+    {#if open}
+      <div transition:fade class="menu-container">
+        <ul class="menu rounded-lg bg-base-100 w-full">
+          <li><a class={currentRoute == '/' ? 'ativo' : ''} href="/">Inicio</a></li>
+          <li><a class={currentRoute == '/produtos' ? 'ativo' : ''} href="/produtos">Produtos</a></li>
+          <li><a class={currentRoute == '/sobre' ? 'ativo' : ''} href="/sobre">Sobre</a></li>
+        </ul>
+      </div>
+    {/if}
+    {#if $signed == false}
+      <div class="wrapper-login">
+        <a class="main-action -second" href={"/login"}>Login</a>
+        <a class="main-action -third" href={"/login"}>ou Cadastre-se</a>
+        <img src={avatar} alt="imagem para cadastro" height="105" class="img_avatar"/>
+      </div>
     {:else}
       <div class="wrapper-login -logado">
         <a href='/perfil' class="main-action -secondlogado">Ola! <br /> {$user.nome.split(' ')[0]}</a>

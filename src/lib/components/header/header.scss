@@ -61,7 +61,7 @@
 	display: flex;
 	align-items: center;
 	position: relative;
-	gap: 13rem;
+	gap: 7rem;
 }
 
 .produto{
@@ -110,6 +110,7 @@ padding: 1rem 0.15rem;
 }
 
 .main-header{
+	position: relative;
 	justify-content: space-between;
 	background-color: #fff;
 	display: flex;
@@ -234,7 +235,50 @@ padding: 1rem 0.15rem;
 		cursor: pointer;
 	}
 
-	#menu-trigger{
+}
+
+.hamburguer{
+	display: none;
+	z-index: 10;
+}
+
+.menu-container{
+	display: none;
+	gap: 2;
+	flex-direction: column;
+	align-items: center;
+	right: 0;
+	width: 20rem;
+	top: 80px;
+	z-index: 30;
+}
+
+.ativo{
+	background-color: #7C3267;
+	color: white;
+}
+
+@media (max-width: 1024px){
+	.wrapper-login{
+		display: none !important;
+	}
+
+	.menu-container{
+		display: flex;
+		position: absolute;
+	}
+
+	.hamburguer{
+		display: block;
+	}
+
+	.main-header .nav{
+		display: none;
+	}
+}
+
+@media (max-width: 1366px){
+	.cart-label{
 		display: none;
 	}
 }
