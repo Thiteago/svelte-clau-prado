@@ -11,7 +11,7 @@
       </a>
   </div>
   <div class="w-8/12 py-12 flex gap-12 sm:gap-0 flex-col sm:flex-row justify-between ">
-    <div class="flex flex-col items-center sm:items-start gap-2">
+    <div class="flex flex-col items-center text-center sm:text-left sm:items-start gap-2">
       <p class="text-white">📞 (12)997431974</p>
       <p class="text-white">✉️ clauprado@gmail.com</p>
       <p class="text-white">🚚 Entrega para todo o <strong>Vale do Paraíba</strong></p>
