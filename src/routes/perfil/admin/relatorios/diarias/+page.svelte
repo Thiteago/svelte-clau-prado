@@ -99,7 +99,7 @@
       <p>Data com mais pedidos</p>
     </div>
     <div class="text-center">
-      <h2 class="font-bold text-2xl">R${maiorLucro.valor}</h2>
+      <h2 class="font-bold text-2xl">R${maiorLucro}</h2>
       <p>Maior lucro em um pedido</p>
     </div>
     <div class="text-center">
