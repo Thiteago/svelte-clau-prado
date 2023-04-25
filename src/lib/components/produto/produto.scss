@@ -5,39 +5,15 @@
   display: flex;
   background-color: white;
   border-radius: 0 1rem 1rem 0;
-
-  .icon-produto{
-    >img{
-        width: 200px;
-    }
-  }
-
-  .info-produto{
-    >h1{
-        font-size: 25px;
-    }
-    gap: 2rem;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-
     .wrapper-additional-info{
         display: flex;
         justify-content: space-between;
         width: 100%;
 
         .container-situation{
-            display: flex;
-            align-items: flex-end;
-        }
-
-        .buy-button{
           display: flex;
-          text-align: center;
-          flex-direction: column;
-          align-items: center;
-
+          align-items: flex-end;
+        }
         .botao{
             border-radius: 10px;
             width: 200px;
@@ -76,7 +52,58 @@
                 box-shadow:0 200px 100px -100px #F44336e2 inset;
                 transition:background 1s ease,box-shadow 2s ease;
         }
-      }
+  }
+}
+
+.info-produto{
+  >h1{
+      font-size: 25px;
+  }
+  gap: 2rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.buy-button{
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.icon-produto{
+  >img{
+    width: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .wrapper-additional-info{
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  .buy-button{
+    align-items: center;
+  }
+
+  .wrapper-produtos{
+    gap: 0.5rem;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .icon-produto{
+    >img{
+      width: 150px;
+      height: 150px;
     }
+  }
+
+  .info-produto{
+    align-items:  center;
+    text-align: center;
   }
 }

@@ -21,31 +21,31 @@ onMount(async () => {
 })
 
 $: {
-    if(alugadosFiltered && vendaFiltered){
-      filteredProducts = produtos.filter(
-        item => 
-        (item.Aluguel.length > 0 && item.Aluguel.status_aluguel != 'Indisponivel') 
-        || (item.Venda.length > 0 && item.Venda.status_venda != 'Indisponivel'))
-      .filter(item => item.nome.toLowerCase().includes(searchInput.toLowerCase()))
-    }else if(alugadosFiltered){
-      filteredProducts = produtos.filter(item => 
-        item.Aluguel.length > 0 && item.Aluguel.status_aluguel != 'Indisponível')
-      .filter(item => item.nome.toLowerCase().includes(searchInput.toLowerCase()))
-    }else if(vendaFiltered){
-      filteredProducts = produtos.filter(item =>
-        item.Venda.length > 0 && item.Venda.status_venda != 'Indisponível')
-      .filter(item => item.nome.toLowerCase().includes(searchInput.toLowerCase()))
-    }else if(searchInput !== ''){
-      filteredProducts = produtos.filter(item => item.nome.toLowerCase().includes(searchInput.toLowerCase()))
-    }else{
-      filteredProducts = produtos
-    }
+  if(alugadosFiltered && vendaFiltered){
+    filteredProducts = produtos.filter(
+      item => 
+      (item.Aluguel.length > 0 && item.Aluguel.status_aluguel != 'Indisponivel') 
+      || (item.Venda.length > 0 && item.Venda.status_venda != 'Indisponivel'))
+    .filter(item => item.nome.toLowerCase().includes(searchInput.toLowerCase()))
+  }else if(alugadosFiltered){
+    filteredProducts = produtos.filter(item => 
+      item.Aluguel.length > 0 && item.Aluguel.status_aluguel != 'Indisponível')
+    .filter(item => item.nome.toLowerCase().includes(searchInput.toLowerCase()))
+  }else if(vendaFiltered){
+    filteredProducts = produtos.filter(item =>
+      item.Venda.length > 0 && item.Venda.status_venda != 'Indisponível')
+    .filter(item => item.nome.toLowerCase().includes(searchInput.toLowerCase()))
+  }else if(searchInput !== ''){
+    filteredProducts = produtos.filter(item => item.nome.toLowerCase().includes(searchInput.toLowerCase()))
+  }else{
+    filteredProducts = produtos
+  }
 
-    if (selectedOrder === 'low-price') {
-      filteredProducts = filteredProducts.sort((a, b) => a.valor - b.valor);
-    } else if (selectedOrder === 'high-price') {
-      filteredProducts = filteredProducts.sort((a, b) => b.valor - a.valor);
-    }
+  if (selectedOrder === 'low-price') {
+    filteredProducts = filteredProducts.sort((a, b) => a.valor - b.valor);
+  } else if (selectedOrder === 'high-price') {
+    filteredProducts = filteredProducts.sort((a, b) => b.valor - a.valor);
+  }
 }
 
 
@@ -60,10 +60,9 @@ $: {
 
   <div class="wrapper-produto">
     <aside class="container-filter">
-      <h1 class="font-bold text-2xl my-3">Filtrar</h1>
-
       <div class="wrapper-filter">
         <div class="flex flex-col">
+          <h1 class="font-bold text-2xl my-3">Filtrar</h1>
           <label for="Alugados">
             <input name="Alugados" type="checkbox" bind:checked={alugadosFiltered} /> Alugados
           </label>

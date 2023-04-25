@@ -19,7 +19,7 @@
     <img class="object-cover w-60 h-60" src={`http://localhost:3333/static/${data.imagens[0]}`} alt="" />
   </div>
   <div class='info-produto'>
-      <div class="flex justify-between pr-5">
+      <div class="flex justify-between pr-0 sm:pr-5">
         <div class='descricao-produto'>
           <h1 class="text-3xl font-bold">{data.nome}</h1>
           <p>{data.descricao}</p>
