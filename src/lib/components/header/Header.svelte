@@ -25,6 +25,13 @@ let logo = logobig
 onMount(() => {
   if(browser){
     currentRoute = window.location.pathname;
+    if(window.innerWidth <= 768){
+      tamanho = 'pequeno'
+      logo = logomin
+    }else{
+      tamanho = 'grande'
+      logo = logobig
+    }
   }
 
   function handleResize(){
