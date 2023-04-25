@@ -3,6 +3,7 @@
   import { PUBLIC_BACKEND_URL } from '$env/static/public'
   import Previousbutton from '$lib/components/previousbutton/Previousbutton.svelte';
   import { goto } from '$app/navigation';
+  import { loadStorageData } from '$lib/js/stores/login.js';
 	import { onMount } from 'svelte';
 
   let email = ''
@@ -36,6 +37,7 @@
       let data = await response.json()
       localStorage.setItem('@Auth:user', JSON.stringify(data.user))
       localStorage.setItem('@Auth:token', JSON.stringify(data.token))
+      loadStorageData()
       if(queryParamCarrinho == 'true'){
         goto('/carrinho/step3')
       }else if(queryParamVenda){
