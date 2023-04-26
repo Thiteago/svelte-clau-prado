@@ -18,12 +18,11 @@
       item.alugueis.length + item.vendas.length == Math.max(...content.map((item) => 
       item.alugueis.length + item.vendas.length)))[0]?.data_pedido
     diaMaisPedidos = formatDate(diaMaisPedidos)
-    
     maiorLucro = content.reduce((maior, atual) => {
-      if (atual.valor > maior.valor) {
-        return atual.valor;
+      if(atual.valor > maior.valor) {
+        return atual;
       } else {
-        return maior.valor;
+        return maior;
       }
     });
 
@@ -50,13 +49,13 @@
         return maior;
       }
     });
-    console.log(pedidoMaisProdutos)
   }
   
   onMount(async () => {
     const response = await fetch(`${PUBLIC_BACKEND_URL}/relatorio/vendasDiarias`);
     content = await response.json();
     content = await formatContent()
+    content.sort((a, b) => (a.id > b.id) ? 1 : -1)
     if(content.length > 0){
       loadStatistics(content)
     }else{
@@ -99,34 +98,35 @@
       <p>Data com mais pedidos</p>
     </div>
     <div class="text-center">
-      <h2 class="font-bold text-2xl">R${maiorLucro}</h2>
+      <h2 class="font-bold text-2xl">R${maiorLucro.valor}</h2>
       <p>Maior lucro em um pedido</p>
     </div>
     <div class="text-center">
       <h2 class="font-bold text-2xl">
-        {#if maisVendas.vendas}
-          {maisVendas.vendas.length}
-        {/if}
+        {maisVendas.id}
       </h2>
-      <span>ID do Pedido: {maisVendas.id}</span>
       <p>Pedido com mais vendas</p>
+      {#if maisVendas.vendas}
+        <span>Qntd de vendas: {maisVendas.vendas.length}</span>
+      {/if}
     </div>
     <div class="text-center">
       <h2 class="font-bold text-2xl">
-        {#if maisAlugueis.alugueis}
-          {maisAlugueis.alugueis.length}
-        {/if}
+        {maisAlugueis.id}
       </h2>
-      <span>ID do Pedido: {maisAlugueis.id}</span>
+      {#if maisAlugueis.alugueis}
+        <span>Qtde de Alugueis: {maisAlugueis.alugueis.length} </span>
+      {/if}
+      
       <p>Pedido com mais Alugueis</p>
     </div>
     <div class="text-center">
       <h2 class="font-bold text-2xl">
-        {#if pedidoMaisProdutos.alugueis || pedidoMaisProdutos.vendas}
-          {pedidoMaisProdutos.alugueis.length + pedidoMaisProdutos.vendas.length}
-        {/if}
+        {pedidoMaisProdutos.id}
       </h2>
-      <span>ID do Pedido: {pedidoMaisProdutos.id}</span>
+      {#if pedidoMaisProdutos.alugueis || pedidoMaisProdutos.vendas}
+        <span> Qtde de produtos: {pedidoMaisProdutos.alugueis.length + pedidoMaisProdutos.vendas.length}</span>
+      {/if}
       <p>Pedido com mais produtos</p>
     </div>
   </div>
