@@ -84,7 +84,7 @@ $: {
       {#each filteredProducts as item}
         {#if (item.Aluguel.length > 0 && item.Aluguel.status_aluguel != 'Indisponível') || (item.Venda.length > 0 && item.Venda.status_venda != 'Indisponível')}
           <Produto data={item}/>
-        {:else}
+        {:else if filteredProducts.length == 0 && !(alugadosFiltered || vendaFiltered)}
           <div class="m-auto">
             Infelizmente não temos nenhum produto disponível no momento 😥
           </div>
