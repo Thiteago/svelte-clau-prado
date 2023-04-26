@@ -87,8 +87,6 @@
       }else{
         selectedDay = today.day
         selectedMonth = today.month
-        console.log(selectedDay)
-        console.log(selectedMonth)
       }
 
       if(data.length > 0){
