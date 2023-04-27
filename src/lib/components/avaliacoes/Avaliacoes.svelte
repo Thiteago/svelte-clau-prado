@@ -112,7 +112,6 @@
         hasPosted = true
       }
     })
-    console.log(avaliacoes)
   })
 </script>
 

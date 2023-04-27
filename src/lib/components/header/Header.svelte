@@ -4,6 +4,9 @@ import { fade } from 'svelte/transition';
 import { page } from '$app/stores';
 import {cart} from '$lib/js/stores/cart.js'
 import trash from '$lib/assets/icons/trash-icon.svg' 
+import profile from '$lib/assets/icons/profile.svg'
+import login from '$lib/assets/icons/login.svg'
+import exit from '$lib/assets/icons/exit.svg'
 import {browser} from '$app/environment'
 import { Hamburger } from 'svelte-hamburgers'
 import './header.scss'
@@ -108,14 +111,28 @@ function  handleRemoveItem(id){
     </div>
     {#if open}
       <div transition:fade class="menu-container">
-        <ul class="menu rounded-lg bg-base-100 w-full">
+        <ul style="padding-bottom: 1rem;" class="menu bg-base-100 w-full">
           <li><a class={currentRoute == '/' ? 'ativo' : ''} href="/">Inicio</a></li>
           <li><a class={currentRoute == '/produtos' ? 'ativo' : ''} href="/produtos">Produtos</a></li>
           <li><a class={currentRoute == '/sobre' ? 'ativo' : ''} href="/sobre">Sobre</a></li>
         </ul>
+        <div class="w-full bg-white rounded-b-lg p-2">
+          {#if !$signed}
+            <div class="flex items-center flex-col">
+              <a class="flex gap-2" href={"/login"}>Login / cadastre-se<img width="25" src={login} alt=""></a>
+            </div>
+          {:else}
+            <div class="flex items-center justify-evenly w-full">
+                <a class="" href='/perfil'>Ola! {$user.nome.split(' ')[0]}</a>
+                <a href={"/perfil"}> <img width="25" src={profile} alt=""> </a>
+                <a href={"/"} on:click={logout}> <img width="35" src={exit} alt=""> 
+                </a>
+            </div>
+          {/if}
+        </div>
       </div>
     {/if}
-    {#if $signed == false}
+    {#if !$signed}
       <div class="wrapper-login">
         <a class="main-action -second" href={"/login"}>Login</a>
         <a class="main-action -third" href={"/login"}>ou Cadastre-se</a>
