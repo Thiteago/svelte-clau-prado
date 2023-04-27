@@ -33,7 +33,6 @@
   })
 
   async function checkCartAsSaled(id){
-    console.log(id)
     await fetch(`${PUBLIC_BACKEND_URL}/carrinho/marcarvenda/${id}`, {
       method: 'POST',
     })

@@ -23,7 +23,6 @@ let promotionalProduts = []
 async function checkIfHasSpecialSale(){
     const response = await fetch(`${PUBLIC_BACKEND_URL}/promocao/promocoesativas`)
 		let data = await response.json()
-    console.log(data)
     if(data.length > 0){
 			hasSpecialSale = true
       data.forEach(promo => {
@@ -64,10 +63,10 @@ onMount(async () => {
     <div class="slide-mob">
       {#if browser}
         <Carousel
-            autoplay
-            autoplayDuration={5000}
-            autoplayProgressVisible
-            arrows={false}
+          autoplay
+          autoplayDuration={5000}
+          autoplayProgressVisible
+          arrows={false}
           >
           <img src={produto1} alt="">
           <img src={produto2} alt="">
