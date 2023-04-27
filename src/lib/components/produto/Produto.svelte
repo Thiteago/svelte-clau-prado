@@ -19,13 +19,13 @@
     <img class="object-cover w-60 h-60" src={`http://localhost:3333/static/${data.imagens[0]}`} alt="" />
   </div>
   <div class='info-produto'>
-      <div class="flex justify-between pr-0 sm:pr-5">
+      <div class="flex flex-col-reverse lg:flex-row justify-between pr-0 lg:pr-5">
         <div class='descricao-produto'>
           <h1 class="text-3xl font-bold">{data.nome}</h1>
           <p>{data.descricao}</p>
         </div>
         {#if data.promocao != null && data.promocao.status != 'Inativo'}
-          <div >
+          <div class="my-4 lg:m-0">
             <span class="bg-[#7C3267] rounded p-2 text-white">Item em Promoçao</span>
           </div>
         {/if}
