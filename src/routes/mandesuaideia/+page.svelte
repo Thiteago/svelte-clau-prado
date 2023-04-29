@@ -6,7 +6,7 @@
 
 </script>
 
-  <Header tamanho='grande'></Header>
+  <Header />
 
             
         

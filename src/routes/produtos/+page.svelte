@@ -52,7 +52,7 @@ $: {
 </script>
 <div class="bg-white">
   <SubHeader/>
-  <Header tamanho="pequeno"/>
+  <Header />
 </div>
 
 <section class="product-grid">

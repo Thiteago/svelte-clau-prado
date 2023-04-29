@@ -55,7 +55,7 @@ onMount(async () => {
 </script>
 <div class="container-home">
 	<SubHeader/>
-  <Header tamanho="grande"/>
+  <Header/>
   <div>
     <div class="slide-desk">
       <Slide/>

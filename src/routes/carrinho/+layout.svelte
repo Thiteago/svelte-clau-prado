@@ -5,7 +5,7 @@
 </script>
 
 
-<Header tamanho="grande" />
+<Header />
 <div class="bg-white">
   <div class="flex justify-center">
     <Steps currentStep={$currentStep} />

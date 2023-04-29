@@ -7,7 +7,7 @@
 </script>
 <div class="bg-white">
   <SubHeader/>
-  <Header tamanho="grande"/>
+  <Header />
 </div>
 <section class="main-sobre">
   <div class="wrapper-sobre">
