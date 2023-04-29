@@ -85,13 +85,13 @@ onMount(async () => {
           <p>Os itens abaixo estão todos em promoção, confira! 🥳🎉</p>
         </div>
 
-        <div class="mt-4 flex gap-3 flex-wrap pl-2">
+        <div class="mt-4 flex justify-center gap-3 flex-wrap pl-2">
           {#if products.length > 0}
             {#each promotionalProduts as prod }
               <div>
                 <div class="flex justify-center bg-[#f5d9f1] hover:bg-[#e092cf] cursor-pointer py-12 rounded-md">
                   <a href="/venda?produto_id={prod.id}">
-                    <img width="250" src="{PUBLIC_BACKEND_URL}/static/{prod.imagens[0]}" alt="">
+                    <img style="width: 250px; height: 185px" class="object-cover" src="{PUBLIC_BACKEND_URL}/static/{prod.imagens[0]}" alt="">
                   </a>
                 </div>
                 <div class="flex flex-col mt-2 items-center">
@@ -119,13 +119,13 @@ onMount(async () => {
         <p>Os mais recentes trabalhos da Clau 😍</p>
       </div>
 
-      <div class="mt-4 flex gap-3 flex-wrap">
+      <div class="mt-4 flex justify-center gap-3 flex-wrap">
         {#if products.length > 0}
           {#each products as prod }
             <div>
               <div class="flex justify-center bg-[#F0F0F0] hover:bg-[#c6c6c6] cursor-pointer py-12">
                 <a href="/venda?produto_id={prod.id}">
-                  <img width="250" src="{PUBLIC_BACKEND_URL}/static/{prod.imagens[0]}" alt="">
+                  <img style="width: 250px; height: 185px" class="object-cover" src="{PUBLIC_BACKEND_URL}/static/{prod.imagens[0]}" alt="">
                 </a>
               </div>
               <div class="flex flex-col mt-2 items-center">
