@@ -20,7 +20,11 @@
   };
 
   onMount(() => {
-    localStorage.setItem('resume', JSON.stringify($resume))
+    if($resume){
+      localStorage.setItem('resume', JSON.stringify($resume))
+    }else{
+      localStorage.getItem('resume') ? $resume = JSON.parse(localStorage.getItem('resume')) : $resume = {}
+    }
   })
 
   async function handleLogin(){
@@ -34,11 +38,16 @@
         endereco: $temporaryAddress
       }
     }else{
-      localStorage.getItem('temporaryAddress') ? user = { ...user, endereco: JSON.parse(localStorage.getItem('temporaryAddress')) } : user = { ...user, endereco: {}}
+      let endereco = JSON.parse(localStorage.getItem('temporaryAddress')) 
+      user = {...user, rua: endereco.rua, numeroRua: endereco.numeroRua, bairro: endereco.bairro, cep: endereco.cep, cidade: endereco.cidade, estado: endereco.estado}
     }
     response = await createNewUser(user)
+    $resume = {...$resume, idUser: response[0].id}
+    $resume = {...$resume, enderecoDeEntrega: response[1]}
+    localStorage.setItem('resume', JSON.stringify($resume))
 
-    if(response.status == 201){
+
+    if(response.length > 0){
       goto('/carrinho/step3')
     }
   }
