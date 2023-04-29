@@ -113,15 +113,15 @@
               {#if produto.quantidadeEmEstoque == 0}
                 <div class='info-situation'>Produto indisponivel</div>
               {:else}
-              <div class='info-situation'>Disponivel apenas para {produto.Aluguel.length > 0 ? 'aluguel' : 'venda'}
+              <div class='info-situation'>Disponivel apenas para {produto.tipo == 'Aluguel' ? 'aluguel' : 'venda'}
               </div>
               {#if produto.promocao != null && produto.promocao.status != 'Inativo'}
                 <div></div>
               {/if}
               <div class='price-info flex-col'>
-                {formatedValue}<span class="text-sm">{produto.Aluguel.length > 0 ? '/Por dia' : ''}</span>
+                {formatedValue}<span class="text-sm">{produto.tipo == 'Aluguel' ? '/Por dia' : ''}</span>
               </div>
-                <button on:click={() => {addToCart(), goto('/carrinho')}} class='button'>{produto.Aluguel.length > 0 ? 'Alugar' : 'Comprar'}</button>
+                <button on:click={() => {addToCart(), goto('/carrinho')}} class='button'>{produto.tipo == 'Aluguel' ? 'Alugar' : 'Comprar'}</button>
               {/if}
             </div>
           </div>
