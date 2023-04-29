@@ -80,9 +80,10 @@ export async function saveNewAddress(address, userId){
     })
   })
   if(response.status === 201){
-    return true
+    let data = await response.json()
+    return data
   }
-  return false
+  return []
 }
 
 export async function fetchOrdersByUserId(userId){
@@ -221,11 +222,14 @@ export function validateCPF(cpf){
 }
 
 export async function createNewUser(user){
-  return await fetch(`${PUBLIC_BACKEND_URL}/NovoUsuario`,{
+  const response = await fetch(`${PUBLIC_BACKEND_URL}/NovoUsuario`,{
     headers: {
       'Content-Type': 'application/json'
     },
     method: 'POST',
     body: JSON.stringify(user)
   })
+
+  let data = await response.json()
+  return data
 }
