@@ -83,12 +83,17 @@
       count++
       $temporaryAddress = {...$temporaryAddress, principal: true}
     }
-    enderecos = [...enderecos, $temporaryAddress]
-    localStorage.setItem('temporaryAddress', JSON.stringify(enderecos))
+    
+    localStorage.removeItem('temporaryAddress')
+    localStorage.setItem('temporaryAddress', JSON.stringify($temporaryAddress))
 
     if($user){
-      await saveNewAddress($temporaryAddress, $user.id)
+      const endereco = await saveNewAddress($temporaryAddress, $user.id)
+      enderecos = [...enderecos, endereco]
+    }else{
+      enderecos = [...enderecos, $temporaryAddress]
     }
+    
     $temporaryAddress = {}
   }
 
@@ -195,7 +200,9 @@
     $currentStep = 1
     selectedEndereco = enderecos.find(element => element.principal == true)
     localStorage.getItem('cart') ? $cart = JSON.parse(localStorage.getItem('cart')) : $cart = []
-    localStorage.getItem('temporaryAddress') ? enderecos.push(JSON.parse(localStorage.getItem('temporaryAddress'))) : $temporaryAddress = {}    
+    if(!$user){
+      localStorage.getItem('temporaryAddress') ? enderecos.push(JSON.parse(localStorage.getItem('temporaryAddress'))) : $temporaryAddress = {}    
+    }
   })
 
 </script>
