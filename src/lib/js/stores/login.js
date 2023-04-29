@@ -14,6 +14,10 @@ export const signed = writable(false)
 export function logout(){
   localStorage.removeItem('@Auth:user')
   localStorage.removeItem('@Auth:token')
+  localStorage.removeItem('cart')
+  localStorage.removeItem('resume')
+  localStorage.removeItem('idCart')
+  localStorage.removeItem('temporaryAddress')
   user.set({
     cargo: '',
     email: '',
