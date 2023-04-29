@@ -15,6 +15,7 @@
   import './carrinho.scss'
 	import { onMount } from 'svelte';
 	import Loading from '$lib/components/loading/Loading.svelte';
+  import { browser } from '$app/environment';
 
   const optionsCEP = {
     mask: '00000-000',
@@ -30,6 +31,7 @@
   let enderecos = []
   let count = 0
 
+  $: mobile = false
   $: limitDate = ''
   $: validateForm = true
   $: cepValidates = true
@@ -203,14 +205,33 @@
     if(!$user){
       localStorage.getItem('temporaryAddress') ? enderecos.push(JSON.parse(localStorage.getItem('temporaryAddress'))) : $temporaryAddress = {}    
     }
+
+    if(browser){
+      if(window.innerWidth <= 768){
+        mobile = true
+      }else{
+        mobile = false
+      }
+    }
+
+    function handleResize(){
+      let windowWidth = window.innerWidth
+      if(windowWidth <= 768){
+        mobile = true
+      }else{
+        mobile = false
+      }
+    }
+
+  window.addEventListener('resize', handleResize);
   })
 
 </script>
 
 <div class="w-full bg-white flex flex-col items-center">
   <div class="flex w-11/12 mt-8">
-    <div class="flex w-full gap-10">
-      <div class="w-4/12">
+    <div class="flex flex-col lg:justify-center lg:flex-row w-full gap-10">
+      <div class=" w-full lg:w-4/12">
         {#if enderecos!= undefined && enderecos.length > 0}
           <div>
             <div class="flex items-center gap-2 ">
@@ -236,7 +257,7 @@
                 <div class="mt-4">
                   <h1 class="text-xl font-poppins font-bold">Frete</h1>
                   <div class="mt-2 w-9/12 flex flex-col justify-center">
-                    <div class="flex justify-between">
+                    <div class="flex flex-col items-end lg:items-center lg:flex-row justify-between">
                       <div class="flex gap-2">
                         <input bind:group={selectedFreight} name="frete" type="radio" value="PAC">
                         <label for="frete" class="text-gray-500">PAC - Até {freightInfo?.prazopac} dias úteis</label>
@@ -244,7 +265,7 @@
                       <span class="text-gray-500">R$ {freightInfo?.valorpac}</span>
                     </div>
                     
-                    <div class="flex justify-between">
+                    <div class="flex flex-col items-end lg:items-center lg:flex-row justify-between">
                       <div class="flex gap-2">
                         <input bind:group={selectedFreight} name="frete" type="radio" value="SEDEX">
                         <label for="frete" class="text-gray-500">SEDEX - Até {freightInfo?.prazosedex} dias úteis</label>
@@ -344,10 +365,10 @@
           </div>
         </div>
       </div>
-      <div class="flex gap-3 flex-col w-3/5">
+      <div class="flex w-full gap-3 flex-col lg:w-3/5">
         {#if $cart.length > 0}
           {#if comprados.length > 0}
-            <h1 class="bg-[#7C3267] rounded w-1/2 text-white pl-3 py-2">Voce esta <b>Comprando</b></h1>
+            <h1 class="bg-[#7C3267] rounded w-full lg:w-1/2 text-white pl-3 py-2">Voce esta <b>Comprando</b></h1>
             {#each comprados as product}
               <div class="flex gap-8 items-center justify-evenly w-full">
                 <div class="w-1/12">
@@ -384,52 +405,76 @@
             {/each}
           {/if}
           {#if alugados.length > 0}
-            <h1 class="bg-[#7C3267] mb-5 rounded w-1/2 text-white pl-3 py-2">Voce esta <b>Alugando</b></h1>
+            <h1 class="bg-[#7C3267] lg:mb-5 rounded w-full lg:w-1/2 text-white pl-3 py-2">Voce esta <b>Alugando</b></h1>
             {#each alugados as product}
-            <div class="flex items-center justify-evenly w-full">
-              <div class="w-1/12">
-                <img class="w-20 h-20 object-cover" src='http://localhost:3333/static/{product.imagens}' alt="">
-              </div>
-              <div class="flex flex-col justify-center w-2/5">
-                <span class="text-black font-bold">{product.nome}</span>
-                <span class="text-gray-500 block">Voce esta <span class="font-bold text-black">ALUGANDO</span> esse produto</span>
-              </div>
-              <div class="flex flex-col items-center justify-center w-1/12">
-                <div class="flex flex-col items-center">
-                  <label for="quantidade">Quant.</label>
-                  <div class="flex items-center justify-center">
-                    <button on:click={() => {product.quantidade > 1 ? product.quantidade-- : ''}} class="w-4">
-                      <img src={leftArrow} alt="">
-                    </button>
-                    <input name="quantidade" class="input-number w-11 text-center" min="1" type="number" value={product.quantidade} readonly>
-                    <button on:click={() => {product.quantidade != product.Aluguel.length ? product.quantidade++ : ''}} class="w-4">
-                      <img src={rightArrow} alt="">
-                    </button>
+              <div class="flex justify-center items-center justify-evenly w-full">
+                <div class=" lg:w-1/12">
+                  <img class="w-20 h-20 object-cover" src='http://localhost:3333/static/{product.imagens}' alt="">
+                </div>
+                <div class="flex flex-col items-center lg:items-start justify-center w-2/5">
+                  <span class="text-black font-bold">{product.nome}</span>
+                  <span class="hidden text-gray-500 lg:block">Voce esta <span class="font-bold text-black">ALUGANDO</span> esse produto</span>
+                  {#if mobile}
+                    <div class="flex flex-col items-center">
+                      <label for="quantidade">Quant.</label>
+                      <div class="flex items-center justify-center">
+                        <button on:click={() => {product.quantidade > 1 ? product.quantidade-- : ''}} class="w-4">
+                          <img src={leftArrow} alt="">
+                        </button>
+                        <input name="quantidade" class="input-number w-11 text-center" min="1" type="number" value={product.quantidade} readonly>
+                        <button on:click={() => {product.quantidade != product.Aluguel.length ? product.quantidade++ : ''}} class="w-4">
+                          <img src={rightArrow} alt="">
+                        </button>
+                      </div>
+                    </div>
+                  {/if}
+                </div>
+                {#if !mobile}
+                  <div class="flex flex-col items-center justify-center w-1/12">
+                    <div class="flex flex-col items-center">
+                      <label for="quantidade">Quant.</label>
+                      <div class="flex items-center justify-center">
+                        <button on:click={() => {product.quantidade > 1 ? product.quantidade-- : ''}} class="w-4">
+                          <img src={leftArrow} alt="">
+                        </button>
+                        <input name="quantidade" class="input-number w-11 text-center" min="1" type="number" value={product.quantidade} readonly>
+                        <button on:click={() => {product.quantidade != product.Aluguel.length ? product.quantidade++ : ''}} class="w-4">
+                          <img src={rightArrow} alt="">
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                {/if}
+                <div class="text-right w-1/5">
+                  <p>Preço à vista</p>
+                  <div class="flex justify-end gap-2">
+                    {#if diasAlugados > 0}
+                      <span>{diasAlugados+1}x</span>
+                    {/if}
+                    <p class="font-bold text-[#7C3267]">{ formatToCurrency(product.quantidade * product.valor)}</p>
                   </div>
                 </div>
-              </div>
-              <div class="text-right w-1/5">
-                <p>Preço à vista</p>
-                <div class="flex justify-end gap-2">
-                  {#if diasAlugados > 0}
-                    <span>{diasAlugados+1}x</span>
-                  {/if}
-                  <p class="font-bold text-[#7C3267]">{ formatToCurrency(product.quantidade * product.valor)}</p>
-                </div>
-              </div>
 
-              <div>
-                <button on:click={() => {removeProduct(product.id)}} class="bg-[#7C3267] text-white px-3 py-1 rounded"><img width="25" height="25" src={trash} class="white-icon" alt="icon representing an trash"></button>
+                {#if !mobile}
+                  <div>
+                    <button on:click={() => {removeProduct(product.id)}} class="bg-[#7C3267] text-white px-3 py-1 rounded"><img width="25" height="25" src={trash} class="white-icon" alt="icon representing an trash"></button>
+                  </div>
+                {/if}
               </div>
-            </div>
-            <span class="bg-slate-200 w-full h-2"></span>
+              {#if mobile}
+                <div>
+                  <button on:click={() => {removeProduct(product.id)}} class="bg-[#7C3267] w-full flex gap-3 justify-center text-white px-3 py-1 rounded"><img width="25" height="25" src={trash} class="white-icon" alt="icon representing an trash">Remover item</button>
+                </div>
+              {/if}
+              <span class="bg-slate-200 w-full h-2"></span>
             {/each}
+            
             <div class="text-center">
               <h2 class="rounded text-xl w-full text-black font-bold pl-3">Para quais dias voce precisa</h2>
-              <span class="text-sm">(válido para os itens alugados)</span>
+              <span class="text-lg">(válido para os itens alugados)</span>
             </div>
-            <div class="w-11/12 flex flex-col">
-              <div class="w-full flex flex-col">
+            <div class=" w-full lg:w-11/12 flex flex-col">
+              <div class="mt-6 w-full lg:mt-0 flex flex-col">
                 <span>Do dia</span>
                 <input bind:value={data_inicio_aluguel} class="input input-bordered input-date" min={today} type="date">
               </div>
@@ -455,7 +500,7 @@
           </div>
         {/if}
       </div>
-      <div>
+      <div class="w-full pb-6 lg:pb-0 lg:w-fit flex flex-col items-center lg:block">
         <div>
           <h1 class="flex gap-1 items-center font-bold text-2xl"><span><img class="w-5" src={resumeIcon} alt="resume logo"></span>Resumo</h1>
         </div>
