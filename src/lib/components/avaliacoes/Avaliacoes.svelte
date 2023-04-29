@@ -117,18 +117,18 @@
 
 <section>
   {#if !$signed}
-    <div class="flex items-center flex-col w-full">
+    <div class="flex px-1 sm:px-0 items-center flex-col w-full">
       <h1>Para avaliar o produto, você precisa estar logado</h1>
       <a class="btn bg-[#632c52] w-4/12" href="/login?Venda={produtoId}">Clique aqui para logar</a>
     </div>
   {:else}
     {#if hasBuyed}
       {#if hasPosted}
-        <div class="flex items-center flex-col w-full">
+        <div class="flex px-1 sm:px-0 items-center flex-col w-full">
           <h1>Você já avaliou esse produto</h1>
         </div>
       {:else}
-        <form on:submit={handleCreateFeedback} class="flex items-start flex-col w-full gap-2 rounded px-6">
+        <form on:submit={handleCreateFeedback} class="flex px-1 sm:px-0 items-start flex-col w-full gap-2 rounded px-6">
           <input name="titulo" required id="titulo" class="input input-bordered w-full" type="text" placeholder="Título">
           <textarea name="avaliacao" class="w-full border-2 border-solid p-2 h-32" required placeholder="Escreva sua avaliação"/>
           <div class="flex w-full">
@@ -140,7 +140,7 @@
         </form>
       {/if}
     {:else}
-      <div class="flex items-center flex-col py-6 w-full">
+      <div class="flex px-1 sm:px-0 items-center flex-col py-6 w-full">
         <h1>Compre o produto e Compartilhe sua experiência 😆</h1>
       </div>
     {/if}
