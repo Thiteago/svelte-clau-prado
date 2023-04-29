@@ -52,13 +52,13 @@
 
   function toggleActive(e){
     let liList = document.getElementsByTagName("li")
-    if(!(e.target.className  == "ativo")){
+    if(!(e.target.className  == "ativo-tab")){
       for(let i = 0; i < liList.length; i++){
         if(liList[i] != e.target){
           liList[i].className = ""
         }
       }
-      e.target.className = "ativo"
+      e.target.className = "ativo-tab"
       if(e.target.innerHTML == "Descrição"){
         ativo = "descricao"
       }else if(e.target.innerHTML == "Especificações Técnicas"){
@@ -85,22 +85,22 @@
 </script>
 
 <div>
-  <Header tamanho='pequeno'></Header>
+  <Header />
   {#if Object.keys(produto).length > 0}
   <section class="container-produto">
     <div class="container-info">
-      <PreviousButton endereco={'/produtos'}></PreviousButton>
+      <PreviousButton endereco={'/produtos'}/>
         <div class='wrapper-info'>
           <aside class='imagem-produto'>
               <div class="max-w-full justify-center flex pb-2">
                 <img class="h-80" src="http://localhost:3333/static/{mainimage}" alt="">
               </div>
-              <div class="flex w-full gap-3">
+              <div class="flex gallery w-full gap-3">
                 {#each produto.imagens as img}
-                  <div class="container-img">
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
-                    <img class="img" on:click={() => {mainimage = img}} src="http://localhost:3333/static/{img}" alt="">
-                  </div>
+                  {#if img != 'Imagem'}
+                    <img on:click={() => {mainimage = img}} src="http://localhost:3333/static/{img}" alt="">
+                  {/if}
                 {/each}
               </div>
           </aside>
@@ -131,7 +131,7 @@
         <nav class="wrapper-menu">
           <!-- svelte-ignore a11y-click-events-have-key-events -->
             <ul class='container-menu'>
-                <li on:click={toggleActive} class='ativo'>Descrição</li>
+                <li on:click={toggleActive} class='ativo-tab'>Descrição</li>
                 <li on:click={toggleActive}>Especificações Técnicas</li>
                 <li on:click={toggleActive}>Avaliações</li>
             </ul>
