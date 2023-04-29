@@ -16,6 +16,10 @@
   let currentPage = 1
   let pages = [];
 
+  $: if(selectedType){
+    handleReload()
+  }
+
   function selectPedido(id){
     selectedPedido = pedidos.find(pedido => pedido.id === id)
   }
@@ -36,22 +40,33 @@
 
   async function handleReload(){
     pedidos = await fetchOrders()
-    displayedPedidos = displayPedidos(currentPage)
+    displayedPedidos = displayPedidos(1, selectedType)
     selectedPedido = []
   }
 
-  function displayPedidos(page) {
+  function displayPedidos(page, type) {
     currentPage = page;
+    let filteredPedidos = pedidos;
+  
+    if(type != 'Todos') {
+      filteredPedidos = pedidos.filter(pedido => pedido.status === type)
+      totalPages = Math.ceil(filteredPedidos.length / productsPerPage);
+      pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+    }else{
+      totalPages = Math.ceil(pedidos.length / productsPerPage);
+      pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+
     const startIndex = (page - 1) * productsPerPage;
     const endIndex = startIndex + productsPerPage;
 
-    return pedidos.slice(startIndex, endIndex);
+    return filteredPedidos.slice(startIndex, endIndex);
   }
 
   onMount(async () => {
     pedidos = await fetchOrders()
-    displayedPedidos = displayPedidos(1)
-    totalPages = Math.ceil(pedidos.length / productsPerPage);
+    displayedPedidos = displayPedidos(1, selectedType)
+    totalPages = Math.ceil(displayedPedidos.length / productsPerPage);
     pages = Array.from({ length: totalPages }, (_, i) => i + 1);
   })
 </script>
@@ -69,6 +84,7 @@
       <option value="Aguardando Envio">Pendentes de Envio</option>
       <option value="Enviado">Enviados</option>
       <option value="Finalizado">Finalizados</option>
+      <option value="Todos">Todos</option>
     </select>
     <div class="flex flex-col items-center">
       <table class="table cazuza table-zebra w-full mt-5">
@@ -90,7 +106,7 @@
             </tr>
           {:else}
             {#each displayedPedidos as pedido}
-              {#if pedido.status === selectedType}
+              {#if pedido.status === selectedType || selectedType === 'Todos'}
                 <tr>
                   <td>{pedido.id}</td>
                   <td>{pedido.user.nome}</td>
@@ -140,7 +156,7 @@
       <div class="btn-group mt-2">
         {#if pages.length > 1}
           {#each pages as page}
-            <button class="btn {currentPage == page ? 'btn-active' : ''}" on:click={() => {displayedPedidos = displayPedidos(page)}}>{page}</button>
+            <button class="btn {currentPage == page ? 'btn-active' : ''}" on:click={() => {displayedPedidos = displayPedidos(page, selectedType)}}>{page}</button>
           {/each}
         {/if}
       </div>
