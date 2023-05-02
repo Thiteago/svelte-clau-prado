@@ -166,7 +166,9 @@
 
   async function freightCalculate(){
     loading = true
-    if(cep?.length < 9 || cep == ''){
+    let verifycep = cep
+    verifycep = verifycep.replace('-', '')
+    if(verifycep.length < 8 || cep == ''){
       cepValidates = false
       return
     }else{
