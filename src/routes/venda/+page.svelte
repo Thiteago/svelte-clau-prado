@@ -176,17 +176,3 @@
   {/if}
 </div>
 <Footer/>
-
-
-<style>
-  .img{
-    width: 100%;
-    object-fit: cover;
-    height: 90px;
-  }
-
-  .container-img{
-    width: 110px;
-    height: 110px;
-  }
-</style>
