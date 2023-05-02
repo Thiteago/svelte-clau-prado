@@ -1,5 +1,6 @@
 import { writable } from "svelte/store";
 import { browser } from '$app/environment';
+import { cart } from "./cart";
 
 
 export const user = writable({
@@ -24,6 +25,7 @@ export function logout(){
     id: 0,
     nome: ''
   })
+  cart.set([])
   signed.set(false)
 }
 
