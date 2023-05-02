@@ -62,14 +62,14 @@
 </script>
 
 <div class="w-full bg-white flex flex-col items-center">
-  <div class="w-11/12 md:w-3/4 lg:w-1/2 flex flex-col mt-6">
+  <div class="w-11/12 md:w-3/4 xl:w-1/2 flex flex-col mt-6">
     <div class="flex gap-2">
       <img class="w-8 h-8" src={moneyIcon} alt="">
       <h1 class="text-2xl">Formas de Pagamento</h1>
     </div>
 
-    <div class="w-full flex gap-5">
-      <div class="w-3/12 flex flex-col gap-2 mt-4">
+    <div class="w-full flex flex-col sm:flex-row gap-5">
+      <div class="w-full sm:w-3/12 flex flex-col gap-2 mt-4">
         <div class="flex items-center gap-2 w-full">
           <button on:click={() => {selectedMethodPayment = 'boleto'}} class="hover:bg-fuchsia-800 hover:text-white w-full flex gap-2 border-2 rounded border-fuchsia-900 py-2 pl-2 pr-5"><img class="w-6 h-6" src={boletoIcon} alt=""> Boleto</button>
         </div>
@@ -80,25 +80,25 @@
           <button on:click={() => {selectedMethodPayment = 'paypal'}} class="hover:bg-fuchsia-800 hover:text-white w-full flex gap-2 border-2 rounded border-fuchsia-900 py-2 pl-2 pr-5"><img class="w-6 h-6" src={paypalIcon} alt=""> Paypal</button>
         </div>
       </div>
-      <div class="w-9/12 flex flex-col gap-10 mt-4">
+      <div class="w-full lg:w-9/12 xl:w-6/12 2xl:w-9/12 flex flex-col items-center sm:items-start gap-10 mt-4">
         {#if selectedMethodPayment == 'boleto'}
           <div>
             <h1 class="text-xl font-bold mb-2 ">Boleto Bancário</h1>
             <p>Esta é a forma mais vantajosa para quem deseja pagar à vista. Você poderá efetuar o pagamento do boleto em qualquer Banco ou Casa Lotérica em qualquer lugar do Brasil, sem necessidade de confirmação do pagamento.</p>
           </div>
-          <div class="flex justify-between items-center">
-            <div class="flex flex-col justify-center">
+          <div class="flex md:w-full flex-col sm:flex-row justify-between items-center">
+            <div class="flex lg:w-full flex-col text-center sm:text-left justify-center sm:justify-between">
               <p>TOTAL DA SUA COMPRA:</p>
               <h1 class="text-2xl font-bold">R$ {$resume.total}</h1>
             </div>
-            <div>
+            <div class="pb-6 sm:pb-0">
               <button disabled={sendedPaymentRequest}  on:click={() => handlePayment('boleto')} class="btn bg-[#7C3267] w-full mt-4">Prosseguir</button>
             </div>
           </div>
         {:else if selectedMethodPayment == 'cartao'}
           <div class="mb-5">
             <h1 class="text-xl font-bold mb-2 ">Cartao de Crédito</h1>
-            <p>Aceitamos as bandeiras de cartão VISA, MasterCard, ELO, HiperCard, American Express e Diners</p>
+            <p class="pb-6 sm:pb-0">Aceitamos as bandeiras de cartão VISA, MasterCard, ELO, HiperCard, American Express e Diners</p>
             <CreditCard submitPayment={handlePayment}/>
           </div>
         {:else}
