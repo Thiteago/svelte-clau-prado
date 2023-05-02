@@ -107,8 +107,8 @@ onMount(async () => {
           {/if}
         </div>
         <div class="flex justify-center">
-          <a href="/produtos" class="flex rounded-lg justify-center  w-full sm:w-2/12 items-center bg-[#b14897] hover:bg-[#92397a] cursor-pointer mt-3 py-3">
-            <div class="font-bold text-white">Ver todos os produtos</div>
+          <a href="/produtos" class="flex rounded-lg justify-center  w-full lg:w-2/12 items-center bg-[#b14897] hover:bg-[#92397a] cursor-pointer mt-3 py-3">
+            <div class="font-bold text-center text-white">Ver todos os produtos</div>
           </a>
         </div>
       </section>
