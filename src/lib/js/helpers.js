@@ -69,6 +69,25 @@ export async function updateToSended(id, codigo){
   })
 }
 
+export async function updateDevolution(idPedido, idAluguel, codigo){
+  const response = await fetch(`${PUBLIC_BACKEND_URL}/pedido/alterar/devolucao/${idPedido}`,{
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    method: 'PATCH',
+    body: JSON.stringify({
+      codigo_rastreio: codigo,
+      idAluguel: idAluguel
+    })
+  })
+
+  if(response.status === 200){
+    return true
+  }else{
+    return false
+  }
+}
+
 export async function saveNewAddress(address, userId){
   const response = await fetch (`${PUBLIC_BACKEND_URL}/Usuarios/${userId}/NovoEndereco`, {
     headers: {
