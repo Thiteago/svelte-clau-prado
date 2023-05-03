@@ -3,6 +3,7 @@
   import { user } from '$lib/js/stores/login.js'
   import { fetchOrdersByUserId, formatDate, updateDevolution } from '$lib/js/helpers.js'
 	import { onMount } from 'svelte';
+	import FlashMessage from '../../lib/components/flashMessage/FlashMessage.svelte';
 
   $: flashMessage = ''
   let selectedPedidoId = ''
@@ -83,7 +84,7 @@
 
 
     <div class="flex justify-center">
-      <h2 class="text-2xl font-bold">Devoluçõess atrasados 😢</h2>
+      <h2 class="text-2xl font-bold">Devoluções atrasados 😢</h2>
     </div>
 
     {#if lateReturn.length > 0}
@@ -104,7 +105,7 @@
       <label for="my-modal-3" class="modal cursor-pointer">
         <label class="modal-box relative" for="">
           {#if flashMessage != ''}
-            <span>{flashMessage}</span>
+            <FlashMessage message={flashMessage} />
           {/if}
           <h3 class="text-lg font-bold">Informar Envio</h3>
           <div class="flex gap-3 items-center">
