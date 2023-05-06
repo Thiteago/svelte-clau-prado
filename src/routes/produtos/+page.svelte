@@ -5,11 +5,13 @@ import Busca from '$lib/components/busca/Busca.svelte'
 import Produto from '$lib/components/produto/Produto.svelte'
 import './produtos.scss'
 import {onMount} from 'svelte'
-import { fetchProducts } from '$lib/js/helpers';
-	import Footer from '$lib/components/footer/Footer.svelte';
+import { fetchProducts, fetchCategorias } from '$lib/js/helpers';
+import Footer from '$lib/components/footer/Footer.svelte';
 
 $: produtos = []
 $: selectedOrder = 'low-price'
+$: categorias = []
+$: selectedCategoria = 'todas'
 let filteredProducts = []
 let alugadosFiltered = false
 let vendaFiltered = false
@@ -18,6 +20,7 @@ $: searchInput = ''
 
 onMount(async () => {
   produtos = await fetchProducts()
+  categorias = await fetchCategorias()
 })
 
 $: {
@@ -41,10 +44,14 @@ $: {
     filteredProducts = produtos
   }
 
+
   if (selectedOrder === 'low-price') {
     filteredProducts = filteredProducts.sort((a, b) => a.valor - b.valor);
   } else if (selectedOrder === 'high-price') {
     filteredProducts = filteredProducts.sort((a, b) => b.valor - a.valor);
+  }
+  if(selectedCategoria != 'todas'){
+    filteredProducts = filteredProducts.filter(item => item.categoria == selectedCategoria)
   }
 }
 
@@ -78,6 +85,16 @@ $: {
             <option value="high-price">Mais Caro</option>
           </select>
         </div>
+
+        <div class="flex flex-col items-center">
+          <h1 class="font-bold text-2xl my-3">Categorias</h1>
+          <select bind:value={selectedCategoria} name="order" class="select select-bordered">
+            <option default value="todas">Todas</option>
+            {#each categorias as categoria}
+              <option value={categoria}>{categoria}</option>
+            {/each}
+          </select>
+        </div>
       </div>
     </aside>
     <div class="container-produtos">
@@ -94,7 +111,7 @@ $: {
         <div class="sem-produtos">
           <h1>Nenhum produto encontrado</h1>
         </div>
-        {:else if alugadosFiltered || vendaFiltered }
+        {:else if (filteredProducts.length == 0) && (alugadosFiltered || vendaFiltered) }
           <div class="m-auto">
             Nenhum resultado com os filtros selecionados, tente novamente 🥹
           </div>
