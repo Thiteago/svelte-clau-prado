@@ -16,6 +16,14 @@ export async function fetchAlugueis(){
   }
 }
 
+export async function fetchCategorias(){
+  const response = await fetch(`${PUBLIC_BACKEND_URL}/categoria/listar`)
+  if(response.status === 200){
+    const data = await response.json()
+    return data
+  }
+}
+
 export async function registerVisit(logado = false){
   await fetch(`${PUBLIC_BACKEND_URL}/Usuarios/visita/${logado}`, {
     method: 'POST',
@@ -167,10 +175,8 @@ export async function calculateDiscount(products){
     if(products.promocao != null && products.promocao.status == 'Ativo'){
       if(products.promocao.tipo == 'valor_fixo'){
         products.valor = products.valor - products.promocao.valor_desconto
-        
       } else {
         products.valor = products.valor - (products.valor * (products.promocao.valor_desconto / 100))
-      
       }
       return Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(products.valor)
     }
