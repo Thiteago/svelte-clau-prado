@@ -82,12 +82,11 @@
       {/each}
     </div>
 
-
-    <div class="flex justify-center">
-      <h2 class="text-2xl font-bold">Devoluções atrasados 😢</h2>
-    </div>
-
     {#if lateReturn.length > 0}
+      <div class="flex justify-center">
+        <h2 class="text-2xl font-bold">Devoluções atrasados 😢</h2>
+      </div>
+
       <div class="grid-container justify-center">
         <div class="header col-4">Número do Pedido</div>
         <div class="header col-4">Data do Aluguel</div>
