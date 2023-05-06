@@ -8,6 +8,14 @@ export async function createdCart(id){
   })
 }
 
+export async function fetchAlugueis(){
+  const response = await fetch(`${PUBLIC_BACKEND_URL}/aluguel/listar`)
+  if(response.status === 200){
+    const data = await response.json()
+    return data
+  }
+}
+
 export async function registerVisit(logado = false){
   await fetch(`${PUBLIC_BACKEND_URL}/Usuarios/visita/${logado}`, {
     method: 'POST',
