@@ -105,10 +105,11 @@
       <h2 class="font-bold text-2xl">
         {maisVendas.id}
       </h2>
-      <p>Pedido com mais vendas</p>
       {#if maisVendas.vendas}
         <span>Qntd de vendas: {maisVendas.vendas.length}</span>
       {/if}
+      <p>Pedido com mais vendas</p>
+      
     </div>
     <div class="text-center">
       <h2 class="font-bold text-2xl">
