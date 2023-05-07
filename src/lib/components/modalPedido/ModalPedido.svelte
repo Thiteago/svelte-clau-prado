@@ -1,6 +1,7 @@
 <script>
   import { PUBLIC_BACKEND_URL } from '$env/static/public'
   import order from '$lib/assets/icons/order-icon.svg'
+	import PaypalButton from '../paypalbutton/PaypalButton.svelte';
   export let pedido
   export let isOpen
 
@@ -57,6 +58,12 @@
         <div>
           <h2 class="font-bold">Status do Pagamento</h2>
           <p>{pedido.Pagamento.status}</p>
+          {#if pedido.Pagamento.forma_pagamento == 'paypal' && pedido.Pagamento.status == 'Pendente'}
+            <div class="flex items-center mt-2 gap-5">
+              <PaypalButton pedido={pedido}/>
+              <p>Clique no Botao para tentar o pagamento via paypal</p>
+            </div>
+          {/if}
         </div>
       </div>
     </label>
