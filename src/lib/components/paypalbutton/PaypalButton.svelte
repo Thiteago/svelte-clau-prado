@@ -6,6 +6,7 @@
   import Loading from '$lib/components/loading/Loading.svelte'
 
   let paypal;
+  export let pedido
 
   async function checkCartAsSaled(id){
     await fetch(`${PUBLIC_BACKEND_URL}/carrinho/marcarvenda/${id}`, {
@@ -24,16 +25,28 @@
       try {
         await paypal.Buttons({
           createOrder(){
-            $resume = {...$resume, metodoPagamento: 'paypal'}
-            return fetch(`${PUBLIC_BACKEND_URL}/pedido/gerar`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify($resume)
-            })
-            .then((response) => response.json())
-            .then((order) => order.id);
+            if(pedido == undefined){
+              $resume = {...$resume, metodoPagamento: 'paypal'}
+              return fetch(`${PUBLIC_BACKEND_URL}/pedido/gerar`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify($resume)
+              })
+              .then((response) => response.json())
+              .then((order) => order.id);
+            }else{
+              return fetch(`${PUBLIC_BACKEND_URL}/pedido/atualizar`, {
+                method: "PATCH",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(pedido)
+              })
+              .then((response) => response.json())
+              .then((order) => order.id);
+            }
           },
 
           onApprove(data) {
@@ -52,15 +65,18 @@
               if($idCart == 0 || $idCart == undefined){
                 $idCart = JSON.parse(localStorage.getItem('idCart')).idCart
               }
-              if(transaction.status == 'COMPLETED'){
+              if(transaction.status == 'COMPLETED' && pedido == undefined){
                 checkCartAsSaled($idCart)
                 goto('/carrinho/step4')
               }else{
                 alert('Erro ao gerar pedido')
               }
             });
+          },
+  
+          onError(err) {
+            alert('Erro ao gerar pedido, tente novamente')
           }
-          
         }).render("#paypal-button-container");
 
       } catch (error) {
