@@ -147,7 +147,7 @@
   }
 </script>
 <div class="text-center">
-  <h1 class="text-2xl my-8">Esse gráfico reflete a quantidade de vendas e aluguéis nos últimos 7 Dias</h1>
+  <h1 class="text-2xl my-8">Esse gráfico por padrão, reflete a quantidade de vendas e aluguéis nos últimos 7 Dias</h1>
 </div>
 {#if flash.message != '' }
   <FlashMessage message={flash.message} type={flash.type} time={flash.time} visible={flash.visible}/>
