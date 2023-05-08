@@ -44,7 +44,6 @@
               .then((response) => response.json())
               .then((order) => order.id);
             }else{
-              console.log('entrei aqui')
               return fetch(`${PUBLIC_BACKEND_URL}/pedido/paypal/novamente`, {
                 method: "POST",
                 headers: {
@@ -52,7 +51,7 @@
                 },
                 body: JSON.stringify(pedido)
               })
-              .then((response) => {console.log(console.log(response)) ;return response.json()})
+              .then((response) => response.json())
               .then((order) => order.id);
             }
           },
