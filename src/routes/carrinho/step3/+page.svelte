@@ -80,7 +80,7 @@
           <button on:click={() => {selectedMethodPayment = 'paypal'}} class="hover:bg-fuchsia-800 hover:text-white w-full flex gap-2 border-2 rounded border-fuchsia-900 py-2 pl-2 pr-5"><img class="w-6 h-6" src={paypalIcon} alt=""> Paypal</button>
         </div>
       </div>
-      <div class="w-full lg:w-9/12 xl:w-6/12 2xl:w-9/12 flex flex-col items-center sm:items-start gap-10 mt-4">
+      <div class="w-full lg:w-9/12 xl:w-6/12 2xl:w-9/12 flex flex-col items-center gap-10 mt-4">
         {#if selectedMethodPayment == 'boleto'}
           <div>
             <h1 class="text-xl font-bold mb-2 ">Boleto Bancário</h1>
