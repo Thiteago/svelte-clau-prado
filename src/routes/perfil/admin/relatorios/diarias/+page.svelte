@@ -3,15 +3,35 @@
 	import BarChart from "$lib/components/barChart/BarChart.svelte";
 	import { onMount } from "svelte";
   import { formatDate } from '$lib/js/helpers.js';
+  import FlashMessage from '$lib/components/flashMessage/FlashMessage.svelte'
 
+  const today = new Date().toISOString().split('T')[0]
   let content = []
   let labels = []
   let info = []
+  $: flash = {
+    message: '',
+    type: 'warning',
+    time: 3000,
+    visible: false
+  }
+  $: dataInicial = ''
+  $: dataFinal = ''
   $: diaMaisPedidos = ''
   $: maiorLucro = ''
   $: maisVendas = {}
   $: maisAlugueis = {}
   $: pedidoMaisProdutos = {}
+  $: limitInitialDate = ''
+  $: limitFinalDate = ''
+
+  $: if(dataInicial != ''){
+    limitInitialDate = new Date(dataInicial).toISOString().split('T')[0]
+  }
+
+  $: if(dataFinal != ''){
+    limitFinalDate = new Date(dataFinal).toISOString().split('T')[0]
+  }
   
   async function loadStatistics(content){
     diaMaisPedidos = content.filter((item) => 
@@ -51,6 +71,38 @@
     });
   }
   
+  async function searchByDate(){
+    if(dataInicial != '' && dataFinal != ''){
+      const response = await fetch(`${PUBLIC_BACKEND_URL}/relatorio/vendasDiarias?dataInicial=${dataInicial}&dataFinal=${dataFinal}`);
+      content = await response.json();
+      content = await formatContent()
+      content.sort((a, b) => (a.id > b.id) ? 1 : -1)
+      if(content.length > 0){
+        loadStatistics(content)
+      }else{
+        diaMaisPedidos = ' - '
+        maiorLucro = ' - '
+        maisVendas = {
+          id: ' - ',
+          valor: ' - '
+        }
+      }
+    }else if(dataFinal == '' && dataInicial != ''){
+      flash.message = 'Preencha a data final'
+      flash.type = 'error'
+      flash.visible = true
+    }else if(dataInicial == '' && dataFinal != ''){
+      flash.message = 'Preencha a data inicial'
+      flash.type = 'error'
+      flash.visible = true
+    }else{
+      flash.message = 'Preencha as datas'
+      flash.type = 'error'
+      flash.visible = true
+    }
+
+  }
+
   onMount(async () => {
     const response = await fetch(`${PUBLIC_BACKEND_URL}/relatorio/vendasDiarias`);
     content = await response.json();
@@ -87,6 +139,14 @@
 </script>
 <div class="text-center">
   <h1 class="text-2xl my-8">Esse gráfico reflete a quantidade de vendas e aluguéis nos últimos 7 Dias</h1>
+</div>
+{#if flash.message != '' }
+  <FlashMessage message={flash.message} type={flash.type} time={flash.time} visible={flash.visible}/>
+{/if}
+<div class="flex justify-center gap-3 my-6">
+  <input type="date" bind:value={dataInicial} max={limitFinalDate != '' ? limitFinalDate : today} placeholder="Data Inicial" class="input input-bordered w-full max-w-xs" />
+  <input type="date" bind:value={dataFinal} min={limitInitialDate} max={today} placeholder="Data Final" class="input input-bordered w-full max-w-xs" />
+  <button on:click={searchByDate} class="btn">Filtrar</button>
 </div>
 <div class="w-6/12 flex m-auto">
   <BarChart {content} {labels} {info}/>
