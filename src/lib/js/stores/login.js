@@ -32,7 +32,12 @@ export function logout(){
 export function loadStorageData(){
   if(browser){
     user.set(JSON.parse(localStorage.getItem("@Auth:user"))) 
-    cart.set(JSON.parse(localStorage.getItem("cart")))
+    let cartItens = JSON.parse(localStorage.getItem("cart"))
+    if(cartItens != null){
+      cart.set(JSON.parse(localStorage.getItem("cart")))
+    }else {
+      cart.set([])
+    }
     if(localStorage.getItem("@Auth:user")!= null){
       signed.set(true)
     }else{
