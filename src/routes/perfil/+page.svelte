@@ -49,6 +49,15 @@
         rentedOrders = [...rentedOrders, order]
       }
     })
+    
+    rentedOrders.forEach(order => {
+      order.alugueis = order.alugueis.filter((aluguel, index, self) =>
+        index === self.findIndex((t) => (
+          t.pedidoId === aluguel.pedidoId
+        ))
+      )
+    })
+    
     verifyExpiration()
     orders = orders.slice(0, 3)
   })
