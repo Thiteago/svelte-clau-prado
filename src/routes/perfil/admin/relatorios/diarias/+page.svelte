@@ -73,7 +73,16 @@
   
   async function searchByDate(){
     if(dataInicial != '' && dataFinal != ''){
-      const response = await fetch(`${PUBLIC_BACKEND_URL}/relatorio/vendasDiarias?dataInicial=${dataInicial}&dataFinal=${dataFinal}`);
+      const response = await fetch(`${PUBLIC_BACKEND_URL}/relatorio/vendasDiarias/selecionar`,{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          dataInicial,
+          dataFinal
+        })
+      });
       content = await response.json();
       content = await formatContent()
       content.sort((a, b) => (a.id > b.id) ? 1 : -1)
