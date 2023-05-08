@@ -1,5 +1,6 @@
 <script>
   import { PUBLIC_BACKEND_URL } from '$env/static/public'
+  import {fetchOrdersById} from '$lib/js/helpers.js'
   import order from '$lib/assets/icons/order-icon.svg'
 	import PaypalButton from '../paypalbutton/PaypalButton.svelte';
   export let pedido
@@ -7,11 +8,15 @@
 
   async function handlePdf(){
     await fetch(`${PUBLIC_BACKEND_URL}/pagamento/boleto/${pedido.Pagamento.id}`)
-    .then(response => response.blob())
-    .then(blob => {
-    const file = new File([blob], 'file.pdf', { type: 'application/pdf' })
-    window.open(URL.createObjectURL(file))
-  })
+      .then(response => response.blob())
+      .then(blob => {
+      const file = new File([blob], 'file.pdf', { type: 'application/pdf' })
+      window.open(URL.createObjectURL(file))
+    })
+  }
+
+  async function handleReload(){
+    pedido = await fetchOrdersById(pedido.id)
   }
 
 </script>
@@ -60,7 +65,7 @@
           <p>{pedido.Pagamento.status}</p>
           {#if pedido.Pagamento.forma_pagamento == 'paypal' && pedido.Pagamento.status == 'Pendente'}
             <div class="flex items-center mt-2 gap-5">
-              <PaypalButton pedido={pedido}/>
+              <PaypalButton on:reloadOrder={handleReload} pedido={pedido}/>
               <p>Clique no Botao para tentar o pagamento via paypal</p>
             </div>
           {/if}
