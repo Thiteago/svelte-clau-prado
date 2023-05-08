@@ -3,7 +3,7 @@
   import { user } from '$lib/js/stores/login.js'
   import { fetchOrdersByUserId, formatDate, updateDevolution } from '$lib/js/helpers.js'
 	import { onMount } from 'svelte';
-	import FlashMessage from '../../lib/components/flashMessage/FlashMessage.svelte';
+	import FlashMessage from '$lib/components/flashMessage/FlashMessage.svelte';
 
   $: flashMessage = ''
   let selectedPedidoId = ''
