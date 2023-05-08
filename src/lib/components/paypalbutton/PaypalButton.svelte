@@ -4,6 +4,13 @@
   import { loadScript } from "@paypal/paypal-js";
   import { resume, idCart } from '$lib/js/stores/cart.js'
   import Loading from '$lib/components/loading/Loading.svelte'
+  import { createEventDispatcher } from 'svelte';
+
+  const dispatch = createEventDispatcher();
+
+  function reloadOrder(){
+    dispatch('reloadOrder')
+  }
 
   let paypal;
   export let pedido
@@ -37,14 +44,15 @@
               .then((response) => response.json())
               .then((order) => order.id);
             }else{
-              return fetch(`${PUBLIC_BACKEND_URL}/pedido/atualizar`, {
-                method: "PATCH",
+              console.log('entrei aqui')
+              return fetch(`${PUBLIC_BACKEND_URL}/pedido/paypal/novamente`, {
+                method: "POST",
                 headers: {
                   "Content-Type": "application/json",
                 },
                 body: JSON.stringify(pedido)
               })
-              .then((response) => response.json())
+              .then((response) => {console.log(console.log(response)) ;return response.json()})
               .then((order) => order.id);
             }
           },
@@ -68,6 +76,8 @@
               if(transaction.status == 'COMPLETED' && pedido == undefined){
                 checkCartAsSaled($idCart)
                 goto('/carrinho/step4')
+              }else if(transaction.status == 'COMPLETED' && pedido != undefined){
+                reloadOrder()
               }else{
                 alert('Erro ao gerar pedido')
               }
