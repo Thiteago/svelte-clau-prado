@@ -25,6 +25,14 @@ export async function fetchCategorias(){
   }
 }
 
+export async function fetchInitialAvaliacoes(){
+  const response = await fetch(`${PUBLIC_BACKEND_URL}/avaliacoes/listar_inicio`)
+  if(response.status === 200){
+    const data = await response.json()
+    return data
+  }
+}
+
 export async function registerVisit(logado = false){
   await fetch(`${PUBLIC_BACKEND_URL}/Usuarios/visita/${logado}`, {
     method: 'POST',

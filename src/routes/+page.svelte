@@ -7,7 +7,7 @@ import SubHeader from '$lib/components/subHeader/SubHeader.svelte'
 import Slide from '$lib/components/slide/Slide.svelte'
 import BuyInfo from '$lib/components/buyinfo/Buyinfo.svelte'
 import {loadStorageData, user} from '$lib/js/stores/login.js'
-import { registerVisit,fetchProducts } from '$lib/js/helpers.js'
+import { registerVisit,fetchProducts, fetchInitialAvaliacoes } from '$lib/js/helpers.js'
 import './style.scss'
 import Carousel from 'svelte-carousel'
 import { browser } from '$app/environment';
@@ -15,10 +15,12 @@ import { onMount } from 'svelte';
 import produto1 from '$lib/assets/img/produto-3.jpeg'
 import produto2 from '$lib/assets/img/produto-5.jpg'
 import Footer from '$lib/components/footer/Footer.svelte';
+	import { each } from 'svelte/internal';
 
 let hasSpecialSale = false
 let products = []
 let promotionalProduts = []
+let avaliacoes = []
 
 async function checkIfHasSpecialSale(){
     const response = await fetch(`${PUBLIC_BACKEND_URL}/promocao/promocoesativas`)
@@ -50,6 +52,8 @@ onMount(async () => {
     await registerVisit($user ? true : false)
     await checkIfHasSpecialSale()
     await orderProducts()
+    avaliacoes = await fetchInitialAvaliacoes()
+    
 })
 
 </script>
@@ -169,39 +173,19 @@ onMount(async () => {
             arrows={false}
 
             >
+            {#each avaliacoes as avaliacao}
               <div class="flex flex-col items-center">
                 <h1 class="font-bold text-2xl flex">
                   <i class="w-3">
                     <img class="w-6" src={leftquote} alt=""/>
                   </i>
-                    Sensacional 
+                    {avaliacao.titulo} 
                     <i class="w-3"><img class="w-6" src={quotes} alt=""/>
                   </i>
                 </h1>
-                <p>aidqkadiqeiwqeiqweiqwieqwi</p>
+                <p>{avaliacao.descricao}</p>
               </div>
-              <div class="flex flex-col items-center">
-                <h1 class="font-bold text-2xl flex">
-                  <i class="w-3">
-                    <img class="w-6" src={leftquote} alt=""/>
-                  </i>
-                    Sensacional 
-                    <i class="w-3"><img class="w-6" src={quotes} alt=""/>
-                  </i>
-                </h1>
-                <p>aidqkadiqeiwqeiqweiqwieqwi</p>
-              </div>
-              <div class="flex flex-col items-center">
-                <h1 class="font-bold text-2xl flex">
-                  <i class="w-3">
-                    <img class="w-6" src={leftquote} alt=""/>
-                  </i>
-                    Sensacional 
-                    <i class="w-3"><img class="w-6" src={quotes} alt=""/>
-                  </i>
-                </h1>
-                <p>aidqkadiqeiwqeiqweiqwieqwi</p>
-              </div>
+            {/each}
             </Carousel>
           </div>
           <div class="carousel-mobile">
@@ -216,39 +200,19 @@ onMount(async () => {
             arrows={false}
 
             >
+            {#each avaliacoes as avaliacao}
               <div class="flex flex-col items-center">
                 <h1 class="font-bold text-2xl flex">
                   <i class="w-3">
                     <img class="w-6" src={leftquote} alt=""/>
                   </i>
-                    Sensacional 
+                    {avaliacao.titulo} 
                     <i class="w-3"><img class="w-6" src={quotes} alt=""/>
                   </i>
                 </h1>
-                <p>aidqkadiqeiwqeiqweiqwieqwi</p>
+                <p>{avaliacao.descricao}</p>
               </div>
-              <div class="flex flex-col items-center">
-                <h1 class="font-bold text-2xl flex">
-                  <i class="w-3">
-                    <img class="w-6" src={leftquote} alt=""/>
-                  </i>
-                    Sensacional 
-                    <i class="w-3"><img class="w-6" src={quotes} alt=""/>
-                  </i>
-                </h1>
-                <p>aidqkadiqeiwqeiqweiqwieqwi</p>
-              </div>
-              <div class="flex flex-col items-center">
-                <h1 class="font-bold text-2xl flex">
-                  <i class="w-3">
-                    <img class="w-6" src={leftquote} alt=""/>
-                  </i>
-                    Sensacional 
-                    <i class="w-3"><img class="w-6" src={quotes} alt=""/>
-                  </i>
-                </h1>
-                <p>aidqkadiqeiwqeiqweiqwieqwi</p>
-              </div>
+            {/each}
             </Carousel>
           </div>
          
