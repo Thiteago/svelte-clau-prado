@@ -1,4 +1,5 @@
 import { PUBLIC_BACKEND_URL } from '$env/static/public'
+import { DateTime } from "luxon";
 
 export const cpfRegexp = /([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})/;
 
@@ -83,6 +84,26 @@ export async function updateToSended(id, codigo){
     }
     return false
   })
+}
+
+export async function fetchDespesas(inicio, fim){
+  const response = await fetch(`${PUBLIC_BACKEND_URL}/despesas/listar`, {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    body: JSON.stringify({
+      dataInicial: inicio,
+      dataFinal: fim
+    })
+  })
+  if(response.status === 200){
+    const data = await response.json()
+    data.forEach((despesa) => {
+      despesa.data = DateTime.fromISO(despesa.data).toFormat('dd/MM/yyyy')
+    })
+    return data
+  }
 }
 
 export async function updateDevolution(idPedido, idAluguel, codigo){
