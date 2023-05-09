@@ -25,6 +25,14 @@
   $: flashMessage = ''
   let selectedPedidoId = ''
   let selectedAluguelId = ''
+  let dataMaisDiferenca = ''
+  let dataMenosDiferenca = ''
+  let maiorDiferenca = 0
+  let menorDiferenca = 0
+  let gastoMaisDistante = 0
+  let gastoMaisProximo = 0
+  let lucroMaisDistante = 0
+  let lucroMaisProximo = 0
   let labels = []
   let ganhosTotais = []
   let despesasTotais = []
@@ -72,7 +80,10 @@
   }
   
   async function loadChartData(content){
+    let ganhos = 0
+    let despesas = 0
     let uniqueDates = new Set();
+
 
     content.despesas.forEach(item => {
       //format item.data to dd/mm/yyyy with luxon
@@ -88,21 +99,51 @@
     labels = [...uniqueDates].sort((a, b) => new Date(a) - new Date(b));
 
     labels.forEach((label) => {
-      let ganhos = 0
-      let despesas = 0
+      //store date with max profit
+      let diferenca = 0
+
       content.ganhos.forEach(item => {
         if(item.data_pedido == label){
-          ganhos += item.valor_total
+          ganhos += item.valor
         }
       })
       content.despesas.forEach(item => {
         if(item.data == label){
-          despesas += item.valor_total
+          despesas += item.valor
         }
       })
-      ganhosTotais = [...ganhosTotais, ganhos]
-      despesasTotais = [...despesasTotais, despesas]
+
+      if(ganhos > despesas){
+        diferenca = ganhos - despesas
+      }else{
+        diferenca = despesas - ganhos
+      }
+
+      if(ganhosTotais.length == 0){
+        maiorDiferenca = diferenca
+        menorDiferenca = diferenca
+        dataMaisDiferenca = label
+        dataMenosDiferenca = label
+      }
+
+      if(diferenca > maiorDiferenca){
+        maiorDiferenca = diferenca
+        dataMaisDiferenca = label
+        gastoMaisDistante = despesas
+        lucroMaisDistante = ganhos
+      }else if(diferenca < menorDiferenca){
+        menorDiferenca = diferenca
+        dataMenosDiferenca = label
+        gastoMaisProximo = despesas
+        lucroMaisProximo = ganhos
+      }
+      
+
+    
+      ganhosTotais.push(ganhos)
+      despesasTotais.push(despesas)
     })
+
     
   }
 
@@ -169,6 +210,7 @@
         })
       })
       content = await response.json()
+      console.log(content)
       loadChartData(content)
     };
 
@@ -307,8 +349,89 @@
       <input type="date" bind:value={dataFinal} min={limitInitialDate} max={today} placeholder="Data Final" class="input input-bordered w-full max-w-xs" />
       <button on:click={searchByDate} class="btn">Filtrar</button>
     </div>
-    <div>
+    <div class="w-3/4 m-auto">
       <Line {data} options={{ responsive: true }} />
     </div>
+    <section class="mt-6">
+      <div class="flex items-start justify-evenly">
+        <div class="text-center">
+          <h2 class="font-bold text-2xl">{dataMaisDiferenca}</h2>
+          <p>Gastos: R${gastoMaisDistante} | Lucro: R$ {lucroMaisDistante}</p>
+          <span>Diferença de R${maiorDiferenca}</span>
+          <p>Data com maior diferença</p>
+        </div>
+        <div class="text-center">
+          <h2 class="font-bold text-2xl">{dataMenosDiferenca}</h2>
+          <p>Gastos: R${gastoMaisProximo} | Lucro: R$ {lucroMaisProximo}</p>
+          <span>Diferença de R${menorDiferenca}</span>
+          <p>Data com menor diferença</p>
+        </div>
+        
+      </div>
+      <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+      {#if Object.keys(content).length > 0}
+        <div class="collapse border border-base-300 bg-base-100 rounded-box mt-6">
+          <input type="checkbox" />
+          <div class="text-2xl collapse-title text-xl font-medium">
+            Despesas
+          </div>
+          <div class="collapse-content">
+            <table class="table mt-4 w-full">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Data do gasto</th>
+                  <th>Valor</th>
+                  <th>Descricao</th>
+                  <th>Tipo</th>
+                </tr>
+              </thead>
+              <tbody>
+                {#each content.despesas as despesa }
+                  <tr>
+                    <td>{despesa.id}</td>
+                    <td>{despesa.data}</td>
+                    <td>R$ {despesa.valor}</td>
+                    <td>{despesa.descricao}</td>
+                    <td>{despesa.tipoDespesa}</td>
+                  </tr>
+                {/each}
+              </tbody>
+            </table>
+        </div>
+        </div>
+
+        <div class="collapse border border-base-300 bg-base-100 rounded-box mt-6">
+          <input type="checkbox" />
+          <div class="text-2xl collapse-title text-xl font-medium">
+            Lucros / Vendas / Pedidos
+          </div>
+          <div class="collapse-content">
+            <table class="table mt-4 w-full">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Data do Pedido</th>
+                  <th>Valor Total</th>
+                  <th>Qtde. Vendidos</th>
+                  <th>Qtde. Alugados</th>
+                </tr>
+              </thead>
+              <tbody>
+                {#each content.ganhos as ganho }
+                  <tr>
+                    <td>{ganho.id}</td>
+                    <td>{ganho.data_pedido}</td>
+                    <td>R$ {ganho.valor}</td>
+                    <td>{ganho.vendas.length}</td>
+                    <td>{ganho.alugueis.length}</td>
+                  </tr>
+                {/each}
+              </tbody>
+            </table>
+        </div>
+        </div>
+      {/if}
+    </section>
   {/if}
 </div>
