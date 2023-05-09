@@ -3,13 +3,13 @@
   import { DateTime } from "luxon";
   import { PUBLIC_BACKEND_URL } from '$env/static/public'
 	import { onMount } from 'svelte';
+  import { fetchDespesas } from '$lib/js/helpers.js'
   import { fly } from 'svelte/transition';
   import deleteIcon from '$lib/assets/icons/delete.svg'
   import editIcon from '$lib/assets/icons/edit.svg'
+  import FlashMessage from '$lib/components/flashMessage/FlashMessage.svelte'
 
 
-  $: selectedMonth = ''
-  $: selectedDay = ''
   $: actualDespesas = []
   $: valorTotalDespesas = 0
   $: valorTotalRecorrentes = 0
@@ -19,30 +19,27 @@
   $: willSelectDate = false
   $: willEditDespesa = false
   $: selectedItems = []
+  $: dataInicial = ''
+  $: dataFinal = ''
+  $: flash = {
+    message: '',
+    type: 'warning',
+    time: 3000,
+    visible: false
+  }
 
   let flashMessage = {
     message: '',
     type: ''
   }
 
-  $: if(selectedDay || selectedMonth){
-    if(selectedDay && selectedMonth){
-      fetchDespesas(selectedMonth, selectedDay)
-    }else if(selectedMonth){
-      fetchDespesas(selectedMonth)
-    }
-  }
 
   $: if(selectedItems.length == 0){
     willEditDespesa = false
   }
 
 
-  const year = new Date().getFullYear();
-  const months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-                  'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
-  const days = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,
-                21,22,23,24,25,26,27,28,29,30,31]
+  let actualMonth = DateTime.local().monthLong
   let willAddDespesa = false
   let today = DateTime.local()
   let recorrente = false
@@ -58,8 +55,59 @@
   }
 
   onMount(async () => {
-    await fetchDespesas()
+    dataInicial = DateTime.local().startOf('month').toISODate()
+    dataFinal = DateTime.local().endOf('month').toISODate()
+
+    const response = await fetch(`${PUBLIC_BACKEND_URL}/despesas/listar`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        dataInicial, 
+        dataFinal
+      })
+    })
+    actualDespesas = await response.json()
+    actualDespesas.forEach((despesa) => {
+      despesa.data = DateTime.fromISO(despesa.data).toFormat('dd/MM/yyyy')
+    })
+    actualDespesas = await formatContent(actualDespesas)
+
   })
+
+  async function searchByDate(){
+    if(dataInicial != '' && dataFinal != ''){
+      const response = await fetch(`${PUBLIC_BACKEND_URL}/despesas/listar`,{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          dataInicial,
+          dataFinal
+        })
+      });
+      actualDespesas = await response.json();
+      actualDespesas.forEach((despesa) => {
+        despesa.data = DateTime.fromISO(despesa.data).toFormat('dd/MM/yyyy')
+      })
+      actualDespesas = await formatContent(actualDespesas)
+      
+    }else if(dataFinal == '' && dataInicial != ''){
+      flash.message = 'Preencha a data final'
+      flash.type = 'error'
+      flash.visible = true
+    }else if(dataInicial == '' && dataFinal != ''){
+      flash.message = 'Preencha a data inicial'
+      flash.type = 'error'
+      flash.visible = true
+    }else{
+      flash.message = 'Preencha as datas'
+      flash.type = 'error'
+      flash.visible = true
+    }
+  }
 
   function handleFlashMessages(type, message){
     flashMessage = {
@@ -74,31 +122,14 @@
     }, 10000)
   }
 
-  async function fetchDespesas(mes, dia){
-    if(mes && mes.length == 2 && mes[0] == 0){
-      mes = mes[1]
-    }
-    const response = await fetch(`${PUBLIC_BACKEND_URL}/despesas/listar?${mes ? `mes=${mes}` : ''}${dia ? `&dia=${dia}` : ''}`)
+  async function formatContent(content){
     try{
-      const data = await response.json()
-      if(mes || dia){
-        selectedDay = dia
-        selectedMonth = mes
-      }else{
-        selectedDay = today.day
-        selectedMonth = today.month
-      }
-
-      if(data.length > 0){
-        actualDespesas = data
-        actualDespesas.forEach(despesa => {
-          despesa.data = DateTime.fromISO(despesa.data).toFormat('dd/MM/yyyy')
-        })
-        valorTotalDespesas = data.reduce((acc, despesa) => acc + despesa.valor, 0)
-        quantidadeDespesas = data.length
-        valorTotalRecorrentes = data.filter(despesa => despesa.recorrente).reduce((acc, despesa) => acc + despesa.valor, 0)
-        quantidadeRecorrentes = data.filter(despesa => despesa.recorrente).length
-        let quantidadeTipos = data.reduce((acc, obj) => {
+      if(content.length > 0){
+        valorTotalDespesas = content.reduce((acc, despesa) => acc + despesa.valor, 0)
+        quantidadeDespesas = content.length
+        valorTotalRecorrentes = content.filter(despesa => despesa.recorrente).reduce((acc, despesa) => acc + despesa.valor, 0)
+        quantidadeRecorrentes = content.filter(despesa => despesa.recorrente).length
+        let quantidadeTipos = content.reduce((acc, obj) => {
             const tipo = obj.tipoDespesa;
             if (!acc[tipo]) {
               acc[tipo] = 0;
@@ -116,6 +147,8 @@
         quantidadeRecorrentes = 0
         tipoMaisRecorrente = ''
       }
+
+      return content
     
     }catch(err){
       console.log(err)
@@ -148,11 +181,21 @@
       )
     })
     try{
-      if(object.hasOwnProperty('data')){
-        await fetchDespesas(object.data.split('-')[1], object.data.split('-')[2])
+
+      if(e.target.elements.data != undefined){
+        dataInicial = DateTime.fromISO(object.data).startOf('month').toISODate()
+        dataFinal = DateTime.fromISO(object.data).endOf('month').toISODate()
+
+        actualDespesas = await fetchDespesas(dataInicial, dataFinal)
+        selectedItems = []
       }else{
-        await fetchDespesas(selectedMonth, selectedDay)
+        dataInicial = DateTime.local().startOf('month').toISODate()
+        dataFinal = DateTime.local().endOf('month').toISODate()
+        await fetchDespesas(dataInicial, dataFinal)
+        selectedItems = []
       }
+      actualDespesas = await fetchDespesas(dataInicial, dataFinal)
+      formatContent(actualDespesas)
 
       if(response.status == 201){
         handleFlashMessages('success', 'Despesa cadastrada com sucesso!')
@@ -175,7 +218,7 @@
         if(response.status == 201){
           selectedItems = []
           handleFlashMessages('success', 'Despesa(s) deletada(s) com sucesso!')
-          await fetchDespesas(selectedMonth, selectedDay)
+          actualDespesas = await fetchDespesas(dataInicial, dataFinal)
         }
     }catch(err){
       console.log(err)
@@ -209,15 +252,23 @@
       )
     })
     try{
-      if(object.hasOwnProperty('data')){
-        await fetchDespesas(object.data.split('-')[1], object.data.split('-')[2])
+      if(e.target.elements.data != undefined){
+        dataInicial = DateTime.fromISO(object.data).startOf('month').toISODate()
+        dataFinal = DateTime.fromISO(object.data).endOf('month').toISODate()
+
+        actualDespesas = await fetchDespesas(dataInicial, dataFinal)
         selectedItems = []
       }else{
-        await fetchDespesas(today.month, today.day)
+        dataInicial = DateTime.local().startOf('month').toISODate()
+        dataFinal = DateTime.local().endOf('month').toISODate()
+        await fetchDespesas(dataInicial, dataFinal)
         selectedItems = []
       }
+      actualDespesas = await fetchDespesas(dataInicial, dataFinal)
+      formatContent(actualDespesas)
+
       if(response.status == 201){
-        handleFlashMessages('success', 'Despesa alterada com sucesso!')
+        handleFlashMessages('success', 'Despesa cadastrada com sucesso!')
       }
     }catch(err){
       console.log(err)
@@ -240,22 +291,18 @@
     <div class="flex justify-between items-center">
       <div>
         <h1 class="font-italic text-3xl">Despesas</h1>
-        <p>Veja suas despesas e adicione novas despesas! 🥹</p>
-      </div>
-      <div class="font-bold text-4xl">
-        {year}
+        <p>Veja e adicione despesas! </p>
+        <p>O gráfico abaixo por padrão mostra as despesas do mês atual: {actualMonth}</p>
       </div>
     </div>
     <div class="flex flex-col w-full gap-2 my-5 items-center justify-center">
-      <div class="flex gap-2 justify-center 4xl:gap-12 w-full bg-[#7c3267] px-1 meses-container rounded-lg py-1"> <!--Meses-->
-        {#each months as month, i}
-          <button on:click={() => {selectedMonth = i+1; selectedDay = undefined}} class="text-white {i+1 == selectedMonth ? 'selecionado' : ''}">{month}</button>
-        {/each}
-      </div>
-      <div class="flex justify-center gap-0.5 4xl:gap-6 w-full bg-[#7c3267] px-2 dias-container rounded-lg py-1"><!-- Dias -->
-        {#each days as day}
-          <button on:click={() => {selectedDay = day}} class="text-white {day == selectedDay ? 'selecionado' : ''}">{day}</button>
-        {/each}
+      {#if flash.message != '' }
+        <FlashMessage message={flash.message} type={flash.type} time={flash.time} visible={flash.visible}/>
+      {/if}
+      <div class="flex justify-center gap-3 my-6">
+        <input type="date" bind:value={dataInicial} placeholder="Data Inicial" class="input input-bordered w-full max-w-xs" />
+        <input type="date" bind:value={dataFinal} placeholder="Data Final" class="input input-bordered w-full max-w-xs" />
+        <button on:click={searchByDate} class="btn">Buscar</button>
       </div>
     </div>
     <div class="flex mb-2 justify-evenly">
@@ -321,7 +368,6 @@
     </div>
     <div class="flex justify-end gap-2">
       <button on:click={() => {willAddDespesa = !willAddDespesa; willEditDespesa = false}} class="bg-[#7c3267] text-white w-1/3 rounded-lg py-2 my-2">Adicionar despesa</button>
-      <button class="bg-[#7c3267] text-white w-1/3 rounded-lg py-2 my-2">Baixar CSV</button>
     </div>
 
     <div style="min-height: 500px" class="items-start px-2 justify-end relative gap-12 mt-3 flex">
@@ -476,38 +522,6 @@
 </section>
 
 <style>
-  .meses-container button {
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 5px 10px;
-  }
-
-  @media (max-width: 1921px) {
-    .meses-container button {
-      padding: 0 2px;
-    }
-  }
-
-  .selecionado{
-    background-color: #92397a;
-  }
-
-  .meses-container button:hover {
-    background-color: #92397a;
-  }
-
-  .dias-container button {
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 2.5px 5px;
-  }
-
-  .dias-container button:hover {
-    background-color: #92397a;
-  }
-
   .hidden{
     display: none;
   }
