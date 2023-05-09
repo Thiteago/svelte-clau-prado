@@ -89,7 +89,9 @@
   {#if Object.keys(produto).length > 0}
   <section class="container-produto">
     <div class="container-info">
-      <PreviousButton endereco={'/produtos'}/>
+      <div class="flex justify-end">
+        <PreviousButton endereco={'/produtos'}/>
+      </div>
         <div class='wrapper-info'>
           <aside class='imagem-produto'>
               <div class="max-w-full justify-center flex pb-2">
