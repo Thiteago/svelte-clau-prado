@@ -80,6 +80,18 @@
   }
   
   async function loadChartData(content){
+    maiorDiferenca = 0
+    menorDiferenca = 0
+    gastoMaisDistante = 0
+    gastoMaisProximo = 0
+    lucroMaisDistante = 0
+    lucroMaisProximo = 0
+    labels = []
+    ganhosTotais = []
+    despesasTotais = []
+    dataMaisDiferenca = ''
+    dataMenosDiferenca = ''
+
     let ganhos = 0
     let despesas = 0
     let uniqueDates = new Set();
@@ -119,11 +131,20 @@
         diferenca = despesas - ganhos
       }
 
+      if(diferenca !== Math.trunc(diferenca)){
+        diferenca = diferenca.toFixed(2)
+      }
+
       if(ganhosTotais.length == 0){
         maiorDiferenca = diferenca
         menorDiferenca = diferenca
         dataMaisDiferenca = label
         dataMenosDiferenca = label
+        gastoMaisDistante = despesas
+        gastoMaisProximo = despesas
+        lucroMaisDistante = ganhos
+        lucroMaisProximo = ganhos
+
       }
 
       if(diferenca > maiorDiferenca){
@@ -210,7 +231,6 @@
         })
       })
       content = await response.json()
-      console.log(content)
       loadChartData(content)
     };
 
