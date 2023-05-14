@@ -91,7 +91,7 @@
       numeroTel,
       numeroCel
     })
-    if(response.status == 201){
+    if(response){
       goto("/login")
     }
   }
