@@ -1,9 +1,13 @@
 <script>
   import { goto } from "$app/navigation";
-  import {user} from '$lib/js/stores/login.js'
-  import { loadStorageData, signed } from '$lib/js/stores/login.js'
+  import {user , signed, logout, loadStorageData} from '$lib/js/stores/login.js'
+  import { Hamburger } from 'svelte-hamburgers'
+  import exit from '$lib/assets/icons/exit.svg'
+  import { fade } from 'svelte/transition';
   import { redirect } from "@sveltejs/kit";
   import './perfil.scss'
+
+  let open
 
   export function load(){
     loadStorageData()
@@ -18,6 +22,9 @@
 
 
 <div class="containerContent">
+  <div class="hamburguer">
+    <Hamburger bind:open />
+  </div>
   <aside class="menuBar">
     <span class="returnButton" on:keyup={() => {goto("/")}} on:click={() => {goto("/")}}>Voltar</span>
     <ul class="menu">
@@ -38,6 +45,22 @@
     </ul>
   </aside>
   <div class="contentWrapper">
+    {#if open}
+      <div transition:fade class="menu-container">
+        <ul style="padding-bottom: 1rem;" class="menu bg-base-100 w-full">
+          <li><a href="/">Inicio</a></li>
+          <li><a href="/produtos">Produtos</a></li>
+          <li><a href="/sobre">Sobre</a></li>
+        </ul>
+        <div class="w-full bg-white rounded-b-lg p-2">
+          <div class="flex items-center justify-evenly w-full">
+            <a class="" href='/perfil'>Ola! {$user.nome.split(' ')[0]}</a>
+            <a href={"/"} on:click={logout}> <img width="35" src={exit} alt=""> 
+            </a>
+          </div>
+        </div>
+      </div>
+    {/if}
     <slot />
   </div>
 </div>
