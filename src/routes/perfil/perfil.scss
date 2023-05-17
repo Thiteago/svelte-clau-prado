@@ -124,6 +124,11 @@ padding: 25px 30px;
   padding-bottom: 50px;
 }
 
+.hamburguer{
+	display: none;
+	z-index: 10;
+}
+
 .item {
   padding-left: 15px;
 
@@ -133,3 +138,17 @@ padding: 25px 30px;
   }
 }
 
+
+@media (max-width: 1024px){
+  .profileContainer{
+    padding: 0;
+  }
+  .hamburguer{
+		display: block;
+    position: absolute;
+    right: 0;
+	}
+  .menuBar{
+    display: none;
+  }
+}

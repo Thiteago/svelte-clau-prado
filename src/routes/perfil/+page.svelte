@@ -364,16 +364,16 @@
     {#if flash.message != '' }
       <FlashMessage message={flash.message} type={flash.type} time={flash.time} visible={flash.visible}/>
     {/if}
-    <div class="flex justify-center gap-3 my-6">
+    <div class="flex flex-col sm:flex-row items-center sm:items-start justify-center gap-3 my-6">
       <input type="date" bind:value={dataInicial} max={limitFinalDate != '' ? limitFinalDate : today} placeholder="Data Inicial" class="input input-bordered w-full max-w-xs" />
       <input type="date" bind:value={dataFinal} min={limitInitialDate} max={today} placeholder="Data Final" class="input input-bordered w-full max-w-xs" />
       <button on:click={searchByDate} class="btn">Filtrar</button>
     </div>
-    <div class="w-3/4 m-auto">
+    <div class="w-full flex justify-center sm:w-3/4 m-auto">
       <Line {data} options={{ responsive: true }} />
     </div>
     <section class="mt-6">
-      <div class="flex items-start justify-evenly">
+      <div class="flex flex-col gap-3 sm:gap-0 sm:flex-row items-center sm:items-start justify-evenly">
         <div class="text-center">
           <h2 class="font-bold text-2xl">{dataMaisDiferenca}</h2>
           <p>Gastos: R${gastoMaisDistante} | Lucro: R$ {lucroMaisDistante}</p>
@@ -395,11 +395,11 @@
           <div class="text-2xl collapse-title text-xl font-medium">
             Despesas
           </div>
-          <div class="collapse-content">
+          <div class="collapse-content overflow-auto">
             <table class="table mt-4 w-full">
               <thead>
                 <tr>
-                  <th>ID</th>
+                  <th style="position: relative">ID</th>
                   <th>Data do gasto</th>
                   <th>Valor</th>
                   <th>Descricao</th>
@@ -426,11 +426,11 @@
           <div class="text-2xl collapse-title text-xl font-medium">
             Lucros / Vendas / Pedidos
           </div>
-          <div class="collapse-content">
+          <div class="collapse-content overflow-auto">
             <table class="table mt-4 w-full">
               <thead>
                 <tr>
-                  <th>ID</th>
+                  <th style="position: relative">ID</th>
                   <th>Data do Pedido</th>
                   <th>Valor Total</th>
                   <th>Qtde. Vendidos</th>
