@@ -38,3 +38,16 @@
   width: 140px;
   height: 50px;
 }
+
+@media screen and (max-width: 800px) {
+  .dados-container{
+    width: 100%;
+  }
+  .input-info{
+    width: 100%;
+  }
+  .button-submit{
+    width: 100%;
+  }
+}
+  
