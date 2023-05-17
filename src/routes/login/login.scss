@@ -232,3 +232,14 @@
 		height: 100px;
 	}
 }
+
+@media (max-width: 768px) {
+	.form-container{
+		top: -75px;
+		width: 100%;
+	}
+
+	.overlay-container{
+		display: none;
+	}
+}

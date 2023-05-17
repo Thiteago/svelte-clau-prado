@@ -76,7 +76,11 @@
               <p style="color: red">Falha na Autenticação</p>
             {/if}
             <a class="a" href="/#">Esqueceu a senha?</a>
-            <button class="button">Login</button>
+            <div class="flex flex-col gap-3">
+              <button class="button">Login</button>
+              <span class="text-sm sm:hidden">Ou</span>
+              <a href={"/registro"} class="btn sm:hidden button">Cadastrar-se</a>
+            </div>
         </form>
       </div>
       <div class="overlay-container">
