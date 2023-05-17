@@ -50,11 +50,11 @@
   })
 </script>
 
-<section class="p-6">
+<section class="sm:p-6">
   <h1 class="text-2xl">Seus enderecos</h1>
   <div class="mt-10">
     {#each enderecos as endereco}
-      <div class="endereco mt-4 py-12 px-3 flex gap-5 h-16 items-center">
+      <div class="endereco mt-4 py-12 px-3 flex flex-col sm:flex-row gap-2 sm:gap-5 sm:h-16 items-center">
         <div class="w-9/12">
           <h2 class="text-xl">{endereco.rua}, {endereco.numeroRua} - {endereco.bairro}</h2>
           <p>{endereco.cidade} - {endereco.estado}</p>
@@ -63,10 +63,10 @@
         <div class="text-center w-3/12 flex justify-center">
           {#if endereco.principal}
             <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <label for="my-modal-{endereco.id}" on:click={() => selectEndereco(endereco.id)} class="btn w-full">Principal / Editar</label>
+            <label for="my-modal-{endereco.id}" on:click={() => selectEndereco(endereco.id)} class="btn sm:w-full">Principal / Editar</label>
           {:else}
           <!-- svelte-ignore a11y-click-events-have-key-events -->
-          <label for="my-modal-{endereco.id}" on:click={() => selectEndereco(endereco.id)} class="btn w-full">Editar</label>
+          <label for="my-modal-{endereco.id}" on:click={() => selectEndereco(endereco.id)} class="btn sm:w-full">Editar</label>
           {/if}
         </div>
       </div>
