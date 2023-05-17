@@ -26,7 +26,7 @@
 
 <section class="p-6">
   <h1 class="text-2xl">Histórico de Pedidos</h1>
-  <div class="mt-10">
+  <div class="mt-10 overflow-auto">
     <table class="table-auto w-full">
       <thead>
         <tr>
