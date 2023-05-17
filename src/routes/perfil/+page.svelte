@@ -341,23 +341,25 @@
     <div class="containerUltimoPedido">
       <div class="containerPedido">
         {#if orders.length > 0}
-          <h3 class="font-bold text-xl">Últimos Pedidos</h3>
-          <div class="grid-container justify-center">
-            <div class="header col-4">Número do Pedido</div>
-            <div class="header col-4">Status</div>
-            <div class="header col-4">Data</div>
-            <div class="header col-4">Pagamento</div>
-            {#each orders as order}
-              <div class="item col-4">{order.id}</div>
-              <div class="item col-4">{order.status}</div>
-              <div class="item col-4">{order.data_pedido}</div>
-              <div class="item col-4">{order.Pagamento.forma_pagamento}</div>
-            {/each}
+          <div class="hidden sm:block">
+            <h3 class="font-bold text-xl">Últimos Pedidos</h3>
+            <div class="grid-container justify-center">
+              <div class="header col-4">Número do Pedido</div>
+              <div class="header col-4">Status</div>
+              <div class="header col-4">Data</div>
+              <div class="header col-4">Pagamento</div>
+              {#each orders as order}
+                <div class="item col-4">{order.id}</div>
+                <div class="item col-4">{order.status}</div>
+                <div class="item col-4">{order.data_pedido}</div>
+                <div class="item col-4">{order.Pagamento.forma_pagamento}</div>
+              {/each}
+            </div>
           </div>
           {:else}
             <div class="my-6">Seus últimos pedidos irão aparecer aqui</div>
           {/if}
-        <a class="rounded p-4 bg-slate-500 text-white w-3/12" href="/perfil/pedidos">Histórico de Pedidos</a>
+        <a class="rounded p-4 bg-slate-500 text-white mt-12 sm:mt-0 w-full sm:w-3/12" href="/perfil/pedidos">Histórico de Pedidos</a>
       </div>
     </div>
   {:else}
