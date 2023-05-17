@@ -22,7 +22,7 @@
 
 
 <div class="containerContent">
-  <div class="hamburguer">
+  <div class="hamburguer-profile">
     <Hamburger bind:open />
   </div>
   <aside class="menuBar">
