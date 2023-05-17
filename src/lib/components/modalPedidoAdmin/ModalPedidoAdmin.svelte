@@ -65,7 +65,7 @@
       <label on:click={reloadOrders} for="my-modal-{pedido.id}" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
       <div class="flex justify-between items-center mr-5">
         <div class="flex flex-col gap-3">
-          <div class="flex gap-3">
+          <div class="flex flex-col sm:flex-row gap-3">
             <h3 class="text-lg font-bold flex items-center"><img class="h-8 w-8" src={order} alt="order icon"/>Pedido #{pedido.id} - Data do Pedido: {pedido.data_pedido}</h3>
             <span class="{pedido.status == 'Pendente' ? 'bg-red-500' : pedido.status == 'A Enviar' ? 'bg-orange-500' : pedido.status == 'Enviado' ? 'bg-blue-500' : 'bg-green-500'} font-bold p-1 rounded">{pedido.status}</span>
           </div>
@@ -92,7 +92,7 @@
       
       <div class="mt-8 flex flex-col gap-5">
         <h1 class="font-bold text-xl">Dados do Comprador</h1>
-        <div class="flex gap-5 items-center">
+        <div class="flex flex-col sm:flex-row gap-5 sm:items-center">
           <div>
             <h2 class="font-bold text-sm">Identificação</h2>
             <p>ID: {pedido.user.id}</p>
@@ -153,11 +153,11 @@
           </div>
         </div>
 
-        <div class="flex justify-between items-center">
+        <div class="flex sm:flex-row flex-col justify-between items-center">
           <h1 class="font-bold text-xl">Vendas e Alugueis</h1>
           <div>
             <label for="my-modal-{`${pedido.data_pedido}${pedido.id}${pedido.endereco.rua}${pedido.endereco.numeroRua}`}" class="btn btn-error">Cancelar Pedido</label>
-            {#if pedido.status != 'Aguardando Envio'}
+            {#if pedido.status == 'Aguardando Envio'}
               <button on:click={handleUpdateVinculatedProducts} class="btn btn-warning">Remover Item</button>
             {/if}
           </div>
@@ -200,7 +200,7 @@
                 <!-- head -->
                 <thead>
                   <tr>
-                    <th>
+                    <th style="position: relative">
                       <label>
                         <input type="checkbox" class="checkbox" />
                       </label>
@@ -218,7 +218,6 @@
                       <th></th>
                       <th></th>
                     {/if}
-                    <th>Ações</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -252,11 +251,6 @@
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td class="flex">
-                        <div class="bg-stone-200 rounded-full p-3 hover:bg-stone-500 cursor-pointer">
-                          <img height="25" width="25" src={pencil} alt="icon pencil">
-                        </div>
-                      </td>
                     </tr>
                   {/each}
 
@@ -295,11 +289,6 @@
                       </td>
                       <td class="text-center">
                         {aluguel.dias_alugados}
-                      </td>
-                      <td class="flex">
-                        <div class="bg-stone-200 rounded-full p-3 hover:bg-stone-500 cursor-pointer">
-                          <img height="25" width="25" src={pencil} alt="icon pencil">
-                        </div>
                       </td>
                     </tr>
                   {/each}

@@ -86,11 +86,11 @@
       <option value="Finalizado">Finalizados</option>
       <option value="Todos">Todos</option>
     </select>
-    <div class="flex flex-col items-center">
+    <div class="overflow-x-auto w-full flex flex-col sm:items-center">
       <table class="table cazuza table-zebra w-full mt-5">
         <thead>
           <tr>
-            <th>Id</th>
+            <th style="position: relative">Id</th>
             <th>Cliente</th>
             <th>Valor</th>
             <th>Forma de Pagamento</th>
