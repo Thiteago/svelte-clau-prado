@@ -132,7 +132,7 @@
   });
 
   async function downloadPDF(){
-    let canvas = document.querySelector('#thisIsATest')
+    let canvas = document.querySelector('#barChart')
 
     let canvasImg = canvas.toDataURL("image/jpeg", 1.0);
     const doc = new jsPDF('landscape');

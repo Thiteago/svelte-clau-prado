@@ -5,6 +5,7 @@
   export let labels
   export let info
   let data
+  let options
 
   $: if(content){
     content = content
@@ -23,7 +24,18 @@
           ],
         },
       ],
-    };
+    },
+    options = {
+      responsive: true,
+      scales:{
+        yAxes: [{
+          ticks: {
+            beginAtZero: true,
+            stepSize: 1
+          }
+        }]
+      }
+    }
   }
 
 
@@ -38,14 +50,25 @@
     LinearScale,
   } from 'chart.js';
 
+  const pluginBackground = {
+    id: 'custom_canvas_background_color',
+    beforeDraw: (chart) =>{
+      let {ctx} = chart;
+      ctx.fillStyle = "white";
+      ctx.fillRect(0,0, chart.width, chart.height);
+    }
+  }
+
   Chart.register(
     Title,
     Tooltip,
     Legend,
+    pluginBackground,    
     BarElement,
     CategoryScale,
     LinearScale
   );
+
 </script>
 
-<Bar {data} options={{ responsive: true }} />
+<Bar id="barChart" {data} {options} />
