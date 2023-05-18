@@ -37,6 +37,8 @@
 		"@paypal/paypal-js": "^5.1.6",
 		"chart.js": "^4.2.1",
 		"dotenv": "^16.0.3",
+		"jspdf": "^2.5.1",
+		"jspdf-autotable": "^3.5.28",
 		"luxon": "^3.3.0",
 		"node-sass": "^8.0.0",
 		"styled-components": "^5.3.6",
