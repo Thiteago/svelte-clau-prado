@@ -4,6 +4,7 @@
 	import { onMount } from "svelte";
   import { formatDate } from '$lib/js/helpers.js';
   import FlashMessage from '$lib/components/flashMessage/FlashMessage.svelte'
+  import { jsPDF } from "jspdf";
 
   const today = new Date().toISOString().split('T')[0]
   let content = []
@@ -130,6 +131,25 @@
     
   });
 
+  async function downloadPDF(){
+    let canvas = document.querySelector('#thisIsATest')
+
+    let canvasImg = canvas.toDataURL("image/jpeg", 1.0);
+    const doc = new jsPDF('landscape');
+    doc.setFontSize(20);
+    doc.text("Relatório de Vendas Diárias", 10, 10);
+    doc.addImage(canvasImg, 'PNG', 100, 20, 110, 50 );
+    doc.autoTable({ 
+      head: [['ID', 'Data', 'Valor', 'Aluguéis', 'Vendas']],
+      body: content.map((item) => {
+        return [item.id, item.data_pedido, item.valor, item.alugueis.length, item.vendas.length]
+      }),
+      startY: 80
+    })
+
+    doc.save("vendas_diarias.pdf");
+  }
+
   async function formatContent(){
     content.forEach((item) => {
       let repeatedIndex = []
@@ -156,6 +176,7 @@
   <input type="date" bind:value={dataInicial} max={limitFinalDate != '' ? limitFinalDate : today} placeholder="Data Inicial" class="input input-bordered w-full max-w-xs" />
   <input type="date" bind:value={dataFinal} min={limitInitialDate} max={today} placeholder="Data Final" class="input input-bordered w-full max-w-xs" />
   <button on:click={searchByDate} class="btn">Filtrar</button>
+  <button on:click={downloadPDF} class="btn btn-primary">Baixar CSV</button>
 </div>
 <div class="w-6/12 flex m-auto">
   <BarChart {content} {labels} {info}/>
@@ -167,7 +188,7 @@
       <p>Data com mais pedidos</p>
     </div>
     <div class="text-center">
-      <h2 class="font-bold text-2xl">R${maiorLucro.valor}</h2>
+      <h2 class="font-bold text-2xl">R${maiorLucro.valor != undefined ? maiorLucro.valor : "-"}</h2>
       <p>Maior lucro em um pedido</p>
     </div>
     <div class="text-center">
@@ -182,9 +203,9 @@
     </div>
     <div class="text-center">
       <h2 class="font-bold text-2xl">
-        {maisAlugueis.id}
+        {maisAlugueis?.id != undefined ? maisAlugueis?.id : " - "}
       </h2>
-      {#if maisAlugueis.alugueis}
+      {#if maisAlugueis?.alugueis}
         <span>Qtde de Alugueis: {maisAlugueis.alugueis.length} </span>
       {/if}
       
@@ -192,7 +213,7 @@
     </div>
     <div class="text-center">
       <h2 class="font-bold text-2xl">
-        {pedidoMaisProdutos.id}
+        {pedidoMaisProdutos.id != undefined ? pedidoMaisProdutos.id : " - "}
       </h2>
       {#if pedidoMaisProdutos.alugueis || pedidoMaisProdutos.vendas}
         <span> Qtde de produtos: {pedidoMaisProdutos.alugueis.length + pedidoMaisProdutos.vendas.length}</span>
@@ -200,8 +221,7 @@
       <p>Pedido com mais produtos</p>
     </div>
   </div>
-  <h2 class="text-2xl">Pedidos</h2>
-  <table class="table mt-4 w-full">
+  <table id="table" class="table mt-4 w-full">
     <thead>
       <tr>
         <th>ID</th>
