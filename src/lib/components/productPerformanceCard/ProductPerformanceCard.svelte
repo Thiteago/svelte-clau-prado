@@ -31,7 +31,7 @@
 </script>
 
 <div class="flex gap-6 w-2/4 bg-gray-100 rounded-xl">
-  <div class="w-3/12 flex items-center pl-2">
+  <div class="w-3/12 flex items-center">
     {#if produto.statisticProduct.qtdeVendida > 0 || produto.statisticProduct.qtdeAlugada > 0 || produto.statisticProduct.qtdeVisualizada > 0}
       <Doughnut {data} {options}/>
     {:else}
