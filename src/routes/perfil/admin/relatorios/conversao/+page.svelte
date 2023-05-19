@@ -136,7 +136,6 @@
         }
       }
 
-
     }
   }
 
@@ -178,7 +177,7 @@
     let canvasImg = canvas.toDataURL("image/jpeg", 1.0);
     const doc = new jsPDF('landscape');
     doc.setFontSize(20);
-    doc.text("Relatório de Vendas Diárias", 10, 10);
+    doc.text("Relatório de Conversão de vendas", 10, 10);
     doc.addImage(canvasImg, 'PNG', 100, 20, 110, 50 );
     doc.autoTable({ 
       head: [['Data', 'Visitas', 'Vendas/Alugueis']],
