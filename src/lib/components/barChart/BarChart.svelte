@@ -27,14 +27,6 @@
     },
     options = {
       responsive: true,
-      scales:{
-        yAxes: [{
-          ticks: {
-            beginAtZero: true,
-            stepSize: 1
-          }
-        }]
-      }
     }
   }
 
@@ -71,4 +63,4 @@
 
 </script>
 
-<Bar id="barChart" {data} {options} />
+<Bar id="barChart" width="600" {data} {options} />
