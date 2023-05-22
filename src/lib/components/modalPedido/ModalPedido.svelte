@@ -25,9 +25,9 @@
   <input type="checkbox" checked={isOpen} id="my-modal-{pedido.id}" class="modal-toggle" />
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <label on:click={() => {isOpen = false}} for="my-modal-{pedido.id}" class="modal">
-    <label class="modal-box relative" for="">
+    <label class="modal-box max-w-full relative" for="">
       <h3 class="text-lg font-bold flex items-center"><img class="h-8 w-8" src={order} alt="order icon"/>Pedido #{pedido.id}</h3>
-      <div class="mt-8 flex flex-col gap-5">
+      <div class="mt-8 flex flex-col sm:flex-row gap-5">
         <div>
           <h2 class="font-bold">Data do Pedido:</h2>
           <p>{pedido.data_pedido}</p>
@@ -70,6 +70,45 @@
             </div>
           {/if}
         </div>
+      </div>
+      <div>
+        {#if pedido.vendas.length > 0 || pedido.alugueis.length > 0}
+        <h2>Itens :</h2>
+        <div class="overflow-x-auto">
+          <table class="table w-full">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Nome</th>
+                <th>Valor</th>
+                <th>Tipo</th>
+              </tr>
+            </thead>
+            <tbody>
+              {#if pedido.vendas.length > 0}
+                {#each pedido.vendas as venda}
+                  <tr>
+                    <th class="mask mask-squircle w-32 h-32"><img src={'http://localhost:3333/static/' + venda.produto.imagens[0]} alt=""></th>
+                    <td>{venda.produto.nome}</td>
+                    <td>{venda.produto.valor}</td>
+                    <td>Comprado</td>
+                  </tr>
+                {/each}
+              {/if}
+              {#if pedido.alugueis.length > 0}
+                {#each pedido.alugueis as aluguel}
+                  <tr>
+                    <th class="mask mask-squircle w-32 h-32"><img src={'http://localhost:3333/static/' + aluguel.produto.imagens[0]} alt=""></th>
+                    <td>{aluguel.produto.nome}</td>
+                    <td>{aluguel.produto.valor}</td>
+                    <td>Alugado</td>
+                  </tr>
+                {/each}
+              {/if}
+            </tbody>
+          </table>
+        </div>
+        {/if}
       </div>
     </label>
   </label>
