@@ -1,7 +1,7 @@
 .main-slide{
   height: 450px;
   overflow: hidden;
-  border-bottom: 6px ridge #FFF;
+  box-shadow: 1px -5px 9px;
   position: relative;
 
   .nuvens{
@@ -97,7 +97,7 @@
           width: 605px;
           position: absolute;
           height: 120px;
-          top: 325px;
+          top: 330px;
 
           .slide{
               >h1{
