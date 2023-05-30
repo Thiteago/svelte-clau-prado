@@ -1,7 +1,10 @@
 <script>
-import {SlideData} from './SlideData.js'
-import './style.scss'
-import nuvem from '$lib/assets/img/nuvem-fundo.png'
+  import {SlideData} from './SlideData.js'
+  import edit from '$lib/assets/icons/edit.svg'
+  import './style.scss'
+  import nuvem from '$lib/assets/img/nuvem-fundo.png'
+  import ModalEditSlide from '$lib/components/modalEditSlide/ModalEditSlide.svelte';
+  import {user} from "$lib/js/stores/login.js"
 
 $: current = 0
 
@@ -21,7 +24,16 @@ setInterval(nextSlide, 3000)
 
 
 
-<section class="main-slide">
+<section class="main-slide relative">
+
+  {#if $user.cargo == 'Admin'}
+    <label style="z-index: 300 " for="modal-edit" class="absolute cursor-pointer right-0 p-2 text-white gap-2 bg-black flex items-center">
+      <img src={edit} class="w-6 h-6" alt="pencil edit icon">
+      Editar Slide
+    </label>
+
+    <ModalEditSlide />
+  {/if}
   <div class="wrapper-slide">
       <div class="legenda">
         {#each SlideData as slide, i}
@@ -57,4 +69,6 @@ setInterval(nextSlide, 3000)
   <div class="nuvens">
       <div class="Cloud"></div>
   </div>
+
+  
 </section>
