@@ -34,6 +34,7 @@
         <li class="item" on:keyup={() => {goto('/perfil/pedidos')}} on:click={() => {goto('/perfil/pedidos')}}>Historico de Pedidos</li>
         {#if $user.cargo == 'Admin'}
           <span class="py-10 text-center font-bold">Funções<br/> Administrativas <br/>↓</span>
+          <li class="item" on:keyup={() => {goto('/perfil/admin/categorias')}} on:click={() => {goto('/perfil/admin/categorias')}}>Categorias</li>
           <li class="item" on:keyup={() => {goto('/perfil/admin/pedidos')}} on:click={() => {goto('/perfil/admin/pedidos')}}>Pedidos</li>
           <li class="item" on:keyup={() => {goto('/perfil/admin/devolucoes')}} on:click={() => {goto('/perfil/admin/devolucoes')}}>Devoluções</li>
           <li class="item" on:keyup={() => {goto('/perfil/admin/promocoes')}} on:click={() => {goto('/perfil/admin/promocoes')}}>Promoções</li>
