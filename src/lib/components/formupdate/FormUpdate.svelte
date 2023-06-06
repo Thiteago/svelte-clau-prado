@@ -9,6 +9,9 @@
     alert:'',
     text: '',
   }
+
+
+  let categorias = []
   let today = new Date().toISOString().split('T')[0]
   let files 
   let tipo = produto.tipo
@@ -28,13 +31,20 @@
     }
   }
 
-  onMount(() => {
+  onMount(async () => {
+    categorias = await fetchCategorias()
     if(produto.Aluguel != null){
       tipo == 'Aluguel'
     }else if(produto.Venda != null){
       tipo == 'Venda'
     }
   })
+
+  async function fetchCategorias(){
+    const response = await fetch(`${PUBLIC_BACKEND_URL}/categoria/listar`)
+    const data = await response.json()
+    return data
+  }
 
   async function handleSubmit(event){
     event.preventDefault()
@@ -69,6 +79,7 @@
         resultUpdate.text = 'Produto Alterado com sucesso';
         files = [];
         produto = await fetchProductsById(produto.id);
+        
       } else {
         throw new Error(`Request failed with status ${response.status}`);
       }
@@ -96,11 +107,12 @@
   id="categoria"
   class="border border-base-300 rounded input w-full"
   required
-  bind:value={produto.categoria}
+  bind:value={produto.categoriasId}
   >
     <option disabled>Selecione uma Categoria</option>
-    <option value="Topo de Bolo">Topo de Bolo</option>
-    <option value="Painel">Painel</option>
+    {#each categorias as categoria}
+      <option value={categoria.id}>{categoria.nome}</option>
+    {/each}
   </select>
 
   <label for="descricao">Descrição</label>
