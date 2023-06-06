@@ -11,6 +11,7 @@
   let produtos = []
   let selectedProduct
   let today = new Date().toISOString().split('T')[0]
+  let categorias = []
 
   let nome = ""
   let categoria = ""
@@ -35,7 +36,14 @@
   
   onMount(async () => {
     await getProdutos()
+    categorias = await fetchCategorias()
   })
+
+  async function fetchCategorias(){
+    const response = await fetch(`${PUBLIC_BACKEND_URL}/categoria/listar`)
+    const data = await response.json()
+    return data
+  }
 
   function deleteProduct(id){
     fetch(`${PUBLIC_BACKEND_URL}/Produto/${id}/Deletar`,{
@@ -162,8 +170,9 @@
           bind:value={categoria}
           >
             <option disabled>Selecione uma Categoria</option>
-            <option value="Topo de Bolo">Topo de Bolo</option>
-            <option value="Painel">Painel</option>
+            {#each categorias as categoria}
+              <option value={categoria.id}>{categoria.nome}</option>
+            {/each}
           </select>
 
           <label for="descricao">Descrição</label>
