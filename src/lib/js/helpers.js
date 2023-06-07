@@ -9,16 +9,17 @@ export async function createdCart(id){
   })
 }
 
-export async function fetchAlugueis(){
-  const response = await fetch(`${PUBLIC_BACKEND_URL}/aluguel/listar`)
+export async function fetchCategorias(){
+  const response = await fetch(`${PUBLIC_BACKEND_URL}/categoria/listar`)
   if(response.status === 200){
     const data = await response.json()
     return data
   }
 }
 
-export async function fetchCategorias(){
-  const response = await fetch(`${PUBLIC_BACKEND_URL}/categoria/listar`)
+
+export async function fetchAlugueis(){
+  const response = await fetch(`${PUBLIC_BACKEND_URL}/aluguel/listar`)
   if(response.status === 200){
     const data = await response.json()
     return data
@@ -239,6 +240,15 @@ export async function fetchPromotions(){
     if(data.length > 0){
       return data
     }
+  }
+  return []
+}
+
+export async function fetchPromoById(id){
+  const response = await fetch(`${PUBLIC_BACKEND_URL}/promocao/listar/${id}`)
+  if(response.ok){
+    const data = await response.json()
+    return data
   }
   return []
 }

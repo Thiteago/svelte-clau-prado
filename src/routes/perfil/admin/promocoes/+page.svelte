@@ -1,7 +1,7 @@
 <script>
 	import ModalPromocao from "$lib/components/modalPromocao/modalPromocao.svelte";
   import { PUBLIC_BACKEND_URL } from '$env/static/public'
-  import { fetchPromotions, fetchProducts } from '$lib/js/helpers.js'
+  import { fetchPromotions, fetchProducts, fetchCategorias} from '$lib/js/helpers.js'
   import { imask } from '@imask/svelte'
 	import { onMount } from "svelte";
   
@@ -36,7 +36,7 @@
   let valor_desconto = ''
   let categoriasSelecionadas = []
   let produtosSelecionados = []
-  let promocaoSelecionada = {}
+  $: promocaoSelecionada = {}
   let produtos = []
 
   async function loadPromotions(){
@@ -46,14 +46,12 @@
   onMount(async () => {
     loadPromotions()
     produtos = await fetchProducts();
-    if(produtos.length > 0) {
-      produtos.forEach((item) => {
-        if(!categorias.includes(item.categoria)){
-          categorias = [...categorias, item.categoria]
-        }
-      })
-    }
+    categorias = await fetchCategorias();
   });
+
+  async function handleChanged(){
+    await loadPromotions()
+  }
 
   async function handleSubmit(){
     await fetch(`${PUBLIC_BACKEND_URL}/promocao/cadastrar`, {
@@ -114,7 +112,7 @@
           <label for="nome" class="label">
             <span class="label-text">Nome</span>
           </label>
-          <input bind:value={nome} name="nome" type="text" placeholder="Nome da promoção" class="input input-bordered w-full" />
+          <input bind:value={nome} id="nome" type="text" placeholder="Nome da promoção" class="input input-bordered w-full" />
 
           <label for="data_inicio" class="label">
             <span class="label-text">Data de Início</span>
@@ -135,18 +133,18 @@
           </select>
 
           {#if tipo == 'porcentual'}
-            <label for="valor" class="label">
+            <label for="valor_porcentual_cadastro" class="label">
               <span class="label-text">Porcentagem do desconto</span>
             </label>
-            <input bind:value={valor_desconto} name="valor" use:imask={optionsValorPorcentual} type="text" 
+            <input bind:value={valor_desconto} name="valor_porcentual_cadastro" use:imask={optionsValorPorcentual} type="text" 
               min="1" max="100" placeholder="Porcentagem do desconto" 
               class="input input-bordered w-full" 
             />
           {:else if tipo == 'valor_fixo'}
-            <label for="valor" class="label">
+            <label for="valor_fixo_cadastro" class="label">
               <span class="label-text">Valor do desconto</span>
             </label>
-            <input bind:value={valor_desconto} name="valor" type="text" min="1" max="100" 
+            <input bind:value={valor_desconto} name="valor_fixo_cadastro" type="text" min="1" max="100" 
               use:imask={optionsValorValor}
               placeholder="Valor do desconto" 
               class="input input-bordered w-full" 
@@ -162,8 +160,8 @@
           </div>
           <div class="w-full">
             <select bind:value={categoriasSelecionadas} class="w-full px-1 select select-bordered select-md cursor-auto" name="categorias" multiple>
-             {#each categorias as item}
-                <option value="{item}">{item}</option>
+            {#each categorias as item}
+                <option value="{item.id}">{item.nome}</option>
               {/each}
             </select>
           </div>
@@ -187,5 +185,5 @@
 
 
 {#if Object.keys(promocaoSelecionada).length > 0}
-  <ModalPromocao on:disable={loadPromotions} promocao={promocaoSelecionada} />
+  <ModalPromocao on:disable={loadPromotions} on:changed={handleChanged} promocao={promocaoSelecionada} />
 {/if}
