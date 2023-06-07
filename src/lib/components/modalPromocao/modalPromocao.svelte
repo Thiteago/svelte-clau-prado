@@ -15,6 +15,7 @@
     visible: false
   }
 
+  let open = false
   let isUpdating = false
   let produtos = []
   let categorias = []
@@ -88,7 +89,7 @@
       flashMessage.time = 3000
       flashMessage.visible = true
       promocao = await fetchPromoById(promocao.id)
-      dispatch('changed', '')
+      dispatch('changed', flashMessage)
     }else{
       flashMessage.message = 'Promoção não foi alterada!'
       flashMessage.type = 'danger'
@@ -99,7 +100,7 @@
 
 
 </script>
-  <input type="checkbox" id="my-modal-{promocao.id}" class="modal-toggle" />
+  <input bind:value={open} type="checkbox" id="my-modal-{promocao.id}" class="modal-toggle" />
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <label for="my-modal-{promocao.id}" class="modal">
     <label class="modal-box relative max-w-4xl" for="">
@@ -214,8 +215,8 @@
           </div>
           <div>
             <button type='button' class="btn btn-{isUpdating ? '' : 'primary'}" on:click={() => {isUpdating = !isUpdating}}>{isUpdating ? 'Cancelar' : 'Alterar'}</button>
-            <button class="btn btn-error" on:click={handleDelete}>Excluir promocao</button>
-            <button disabled={promocao.status == 'Inativo'} class="btn btn-warning" on:click={handleDisable}>Desativar promocao</button>
+            <label for="my-modal-{promocao.id}" type="button" class="btn btn-error" on:click={handleDelete}>Excluir promocao</label>
+            <button type="button" disabled={promocao.status == 'Inativo'} class="btn btn-warning" on:click={handleDisable}>Desativar promocao</button>
           </div>
         </div>
       </form>

@@ -1,12 +1,19 @@
 <script>
 	import ModalPromocao from "$lib/components/modalPromocao/modalPromocao.svelte";
   import { PUBLIC_BACKEND_URL } from '$env/static/public'
+  import FlashMessage from '$lib/components/flashMessage/FlashMessage.svelte'
   import { fetchPromotions, fetchProducts, fetchCategorias} from '$lib/js/helpers.js'
   import { imask } from '@imask/svelte'
 	import { onMount } from "svelte";
   
   let promocao = []
   let today = new Date().toISOString().split('T')[0]
+  $: flashMessage = {
+    message: '',
+    type: '',
+    time: 0,
+    visible: false
+  }
 
   const optionsValorPorcentual = {
     mask: 'num %',
@@ -49,12 +56,13 @@
     categorias = await fetchCategorias();
   });
 
-  async function handleChanged(){
+  async function handleChanged(event){
     await loadPromotions()
+    flashMessage = event.detail.flashMessage
   }
 
   async function handleSubmit(){
-    await fetch(`${PUBLIC_BACKEND_URL}/promocao/cadastrar`, {
+    let response = await fetch(`${PUBLIC_BACKEND_URL}/promocao/cadastrar`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -70,12 +78,28 @@
       })
     })
 
+    if(response.ok){
+      flashMessage = {
+        message: 'Promoção cadastrada com sucesso!',
+        type: 'success',
+        time: 3000,
+        visible: true
+      }
+    }else {
+      flashMessage = {
+        message: 'Erro ao cadastrar promoção!',
+        type: 'error',
+        time: 3000,
+        visible: true
+      }
+    }
+
     promocao = await fetchPromotions();
   }
 </script>
 <section>
   <h1 class="text-2xl font-bold">Promoções</h1>
-
+  <FlashMessage message={flashMessage.message} type={flashMessage.type} visible={flashMessage.visible} time={flashMessage.time}/>
   <div class="collapse border border-base-300 bg-base-100 rounded-box mt-2">
     <input type="checkbox" /> 
     <div class="collapse-title text-xl font-medium">
