@@ -21,7 +21,7 @@
   <div class='info-produto'>
       <div class="flex flex-col-reverse lg:flex-row justify-between pr-0 lg:pr-5">
         <div class='descricao-produto'>
-          <h1 class="text-3xl font-bold">{data.nome}</h1>
+          <a href="/venda?produto_id={data.id}" class="text-3xl font-bold hover:text-[#434343]">{data.nome}</a>
           <p>{data.descricao}</p>
         </div>
         {#if data.promocao != null && data.promocao.status != 'Inativo'}
