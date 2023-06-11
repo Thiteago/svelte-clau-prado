@@ -125,7 +125,9 @@
     data.append('material', material)
     data.append('peso', peso)
     if(personalizaveis.length > 0){
-          data.append('personalizaveis', personalizaveis)
+      personalizaveis.forEach((item) => {
+        data.append('personalizaveis[]', item);
+      });
     }    
     data.append('valor', valor)
     
