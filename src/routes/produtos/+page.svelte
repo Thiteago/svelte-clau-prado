@@ -91,7 +91,7 @@ $: {
           <select bind:value={selectedCategoria} name="order" class="select select-bordered">
             <option default value="todas">Todas</option>
             {#each categorias as categoria}
-              <option value={categoria}>{categoria}</option>
+              <option value={categoria.id}>{categoria.nome}</option>
             {/each}
           </select>
         </div>
