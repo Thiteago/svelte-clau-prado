@@ -8,7 +8,9 @@
   $: files = []	
   let idSelected
   let idDeleteSelected
+  let novo_personalizavel
   let produtos = []
+  let personalizaveis = []
   let selectedProduct
   let today = new Date().toISOString().split('T')[0]
   let categorias = []
@@ -59,6 +61,14 @@
           result.text = 'Erro ao deletar o produto'
         }
     })
+  }
+
+  function adicionarPersonalizavel(item){
+    personalizaveis = [...personalizaveis, item]
+  }
+
+  function removerPersonalizavel(item){
+    personalizaveis = personalizaveis.filter(p => p != item)
   }
 
   function handleSelectChange(){
@@ -118,6 +128,9 @@
     data.append('comprimento', comprimento)
     data.append('material', material)
     data.append('peso', peso)
+    if(personalizaveis.length > 0){
+      data.append('personalizaveis', personalizaveis)
+    }
 
     if(tipo == 'Aluguel'){
       data.append('dataDisponibilidade', dataDisponibilidade)
@@ -225,9 +238,6 @@
           bind:value={valor}
           required
           />
-   
-
-
 
           <label for="valor">Peso</label>
           <input use:imask={optionsPeso} name="peso" type="text" placeholder="0 kg" class="input w-full border border-base-300" 
@@ -261,6 +271,23 @@
 
           <label for="imagens">Imagens</label>
           <input bind:files accept="image/png, image/jpeg" name='imagens' type="file" class="file-input file-input-bordered w-full max-w-xs" multiple/>
+
+          <p>Insira abaixo o que pode ser personalizável no produto: (Ex: Idade, Nome, etc ...)</p>
+          <div class="flex flex-col justify-center gap-2">
+            {#each personalizaveis as item}
+              <div class="flex items-center">
+                <span class="font-bold bg-[#3D4451] rounded-lg text-white p-2">{item}</span>
+                <button type="button" class="btn btn-error btn-sm ml-2" on:click={() => removerPersonalizavel(item)}>-</button>
+              </div>
+            {/each}
+          </div>
+          <div class="flex gap-1">
+            <input type="text" bind:value={novo_personalizavel} class="input input-bordered w-full max-w-xs"
+            required
+            />
+            <button on:click={adicionarPersonalizavel(novo_personalizavel)} class="btn" type="button">Adicionar</button>
+            
+          </div>
 
           <button type="submit" class="btn mt-3">Cadastrar</button>
 
