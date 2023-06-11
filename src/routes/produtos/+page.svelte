@@ -51,7 +51,7 @@ $: {
     filteredProducts = filteredProducts.sort((a, b) => b.valor - a.valor);
   }
   if(selectedCategoria != 'todas'){
-    filteredProducts = filteredProducts.filter(item => item.categoria == selectedCategoria)
+    filteredProducts = filteredProducts.filter(item => item.Categorias?.nome == selectedCategoria)
   }
 }
 
@@ -91,7 +91,7 @@ $: {
           <select bind:value={selectedCategoria} name="order" class="select select-bordered">
             <option default value="todas">Todas</option>
             {#each categorias as categoria}
-              <option value={categoria.id}>{categoria.nome}</option>
+              <option value={categoria.nome}>{categoria.nome}</option>
             {/each}
           </select>
         </div>

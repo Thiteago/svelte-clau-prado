@@ -20,8 +20,6 @@
   let descricao = ""
   let dataFabricacao = ""
   let quantidade = ""
-  let dataDisponibilidade = ""
-  let valorAluguel = ""
   let tipo = ""
   let valor = ""
   let altura = ""
@@ -113,9 +111,7 @@
         data.append('imagens', files[i])
       }
     }
-
     valor = valor.replace('R$', '')
-    valorAluguel = valorAluguel.replace('R$', '')
 
     data.append('nome', nome)
     data.append('categoria', categoria)
@@ -129,15 +125,10 @@
     data.append('material', material)
     data.append('peso', peso)
     if(personalizaveis.length > 0){
-      data.append('personalizaveis', personalizaveis)
-    }
-
-    if(tipo == 'Aluguel'){
-      data.append('dataDisponibilidade', dataDisponibilidade)
-      data.append('valor', valorAluguel)
-    }else{
-      data.append('valor', valor)
-    }
+          data.append('personalizaveis', personalizaveis)
+    }    
+    data.append('valor', valor)
+    
 
     fetch(`${PUBLIC_BACKEND_URL}/Produto/Cadastrar`,{
       method: 'POST',
