@@ -3,20 +3,34 @@
   import { PUBLIC_BACKEND_URL } from '$env/static/public'
 	import { onMount } from 'svelte';
   import { fetchProductsById } from '$lib/js/helpers.js'
+  import { createEventDispatcher } from 'svelte';
   export let produto = {}	
+
+  const dispatch = createEventDispatcher();
 
   $: resultUpdate = {
     alert:'',
     text: '',
   }
 
-
   let categorias = []
   let today = new Date().toISOString().split('T')[0]
   let files 
+  let novo_personalizavel
+  let personalizaveis = []
   let tipo = produto.tipo
   if(Object.keys(produto).length > 0){
     files = produto.imagens
+  }
+
+  $: if(produto){
+    if(produto.Aluguel != null){
+      tipo == 'Aluguel'
+      personalizaveis = produto.Aluguel[0].produto_mudanca.map(p => p.nome)
+    }else if(produto.Venda != null){
+      tipo == 'Venda'
+      personalizaveis = produto.Venda[0].produto_mudanca.map(p => p.nome)
+    }
   }
 
   let formatedDatadeCriacao = new Date(produto.dataFabricacao).toISOString().split('T')[0]
@@ -35,8 +49,10 @@
     categorias = await fetchCategorias()
     if(produto.Aluguel != null){
       tipo == 'Aluguel'
+      personalizaveis = produto.Aluguel[0].produto_mudanca.map(p => p.nome)
     }else if(produto.Venda != null){
       tipo == 'Venda'
+      personalizaveis = produto.Venda[0].produto_mudanca.map(p => p.nome)
     }
   })
 
@@ -44,6 +60,14 @@
     const response = await fetch(`${PUBLIC_BACKEND_URL}/categoria/listar`)
     const data = await response.json()
     return data
+  }
+
+  function adicionarPersonalizavel(item){
+    personalizaveis = [...personalizaveis, item]
+  }
+
+  function removerPersonalizavel(item){
+    personalizaveis = personalizaveis.filter(p => p != item)
   }
 
   async function handleSubmit(event){
@@ -55,7 +79,6 @@
         data.append('imagens', files[i])
       }
     }
-
 
     data.append('nome', produto.nome)
     data.append('categoria', produto.Categorias.id)
@@ -69,6 +92,11 @@
     data.append('largura', produto.largura)
     data.append('comprimento', produto.comprimento)
     data.append('material', produto.material)
+    if(personalizaveis.length > 0){
+      personalizaveis.forEach((item) => {
+        data.append('personalizaveis[]', item);
+      });
+    }   
 
     fetch(`${PUBLIC_BACKEND_URL}/Produto/${produto.id}/Alterar`, {
       method: 'PATCH',
@@ -79,6 +107,8 @@
         resultUpdate.text = 'Produto Alterado com sucesso';
         files = [];
         produto = await fetchProductsById(produto.id);
+        dispatch('updated', { 
+        });
         
       } else {
         throw new Error(`Request failed with status ${response.status}`);
@@ -197,6 +227,22 @@
 
   <label for="imagens">Imagens</label>
   <input bind:files accept="image/png, image/jpeg" name='imagens' type="file" class="file-input file-input-bordered w-full max-w-xs" multiple/>
+
+  <p>Insira abaixo o que pode ser personalizável no produto: (Ex: Idade, Nome, etc ...)</p>
+  <div class="flex flex-col justify-center gap-2">
+    {#each personalizaveis as item}
+      <div class="flex items-center">
+        <span class="font-bold bg-[#3D4451] rounded-lg text-white p-2">{item}</span>
+        <button type="button" class="btn btn-error btn-sm ml-2" on:click={() => removerPersonalizavel(item)}>-</button>
+      </div>
+    {/each}
+  </div>
+  <div class="flex gap-1 items-center">
+    <input type="text" bind:value={novo_personalizavel} class="input input-bordered w-full max-w-xs"
+    />
+    <button on:click={adicionarPersonalizavel(novo_personalizavel)} class="btn" type="button">Adicionar</button>
+    
+  </div>
 
   <button type="submit" class="btn mt-3">Alterar</button>
 
