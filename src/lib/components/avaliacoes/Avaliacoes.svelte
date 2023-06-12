@@ -119,7 +119,7 @@
   {#if !$signed}
     <div class="flex px-1 sm:px-0 items-center flex-col w-full">
       <h1>Para avaliar o produto, você precisa estar logado</h1>
-      <a class="btn bg-[#632c52] w-4/12" href="/login?Venda={produtoId}">Clique aqui para logar</a>
+      <a class="btn bg-[#632c52] w-full sm:w-4/12" href="/login?Venda={produtoId}">Clique aqui para logar</a>
     </div>
   {:else}
     {#if hasBuyed}

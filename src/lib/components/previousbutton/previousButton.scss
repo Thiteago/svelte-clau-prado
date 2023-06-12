@@ -1,5 +1,6 @@
 .container-botao{
   z-index: 1500;
+  position: relative;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -17,5 +18,5 @@
 }
 
 a{
-   color: black;
+  color: black;
 }

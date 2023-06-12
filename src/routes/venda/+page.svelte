@@ -65,10 +65,10 @@
     if(!(e.target.className  == "ativo-tab")){
       for(let i = 0; i < liList.length; i++){
         if(liList[i] != e.target){
-          liList[i].className = ""
+          liList[i].classList.remove("ativo-tab")
         }
       }
-      e.target.className = "ativo-tab"
+      e.target.classList.add("ativo-tab")
       if(e.target.innerHTML == "Descrição"){
         ativo = "descricao"
       }else if(e.target.innerHTML == "Especificações Técnicas"){
@@ -97,67 +97,71 @@
 <div>
   <Header />
   {#if Object.keys(produto).length > 0}
-  <section class="container-produto">
-    <div class="container-info">
-      <div class="flex justify-end">
-        <PreviousButton endereco={'/produtos'}/>
+  <section class="w-full bg-[#F5F5F5] flex justify-center items-center flex-col">
+    <div class="w-full xl:w-3/4 flex flex-col rounded-bl-lg bg-white gap-10">
+      <div class="flex bg-[#7C3267]">
+        <PreviousButton cor="text-white" endereco={'/produtos'}/>
       </div>
-        <div class='wrapper-info'>
-          <aside class='imagem-produto'>
-              <div class="max-w-full justify-center flex pb-2">
-                <img class="h-80" src="http://localhost:3333/static/{mainimage}" alt="">
+      <div class='flex flex-col h-fit xl:h-full xl:flex-row min-h-[565px] '>
+          <aside class='w-full pb-0 h-fit xl:w-1/3 px-5  flex flex-col xl:pb-5 xl:px-0'>
+              <div class="max-w-full max-h-96 min-h-[384px] justify-center flex pb-2">
+                <img class="object-cover" src="http://localhost:3333/static/{mainimage}" alt="">
               </div>
-              <div class="flex gallery w-full gap-3">
+              <div class="flex justify-center relative overflow-auto snap-mandatory snap-x w-full gap-3">
                 {#each produto.imagens as img}
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                   {#if img != 'Imagem'}
-                    <img on:click={() => {mainimage = img}} src="http://localhost:3333/static/{img}" alt="">
+                    <img class="w-20 h-20 left-0 shrink-0 object-cover snap-start" on:click={() => {mainimage = img}} src="http://localhost:3333/static/{img}" alt="">
                   {/if}
                 {/each}
               </div>
           </aside>
-          <div class='info-produto'>
-            <div class="wrapper-title">
-              <h1>{produto.nome}</h1>
-              <p>cod. {produto.id}</p>
+          <div class='px-5 w-full m-0 xl:px-0 xl:w-2/3 xl:ml-24 flex flex-col min-h-[300px]'>
+            <div class="pb-5 mt-2 xl:mt-0">
+              <h1 class="text-lg xl:text-3xl font-bold mb-0">{produto.nome}</h1>
+              <p class="text-xs">cod. {produto.id}</p>
             </div>
-            <div class='wrapper-buy'>
+            <div class='flex flex-col items-center '>
               {#if produto.quantidadeEmEstoque == 0}
-                <div class='info-situation'>Produto indisponivel</div>
+                <div>Produto indisponivel</div>
               {:else}
-              <div class='info-situation'>Disponivel apenas para {produto.tipo == 'Aluguel' ? 'aluguel' : 'venda'}
-              </div>
-              {#if produto.promocao != null && produto.promocao.status != 'Inativo'}
-                <div class="bg-[#7C3267] p-2 rounded text-white">Item Em Promoção!</div>
-                <div class='price-info flex-col line-through'>
-                  {formatedValue}<span class="text-sm">{produto.tipo == 'Aluguel' ? '/Por dia' : ''}</span>
-                </div>
                 <div>
-                  {promotionalValue}
+                  Disponivel apenas para {produto.tipo == 'Aluguel' ? 'aluguel' : 'venda'}
                 </div>
-              {:else}
-                <div class='price-info flex-col'>
-                  {formatedValue}<span class="text-sm">{produto.tipo == 'Aluguel' ? '/Por dia' : ''}</span>
-                </div>
-              {/if}
-                <button on:click={() => {addToCart(), goto('/carrinho')}} class='button'>{produto.tipo == 'Aluguel' ? 'Alugar' : 'Comprar'}</button>
+                {#if produto.promocao != null && produto.promocao.status != 'Inativo'}
+                  <div class="bg-[#7C3267] p-2 rounded text-white">Item Em Promoção!</div>
+                  <div class='flex items-center text-3xl pt-2.5 flex-col line-through'>
+                    {formatedValue}<span class="text-lg">{produto.tipo == 'Aluguel' ? '/Por dia' : ''}</span>
+                  </div>
+                  <div>
+                    {promotionalValue}
+                  </div>
+                {:else}
+                  <div class='flex items-center text-3xl pt-2.5 flex-col'>
+                    {formatedValue}<span class="text-lg">{produto.tipo == 'Aluguel' ? '/Por dia' : ''}</span>
+                  </div>
+                {/if}
+                <button on:click={() => {addToCart(), goto('/carrinho')}} 
+                  class='rounded-2xl h-10 px-5 m-5 border-0 bg-[#7C3267] text-white '>
+                  {produto.tipo == 'Aluguel' ? 'Alugar' : 'Comprar'}
+                </button>
               {/if}
             </div>
           </div>
       </div>    
     </div>
-    <div class='more-info'>
-        <nav class="wrapper-menu">
+    <div class='w-full xl:w-3/4 bg-white rounded-tr-lg my-2.5'>
+        <nav class="p-2.5">
           <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <ul class='container-menu'>
-                <li on:click={toggleActive} class='ativo-tab'>Descrição</li>
-                <li on:click={toggleActive}>Especificações Técnicas</li>
-                <li on:click={toggleActive}>Avaliações</li>
+            <ul class='flex flex-col xl:flex-row gap-10'>
+                <li on:click={toggleActive} class="ativo-tab font-bold flex flex-col hover:cursor-pointer">Descrição</li>
+                <li on:click={toggleActive} class="font-bold flex flex-col hover:cursor-pointer">Especificações Técnicas</li>
+                <li on:click={toggleActive} class="font-bold flex flex-col hover:cursor-pointer">Avaliações</li>
             </ul>
         </nav>
 
         {#if ativo == 'descricao'}
-          <p class='container-descricao'>{produto.descricao}</p>
+          <p class='pl-6 pb-7 w-10/12'>{produto.descricao}</p>
         {:else}
           {#if ativo == 'especificacoes'}
             <div class="overflow-x-auto">
@@ -195,3 +199,12 @@
   {/if}
 </div>
 <Footer/>
+
+<style>
+  .ativo-tab::after {
+		content: '';
+		width: 100%;
+		height: 2px;
+		background-color: palevioletred;
+	}
+</style>
