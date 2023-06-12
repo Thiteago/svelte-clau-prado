@@ -8,10 +8,17 @@
   let promotionalValue
   $: formatedValue = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(data.valor)
 
+  $: if(data){
+    runCalculateDiscount()
+  }
 
-  onMount(async () => {
+  async function runCalculateDiscount(){
     promotionalValue = await calculateDiscount(data)
+  }
+  onMount(async () => {
+    runCalculateDiscount()
   })
+
 </script>
 
 <div class='wrapper-produtos'>

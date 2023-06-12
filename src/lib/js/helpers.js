@@ -190,6 +190,7 @@ export async function fetchOrders(){
 }
 
 export async function calculateDiscount(products){
+  let promotional_value
   if(products.length != 0 && products.length != undefined){
     products.forEach((item) => {
       if(item.promocao != null && item.promocao.status == 'Ativo'){
@@ -203,11 +204,11 @@ export async function calculateDiscount(products){
   }else{
     if(products.promocao != null && products.promocao.status == 'Ativo'){
       if(products.promocao.tipo == 'valor_fixo'){
-        products.valor = products.valor - products.promocao.valor_desconto
+        promotional_value = products.valor - products.promocao.valor_desconto
       } else {
-        products.valor = products.valor - (products.valor * (products.promocao.valor_desconto / 100))
+        promotional_value = products.valor - (products.valor * (products.promocao.valor_desconto / 100))
       }
-      return Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(products.valor)
+      return Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(promotional_value)
     }
   }
 
