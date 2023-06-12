@@ -240,7 +240,7 @@
   <input type="date" bind:value={dataInicial} max={limitFinalDate != '' ? limitFinalDate : today} placeholder="Data Inicial" class="input input-bordered w-full max-w-xs" />
   <input type="date" bind:value={dataFinal} min={limitInitialDate} max={today} placeholder="Data Final" class="input input-bordered w-full max-w-xs" />
   <button on:click={searchByDate} class="btn">Filtrar</button>
-  <button on:click={downloadPDF} class="btn btn-primary">Baixar CSV</button>
+  <button on:click={downloadPDF} class="btn btn-primary">Baixar PDF</button>
 </div>
 
 <div class="w-full flex justify-center">
