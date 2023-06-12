@@ -274,7 +274,7 @@
               </div>
             {/each}
           </div>
-          <div class="flex gap-1">
+          <div class="flex gap-1 items-center">
             <input type="text" bind:value={novo_personalizavel} class="input input-bordered w-full max-w-xs"
             required
             />
