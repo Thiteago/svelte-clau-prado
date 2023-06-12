@@ -2,6 +2,7 @@
   import "./produtos.scss"
   import {imask} from '@imask/svelte'
   import { PUBLIC_BACKEND_URL } from '$env/static/public'
+  import { fetchProductsById } from '$lib/js/helpers.js'
 	import FormUpdate from "$lib/components/formupdate/FormUpdate.svelte";
 	import { onMount } from "svelte";
 
@@ -99,6 +100,11 @@
         thousandsSeparator: '.'
       }
     }
+  }
+
+  async function handleUpdate(){
+    await getProdutos()
+    selectedProduct = await fetchProductsById(idSelected)
   }
 
 
@@ -311,7 +317,7 @@
         </select>
 
         {#if selectedProduct != undefined}
-          <FormUpdate produto={selectedProduct}/>
+          <FormUpdate on:updated={handleUpdate} produto={selectedProduct}/>
         {/if}
       </div>
     </div>
