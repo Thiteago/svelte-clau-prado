@@ -113,9 +113,11 @@
               <p>{pedido.endereco.rua}, {pedido.endereco.numeroRua} - {pedido.endereco.bairro}</p>
               <p>{pedido.endereco.cidade}, {pedido.endereco.estado} <br/> {pedido.endereco.cep}</p>
             </div>
-            <label for="my-modal-{`${pedido.data_pedido}${pedido.id}${pedido.endereco.rua}${pedido.endereco.numeroRua}enviar`}" class="bg-stone-300 rounded-full p-2 hover:bg-stone-500 cursor-pointer">
-              <img width="30" height="30" src={pencil} alt="pencil icon">
-            </label>
+            {#if pedido.status == 'Aguardando Envio'}
+              <label for="my-modal-{`${pedido.data_pedido}${pedido.id}${pedido.endereco.rua}${pedido.endereco.numeroRua}enviar`}" class="bg-stone-300 rounded-full p-2 hover:bg-stone-500 cursor-pointer">
+                <img width="30" height="30" src={pencil} alt="pencil icon">
+              </label>
+            {/if}
 
           </div>
         </div>

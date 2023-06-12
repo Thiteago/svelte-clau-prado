@@ -79,7 +79,6 @@ export async function checkIfCartIsAvailable(carrinho){
 
 export async function updateToSended(id, codigo){
   await fetch(`${PUBLIC_BACKEND_URL}/pedido/alterar/envio/${id}`,{
-    
     headers: {
       'Content-Type': 'application/json'
       },

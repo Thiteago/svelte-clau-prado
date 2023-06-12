@@ -89,7 +89,12 @@
                 {#each pedido.vendas as venda}
                   <tr>
                     <th class="mask mask-squircle w-32 h-32"><img src={'http://localhost:3333/static/' + venda.produto.imagens[0]} alt=""></th>
-                    <td>{venda.produto.nome}</td>
+                    <td>
+                      <div>{venda.produto.nome}</div>
+                      {#each venda.produto_mudanca as info}
+                        <div>{info.nome}: {info.valor}</div>
+                      {/each}
+                    </td>
                     <td>{venda.produto.valor}</td>
                     <td>Comprado</td>
                   </tr>
@@ -99,7 +104,12 @@
                 {#each pedido.alugueis as aluguel}
                   <tr>
                     <th class="mask mask-squircle w-32 h-32"><img src={'http://localhost:3333/static/' + aluguel.produto.imagens[0]} alt=""></th>
-                    <td>{aluguel.produto.nome}</td>
+                    <td>
+                      <div>{aluguel.produto.nome}</div>
+                      {#each aluguel.produto_mudanca as info}
+                        <div>{info.nome}: {info.valor}</div>
+                      {/each}
+                    </td>
                     <td>{aluguel.produto.valor}</td>
                     <td>Alugado</td>
                   </tr>
