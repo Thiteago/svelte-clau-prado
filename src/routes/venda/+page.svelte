@@ -1,5 +1,4 @@
 <script>
-  import './venda.scss'
   import { PUBLIC_BACKEND_URL } from '$env/static/public'
   import { cart, idCart } from '$lib/js/stores/cart.js'
   import { onMount } from 'svelte';
