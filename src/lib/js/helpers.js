@@ -210,8 +210,7 @@ export async function calculateDiscount(products){
       return Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(products.valor)
     }
   }
-  
-  return products
+
 }
 
 export async function fetchProducts(){

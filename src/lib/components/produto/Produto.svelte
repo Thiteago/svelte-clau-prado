@@ -24,7 +24,7 @@
           <a href="/venda?produto_id={data.id}" class="text-3xl font-bold hover:text-[#434343]">{data.nome}</a>
           <p>{data.descricao}</p>
         </div>
-        {#if data.promocao != null && data.promocao.status != 'Inativo'}
+        {#if data.promocao != null && data.promocao.status != 'Inativo' && data.promocao.status != 'Agendado'}
           <div class="my-4 lg:m-0">
             <span class="bg-[#7C3267] rounded p-2 text-white">Item em Promoçao</span>
           </div>
@@ -47,7 +47,7 @@
 
           <div class='buy-button'>
             <div class="flex flex-col justify-end items-center">
-              {#if data.promocao != null && data.promocao.status != 'Inativo'}
+              {#if data.promocao != null && data.promocao.status != 'Inativo' && data.promocao.status != 'Agendado'}
                 <div class="flex gap-1 mb-1 justify-center items-center">
                   {#if data.promocao.tipo == 'porcentual'}
                     <p class="p-1 bg-[#7C3267] text-white rounded">-{data.promocao.valor_desconto}%</p>
@@ -65,7 +65,7 @@
                 </p>
               {/if}
 
-              {#if data.promocao == null || data.promocao.status == 'Inativo'}
+              {#if data.promocao == null || data.promocao.status == 'Inativo' || data.promocao.status == 'Agendado'}
                 <p class="text-2xl font-bold">
                   {formatedValue}
                   {#if data.tipo == 'Aluguel'}
