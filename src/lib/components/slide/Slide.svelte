@@ -38,7 +38,7 @@ onMount(async () => {
 
 <section class="main-slide relative justify-center flex">
 
-  {#if $user.cargo == 'Admin'}
+  {#if $user && $user.cargo == 'Admin'}
     <label style="z-index: 300 " for="modal-edit" class="absolute cursor-pointer right-0 p-2 text-white gap-2 bg-black flex items-center">
       <img src={edit} class="w-6 h-6" alt="pencil edit icon">
       Editar Slide
