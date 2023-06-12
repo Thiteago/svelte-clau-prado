@@ -242,7 +242,7 @@
                         </div>
                       </td>
                       <td>
-                        {venda.produto.categoria}
+                        {venda.produto.Categorias.nome}
                       </td>
                       <td>{formatToCurrency(venda.produto.valor)}</td>
                       <td>
