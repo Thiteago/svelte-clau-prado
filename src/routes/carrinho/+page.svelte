@@ -16,6 +16,7 @@
 	import { onMount } from 'svelte';
 	import Loading from '$lib/components/loading/Loading.svelte';
   import { browser } from '$app/environment';
+	import InputMudanca from '$lib/components/input_mudanca/Input_mudanca.svelte';
 
   const optionsCEP = {
     mask: '00000-000',
@@ -53,19 +54,27 @@
     cep = selectedEndereco.cep
   }
 
-  $: if(selectedFreight != ''){
-    validateForm = true
-    if(alugados.length > 0){
-      if(data_inicio_aluguel == '' || data_final_aluguel == ''){
+  $: if(selectedFreight){
+    verifyForm()
+  }
+
+  function verifyForm(){
+    if(selectedFreight != ''){
+      if(alugados.length > 0){
+        if(data_inicio_aluguel == '' || data_final_aluguel == ''){
+          validateForm = false
+        }
+      }
+      if(selectedEndereco == undefined){
         validateForm = false
       }
-    }
-    if(selectedEndereco == undefined){
+      validateForm = verifyInputs()
+    }else{
+      validateForm = verifyInputs()
       validateForm = false
     }
-  }else{
-    validateForm = false
   }
+
 
   $: if($cart){
     subtotal = 0
@@ -132,6 +141,35 @@
     localStorage.setItem('resume', JSON.stringify($resume))
   }
 
+  function handleInputChange(event, produto) {
+    $cart.map(element => {
+      if(element.id == produto.id){
+        element.produto_mudanca = {
+          ...element.produto_mudanca,
+          [event.detail.name]: {name: event.detail.name,
+            value: event.detail.value,
+          id: event.detail.id}}
+      }
+    })
+    verifyForm()
+  }
+
+  function verifyInputs(){
+    let valid = true
+    
+    $cart.forEach(element => {
+      if(element.produto_mudanca){
+        Object.keys(element.produto_mudanca).forEach(key => {
+          if(element.produto_mudanca[key].value == '' || element.produto_mudanca[key] == undefined){
+            valid = false
+          }
+        })
+      }
+    })
+  
+    return valid
+  }
+
   async function checkAsAbandoned(id){
     await fetch (`${PUBLIC_BACKEND_URL}/carrinho/marcarabandono/${id}`, {
       method: 'POST',
@@ -152,6 +190,7 @@
     $cart = $cart.filter(element => element.id != id)
     localStorage.setItem('cart', JSON.stringify($cart))
     if($cart.length == 0){
+      validateForm = false
       if($idCart != 0){
         checkAsAbandoned($idCart)
         localStorage.removeItem('idCart')
@@ -184,6 +223,7 @@
           cepValidates = false
         }
       })
+      verifyForm()
     }
     loading = false
   }
@@ -215,6 +255,7 @@
         mobile = false
       }
     }
+    verifyForm()
 
     function handleResize(){
       let windowWidth = window.innerWidth
@@ -403,6 +444,11 @@
                     <button on:click={() => {removeProduct(product.id)}} class="bg-[#7C3267] text-white px-3 py-1 rounded"><img width="25" height="25" src={trash} class="white-icon" alt="icon representing an trash"></button>
                   </div>
               </div>
+              {#if product.Venda.length > 0}
+                {#each product.Venda[0].produto_mudanca as mudanca}
+                  <InputMudanca nome={mudanca.nome} id={mudanca.id} on:inputChange={(event) => handleInputChange(event, product)} />
+                {/each}
+              {/if}
               <span class="bg-slate-200 w-full h-2"></span>
             {/each}
           {/if}
@@ -463,6 +509,11 @@
                   </div>
                 {/if}
               </div>
+              {#if product.Aluguel.length > 0}
+                {#each product.Aluguel[0].produto_mudanca as mudanca}
+                  <InputMudanca nome={mudanca.nome} id={mudanca.id} on:inputChange={(event) => handleInputChange(event, product)} />
+                {/each}
+              {/if}
               {#if mobile}
                 <div>
                   <button on:click={() => {removeProduct(product.id)}} class="bg-[#7C3267] w-full flex gap-3 justify-center text-white px-3 py-1 rounded"><img width="25" height="25" src={trash} class="white-icon" alt="icon representing an trash">Remover item</button>
