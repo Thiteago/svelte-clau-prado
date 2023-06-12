@@ -43,7 +43,17 @@
 
   function addToCart(){
     createCart()
+    if(produto.promocao != null && produto.promocao.status == 'Ativo'){
+      if(produto.promocao.tipo == 'valor_fixo'){
+        promotionalValue = produto.valor - produto.promocao.valor_desconto
+      } else {
+        promotionalValue = produto.valor - (produto.valor * (produto.promocao.valor_desconto / 100))
+      }
+    }
     if(!$cart.find(produtos => produtos.id == produto.id)){
+      if(produto.promocao != null && produto.promocao.status != 'Inativo'){
+        produto.valor = promotionalValue
+      }
       let product = {...produto, imagens: produto.imagens[0], quantidade: 1}
       localStorage.setItem('cart', JSON.stringify([...$cart, product]))
       $cart = [...$cart, product]
@@ -118,11 +128,18 @@
               <div class='info-situation'>Disponivel apenas para {produto.tipo == 'Aluguel' ? 'aluguel' : 'venda'}
               </div>
               {#if produto.promocao != null && produto.promocao.status != 'Inativo'}
-                <div></div>
+                <div class="bg-[#7C3267] p-2 rounded text-white">Item Em Promoção!</div>
+                <div class='price-info flex-col line-through'>
+                  {formatedValue}<span class="text-sm">{produto.tipo == 'Aluguel' ? '/Por dia' : ''}</span>
+                </div>
+                <div>
+                  {promotionalValue}
+                </div>
+              {:else}
+                <div class='price-info flex-col'>
+                  {formatedValue}<span class="text-sm">{produto.tipo == 'Aluguel' ? '/Por dia' : ''}</span>
+                </div>
               {/if}
-              <div class='price-info flex-col'>
-                {formatedValue}<span class="text-sm">{produto.tipo == 'Aluguel' ? '/Por dia' : ''}</span>
-              </div>
                 <button on:click={() => {addToCart(), goto('/carrinho')}} class='button'>{produto.tipo == 'Aluguel' ? 'Alugar' : 'Comprar'}</button>
               {/if}
             </div>

@@ -127,9 +127,6 @@
    
     labels = labels.sort(compareDates)
     
-
-
-
     labels.forEach((label) => {
       //store date with max profit
       let diferenca = 0
