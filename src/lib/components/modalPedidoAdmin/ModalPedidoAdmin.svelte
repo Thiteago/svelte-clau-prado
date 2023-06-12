@@ -237,7 +237,12 @@
                           </div>
                           <div>
                             <div class="font-bold">{venda.produto.nome}</div>
-                            <div class="text-sm opacity-50">{venda.produto.descricao}</div>
+                            <div class="text-sm opacity-50">
+                              <div>{venda.produto.descricao}</div>
+                              {#each venda.produto_mudanca as info}
+                                <div>{info.nome}: {info.valor}</div>
+                              {/each}
+                            </div>
                           </div>
                         </div>
                       </td>
@@ -270,12 +275,17 @@
                           </div>
                           <div>
                             <div class="font-bold">{aluguel.produto.nome}</div>
-                            <div class="text-sm opacity-50">{aluguel.produto.descricao}</div>
+                            <div class="text-sm opacity-50">
+                              <div>{aluguel.produto.descricao}</div>
+                              {#each aluguel.produto_mudanca as info}
+                                <div>{info.nome}: {info.valor}</div>
+                              {/each}
+                            </div>
                           </div>
                         </div>
                       </td>
                       <td>
-                        {aluguel.produto.categoria}
+                        {aluguel.produto.Categorias.nome}
                       </td>
                       <td>{formatToCurrency(aluguel.produto.valor)}</td>
                       <td>
