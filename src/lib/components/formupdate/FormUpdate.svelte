@@ -58,7 +58,7 @@
 
 
     data.append('nome', produto.nome)
-    data.append('categoria', produto.categoria)
+    data.append('categoria', produto.Categorias.id)
     data.append('descricao', produto.descricao)
     data.append('dataFabricacao', formatedDatadeCriacao)
     data.append('quantidade', produto.quantidadeEmEstoque)
@@ -107,7 +107,7 @@
   id="categoria"
   class="border border-base-300 rounded input w-full"
   required
-  bind:value={produto.categoriasId}
+  bind:value={produto.Categorias.id}
   >
     <option disabled>Selecione uma Categoria</option>
     {#each categorias as categoria}
