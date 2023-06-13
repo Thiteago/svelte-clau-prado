@@ -98,13 +98,12 @@
     localStorage.removeItem('temporaryAddress')
     localStorage.setItem('temporaryAddress', JSON.stringify($temporaryAddress))
 
-    if($user){
+    if($user && $user.id != 0){
       const endereco = await saveNewAddress($temporaryAddress, $user.id)
       enderecos = [...enderecos, endereco]
     }else{
       enderecos = [...enderecos, $temporaryAddress]
     }
-    
     $temporaryAddress = {}
   }
 
@@ -238,7 +237,7 @@
 
   onMount(async () => {
     await import('$lib/js/stores/login.js')
-    if($user || $user.id != undefined || $user.id != '' || $user.id != 0 ){
+    if($user && ($user.id != undefined || $user.id != '' || $user.id != 0 )){
       enderecos = await fetchAddress($user.id)
     }
     $currentStep = 1
