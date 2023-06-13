@@ -20,7 +20,7 @@
   };
 
   onMount(() => {
-    if($resume){
+    if($resume && Object.keys($resume).length > 0){
       localStorage.setItem('resume', JSON.stringify($resume))
     }else{
       localStorage.getItem('resume') ? $resume = JSON.parse(localStorage.getItem('resume')) : $resume = {}
