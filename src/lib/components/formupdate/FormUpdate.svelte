@@ -24,12 +24,16 @@
   }
 
   $: if(produto){
-    if(produto.Aluguel != null){
+    if(produto.Aluguel != null && produto.Aluguel.length > 0){
       tipo == 'Aluguel'
-      personalizaveis = produto.Aluguel[0].produto_mudanca.map(p => p.nome)
-    }else if(produto.Venda != null){
+      if(Object.hasOwn(produto.Aluguel[0], 'produto_mudanca')){
+        personalizaveis = produto.Aluguel[0].produto_mudanca.map(p => p.nome)
+      }
+    }else if(produto.Venda != null && produto.Venda.length > 0){
       tipo == 'Venda'
-      personalizaveis = produto.Venda[0].produto_mudanca.map(p => p.nome)
+      if(Object.hasOwn(produto.Venda[0], 'produto_mudanca')){
+        personalizaveis = produto.Venda[0].produto_mudanca.map(p => p.nome)
+      }
     }
   }
 
@@ -47,12 +51,16 @@
 
   onMount(async () => {
     categorias = await fetchCategorias()
-    if(produto.Aluguel != null){
+    if(produto.Aluguel != null && produto.Aluguel.length > 0){
       tipo == 'Aluguel'
-      personalizaveis = produto.Aluguel[0].produto_mudanca.map(p => p.nome)
-    }else if(produto.Venda != null){
+      if(Object.hasOwn(produto.Aluguel[0], 'produto_mudanca')){
+        personalizaveis = produto.Aluguel[0].produto_mudanca.map(p => p.nome)
+      }
+    }else if(produto.Venda != null && produto.Venda.length > 0){
       tipo == 'Venda'
-      personalizaveis = produto.Venda[0].produto_mudanca.map(p => p.nome)
+      if(Object.hasOwn(produto.Venda[0], 'produto_mudanca')){
+        personalizaveis = produto.Venda[0].produto_mudanca.map(p => p.nome)
+      }
     }
   })
 
