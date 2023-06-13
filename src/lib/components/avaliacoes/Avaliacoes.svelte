@@ -115,7 +115,7 @@
   })
 </script>
 
-<section>
+<section class="px-6">
   {#if !$signed}
     <div class="flex px-1 sm:px-0 items-center flex-col w-full">
       <h1>Para avaliar o produto, você precisa estar logado</h1>
