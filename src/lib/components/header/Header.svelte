@@ -100,7 +100,7 @@ function  handleRemoveItem(id){
             </div>
           {/if}
           <div class="wrapper-button-cart">
-            <a href="/carrinho">Ir para carrinho</a>
+            <a href="/carrinho" on:click={() => {carrinhoAtivo = false}}>Ir para carrinho</a>
           </div>
         </div>
       </div>
