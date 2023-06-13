@@ -96,8 +96,8 @@
 <div>
   <Header />
   {#if Object.keys(produto).length > 0}
-  <section class="w-full bg-[#F5F5F5] flex justify-center items-center flex-col">
-    <div class="w-full xl:w-3/4 flex flex-col rounded-bl-lg bg-white gap-10">
+  <section class="w-full bg-[#F5F5F5] flex justify-center px-6 items-center flex-col">
+    <div class="w-full xl:w-3/4 flex flex-col rounded-bl-lg px-1 bg-white gap-10">
       <div class="flex bg-[#7C3267]">
         <PreviousButton cor="text-white" endereco={'/produtos'}/>
       </div>
